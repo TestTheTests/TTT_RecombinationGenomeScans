@@ -1,0 +1,859 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r install}
+ # install.packages("devtools")
+  library(devtools)
+#  source("http://bioconductor.org/biocLite.R")
+#  biocLite("qvalue")
+# install_github("whitlock/OutFLANK")
+  library(OutFLANK)
+  if(!("adegenet" %in% installed.packages())){install.packages("adegenet")}
+
+  library(vcfR)
+  library(adegenet)
+  library(pcadapt)
+  library(lfmm)
+  library(LEA)
+
+## devtools::install_github("privefl/bigsnpr")
+  library(bigsnpr)
+  library(bigstatsr)
+library(vcfR)
+library(RColorBrewer)
+library(ggplot2)
+library(fields)
+
+
+```
+
+```{r}
+folder <- "results/"
+seed <- "1509520718392"
+type <- "Invers"
+
+vcf <- read.vcfR(paste(folder, seed, "_", type, "_VCFallsim1.vcf.gz", sep=""))
+
+ind0 <- read.table(paste(folder, seed,  "_", type,"_outputIndAll.txt", sep=""), header=TRUE)
+muts <- read.table(paste(folder, seed, "_", type,"_outputMuts.txt", sep=""), header=TRUE)
+phen_env <-  read.table(paste(folder, seed, "_", type,"_outputPhenEnv.txt", sep=""), header=TRUE)
+sim <- system(paste("grep recomb ", folder, seed, "_", type,"_outputSim.txt", sep=""), TRUE)
+H <- read.table(paste(folder, seed, "_", type,"_H.txt", sep=""), header=TRUE)
+
+```
+
+## Count mutations that contribute at least 1% to genetic variance
+```{r}
+
+muts$pa2 <- round(muts$selCoef^2*muts$freq*(1-muts$freq),3)
+muts$prop=NA
+muts$prop[muts$type=="m2"] <- muts$pa2[muts$type=="m2"]/sum(muts$pa2[muts$type=="m2"])
+which(duplicated(muts$position))
+muts$count <- FALSE
+muts$count[muts$prop>=0.01] <- TRUE
+muts$count[muts$type=="m4" & muts$freq > 0.05] <- TRUE
+
+muts
+```
+
+## Set up genetic map for figures
+```{r}
+
+### Color recombination regions ####
+  lgs <- seq(50000, 500000, by=50000) # linkage groups recombination breakpoints 0.5
+  lg_whereplot <- lgs - 25000
+  (recom_rates <- as.numeric(unlist(strsplit(sim[1], " "))[-1]))
+  (recom_end <- as.integer(unlist(strsplit(sim[2], " "))[-1]))
+  recom <- data.frame(recom_rates, recom_end)
+  recom$logrates <- log10(recom_rates)
+    # plot r=0.5 as black
+    # plot r=1e-11 as white
+  (brks <- with(recom, c(-12, -9, -6, -4, -2, 0.5)))
+  grps <- with(recom, cut(logrates, breaks = brks, include.lowest = TRUE))
+  nlevels(grps)
+  colfunc <- paste(colorRampPalette(colors=c( rgb(0,0,1,0.1), rgb(1,1,1,0), rgb(0,1,0,0.1)))(length(brks)-1), 70, sep="")
+  recom$col <- colfunc[grps]
+  plot(recom$logrates, col=recom$col)
+
+
+### Replace chromsome 1 with actual chromosome positions ####
+  ends=c(0,lgs)
+  dim(vcf@gt)
+  vcf@fix[,"CHROM"] <- NA
+  POS <- as.numeric(vcf@fix[,"POS"])
+
+  for (i in 1:(length(ends)-1)){
+    cond <- POS >= ends[i] &  POS < ends[i+1]
+    print(c(ends[i], ends[i+1], sum(cond)))
+    vcf@fix[cond,"CHROM"] = i
+  }
+  table(vcf@fix[,"CHROM"])
+  
+  my_ord <- order(as.numeric(vcf@fix[,"POS"]))
+
+  vcf2 <- vcf
+  vcf2 <- vcf[my_ord,]
+  head(vcf2)
+  head(vcf)
+  
+```
+
+
+Plotting functions
+Inversion is located at 320000 to 330000 bases
+the inversion "tracker" mutation is located at 320000
+```{r}
+
+plot_r_legend <- function(){
+   ### Plot recombination legend
+  xl <- 1
+  yb <- 1
+  xr <- 1.5
+  yt <- 2
+  
+  ncol = length(brks)-1
+  par(mar=c(5.1,2.5,3.1,0.5))
+  plot(NA,type="n",ann=FALSE,xlim=c(1,2),ylim=c(1,2),xaxt="n",yaxt="n",bty="n")
+  mtext("r", side=3, adj=0.2, cex=2)
+  rect(
+       xl,
+       head(seq(yb,yt,(yt-yb)/ncol),-1),
+       xr,
+       tail(seq(yb,yt,(yt-yb)/ncol),-1),
+       col=colfunc
+      )
+  mtext(c(paste0("1e",round(brks[1:(length(brks)-1)],1)),0.5),side=2,at=seq(yb,yt,(yt-yb)/(ncol)),las=2,cex=0.7)
+}
+  
+  
+### Plot function
+  recom_end2 = c(0, recom_end)
+plot_layers <- function(y_head=0, y_arrows=c(1,0.25), ...){
+  ### Plot recombination variation
+  for (i in 1:nrow(recom))
+  {
+    polygon(x = c(recom_end2[i], recom$recom_end[i], recom$recom_end[i], recom_end2[i]),
+            y = c(-10000, -10000, 10000, 10000),
+            col=as.character(recom$col[i]), border = NA)
+  }
+  polygon(x=c(320000, 330000, 330000, 320000),
+          y = c(-10000, -10000, 10000, 10000),
+          col=rgb(1,0,0,0.5), border=NA)
+  abline(v=lgs)
+  
+  text(lg_whereplot, y = y_head, 
+       labels = c("LG1\nNeut", "LG2\nQTL", "LG3\nQTL",
+                  "LG4\nSS", "LG5\nBS",
+                  "LG6\nBS", "LG7\n Inversion",
+                  "LG8\nmed r", "LG9\nr var", "LG10\nNeut"))
+  
+  
+  ### Add QTLs and Sweep Location
+  arrows(muts$position[muts$count],  y_arrows[1], muts$position[muts$count],  y_arrows[2], col="orange", lwd=muts$prop[muts$count]*20, length = 0.1)
+  arrows(muts$position[muts$type=="m4"], y_arrows[1], muts$position[muts$type=="m4"], y_arrows[2], col="purple", lwd=2, length = 0.1)
+} #end plot function
+
+layout(matrix(1:2,nrow=1),widths=c(0.8,0.2))
+par(mar=c(5.1,3.1,3.1,1.9))
+plot(0,0, col="white", xlim=c(0, 500000), ylim=c(-1,1), xaxs="i", yaxt="n", ylab="", xlab="Position (bp)")
+plot_layers()
+plot_r_legend()
+```
+
+## Conversion script
+```{r}
+# NB: Creates a vcfR object (stored in RAM) which size is twice as big as the original vcf file. So when dealing with large data, make sure you have enough RAM space available before proceeding.
+
+geno <- vcf2@gt[,-c(1)] # Character matrix containing the genotypes
+position <- getPOS(vcf2)-1 # Positions in bp, add one to line up with SLIM
+which((position) %in% muts$position)
+
+
+chromosome <- getCHROM(vcf2) # Chromosome information
+
+G <- matrix(NA, nrow = nrow(geno), ncol = ncol(geno))
+
+G[geno %in% c("0/0", "0|0")] <- 0
+G[geno  %in% c("0/1", "1/0", "1|0", "0|1")] <- 1
+G[geno %in% c("1/1", "1|1")] <- 2
+## Remove fixed loci or all heterozygotes ####
+dim(G)
+head(G[1:10,1:10])
+rem = c(which(rowSums(G)==0), which(rowSums(G-2)==0)) ## fixed loci
+position[rem]
+
+training <- list(G = G[-rem,], position = position[-rem], chromosome = chromosome[-rem])
+vcf_filt <- vcf2[-rem,]
+dim(vcf_filt@gt)
+```
+
+## Assign individuals to populations
+```{r}
+  ### optional assignment to pops
+  toclust <- ind0[,c("x","y")]
+  d <- dist(toclust)
+  hc <- hclust(d, method="ward.D")
+  #fit <- kmeans(toclust, 30) 
+  #plot(ind$x, ind$y, pch=fit$cluster, col=fit$cluster+1)
+  k <- 39
+  group <- cutree(hc, k=k)
+  table(group)
+
+  (group_env <- sort(round(tapply(ind0$envi, group, mean), 1)))
+  (group_table <- data.frame(group=names(group_env), group_env, new_g = 1:39))
+  
+  ind0$group <- group
+  ind2 <- merge(ind0, group_table)
+  head(ind2)
+    # the merge puts individuals out of order relative to the genotype matrix
+    # the id should put them back into order
+  ind <- ind2[order(ind2$id),]
+  head(ind)
+  par(mfrow=c(1,1))
+  plot(ind$x, ind$y, pch=ind$group%%6, col=adjustcolor(ind$group%%3+2, alpha=0.2))
+    text(tapply(ind$x, ind$new_g, mean), tapply(ind$y, ind$new_g, mean), label=1:39)
+
+
+  #write.table(ind, "outputIndAll_pop.txt")
+```
+
+## LD pruned set of loci
+```{r}
+ G0<-add_code256(big_copy(t(training$G),type="raw"),code=bigsnpr:::CODE_012)
+    #puts it in the raw format and stores likelihood genotype probability
+  dim(G0)
+  str(G)
+  head(G[,1:10])
+  
+  newpc<-snp_autoSVD(G=G0,infos.chr = training$chromosome,infos.pos = training$position)
+    # this is doing SNP pruning - removing correlated SNPs
+    # take snps with highest MAF and correlate snps around it
+    # Snps with R^2 > 0.2 are removed
+    # the subset is the indexes of the remaining SNPs
+  str(newpc)
+  plot(newpc) 
+  which_pruned <- attr(newpc, which="subset")
+  length(which_pruned)
+
+### Calculate average LD around each SNP ####  
+#  LD <- LD2<- rep(NA, ncol(G0))
+    # the following is not my most efficient lines of code
+#  for(i in 26:(ncol(G0)-26)){
+#    LD[i]=mean(cor(G0[,(i-25):(i+25)])[,25])
+#  }
+
+  layout(matrix(1))
+#  plot(training$position, abs(LD), pch=20, ylim=c(0,0.18), xaxs="i", col=rgb(0,0,0,0.5), xlab="Position (bp)", ylab="Average LD 50-SNP windows")
+ # plot_layers(y_head=0.17, y_arrows=c(0.02, 0))
+```
+
+
+```{r, plot pruned}
+hist(training$position[which_pruned], breaks=seq(0,500000, by=10000), col="lightgrey")
+plot_layers(y_head=20, y_arrows=c(40,25))
+```
+
+
+## H scan
+```{r H scan}
+head(H)
+dim(H)
+H$pos <- round(H$x/2)
+length(match(H$pos, position))
+plot(H$pos, H$H)
+plot_layers(y_head=6000, y_arrows = c(6000, 5000))
+
+
+cond <- H$pos>4e05 & H$pos < 450000
+par(mfrow=c(1,1))
+plot(H$pos[cond], H$H[cond])
+plot_layers(y_head=6000, y_arrows = c(6000, 5000))
+
+find_r <- function(pos){recom$recom_rates[min(which(recom$recom_end >= pos))]}
+H$r <- sapply(H$pos, find_r)
+plot(H$r[cond], H$H[cond])
+abline(lm( H$H[cond] ~ H$r[cond]))
+cor.test(H$r[cond], H$H[cond])
+```
+
+
+## Inversion frequency across populations
+```{r}
+(inv_index <- which(training$position==(320000)))
+head(training$position[training$position>319998])
+
+inv_all <- which(training$position>320000 & training$position<330000 & rowSums(training$G)>100)
+  # remove low H individuals
+inv_allG <- training$G[inv_all,]
+
+dim(training$G)
+inv <- training$G[inv_index,]
+
+# Genotype frequencies of inversion marker
+table(inv)/(1000)
+  # basically, expect individuals to be of type 0 or type 2
+
+# Allele frequency of inversion marker
+1-(sum(inv)/2000)
+
+## Haplotypes of inversion marker
+gen <- apply(inv_allG, 1, function(x) (paste(x, collapse = "", sep="")))
+nlevels(factor(gen))
+
+
+inv_freq <- tapply(inv, ind$new_g, FUN = function(x)(sum(x)/(2*length(x))))
+hist(inv_freq)
+
+pop_df <- data.frame(new_g=rownames(inv_freq), inv_freq=inv_freq, 
+                     pop_x =tapply(ind$x, ind$new_g, mean), 
+                     pop_y = tapply(ind$y, ind$new_g, mean),
+                     pop_envi = tapply(ind$envi, ind$new_g, mean)
+                     )
+
+
+
+qplot(x = pop_df$pop_x, y = pop_df$pop_y, colour = pop_df$inv_freq) + theme_bw() + geom_text(aes(x = pop_df$pop_x, y = pop_df$pop_y, label=pop_df$new_g), nudge_y = 0.02)#+ scale_colour_manual(breaks = seq(0,1, by = 0.1) , values = two.colors(n=10,"red", "blue", middle="grey")) 
+
+### Let's say only two pops were sampled that happened to differ in freq of inversion
+ind_sub <- which(ind$new_g %in% c(15, 32))
+dim(G)
+G_sub <- training$G[, ind_sub]
+dim(G_sub)
+FST_sub <- MakeDiploidFSTMat(t(G_sub),locusNames = training$position, ind$new_g[ind_sub])
+
+plot(FST_sub$LocusName[FST_sub$He>0.1], FST_sub$FST[FST_sub$He>0.1], col=rgb(0,0,0, 0.3), pch=20, ylim=c(0,0.5))
+  plot_layers(y_head=0.45, y_arrows = c(0.4, 0.35))
+  (q = quantile( FST_sub$FST[FST_sub$He>0.1], 0.95, na.rm=TRUE))
+  points(320000, FST_sub$FST[FST_sub$LocusName==320000])
+  abline(a=q, b=0, col="grey")
+```
+
+### Admixture/ancestry based on all data (snmf in LEA package)
+```{r}
+write.geno(t(training$G), paste0("temp/",seed,"genotypes.geno"))
+
+project = snmf(paste0("temp/",seed,"genotypes.geno"),
+                K = 1:4, 
+                entropy = TRUE, 
+                repetitions = 3,
+                project = "new")
+
+par(mfrow=c(1,1), mar=c(3,3,3,1))
+#project
+# plot cross-entropy criterion of all runs of the project
+plot(project, cex = 1.2, col = "blue", pch = 19)
+
+# get the cross-entropy of all runs for K = 3
+ce = cross.entropy(project, K = 2)
+ce
+# select the run with the lowest cross-entropy for K = 2
+best = which.min(ce)
+
+# display the Q-matrix
+Q.matrix <- as.matrix(Q(project, K = 2, run = best))
+dim(Q.matrix)
+cluster <- apply(Q.matrix, 1, which.max)
+my.colors <- c("tomato", "lightblue", "olivedrab")#, "gold")
+
+ord <- order(ind$envi)
+dim(Q.matrix)
+bp <- barplot(t(Q.matrix[ord,]), 
+        border = NA, 
+        space = 0, 
+        col = my.colors, 
+        xlab = "Individuals",
+        ylab = "Ancestry proportions", 
+        main = "Ancestry matrix") 
+        
+#axis(1, at = 1:nrow(Q.matrix), labels = bp$order, las = 3, cex.axis = .4)
+
+
+# get the ancestral genotype frequency matrix, G, for the 2nd run for K = 4. 
+G.matrix = G(project, K = 3, run = 2)
+
+```
+ 
+### Admixture/ancestry based on pruned data (snmf in LEA package)
+```{r}
+write.geno(t(training$G[which_pruned,]), paste0("temp/",seed,"genotypes_LD.geno"))
+
+project_LD = snmf(paste0("temp/",seed,"genotypes_LD.geno"),
+                K = 1:4, 
+                entropy = TRUE, 
+                repetitions = 3,
+                project = "new")
+
+
+#project
+# plot cross-entropy criterion of all runs of the project
+plot(project_LD, cex = 1.2, col = "blue", pch = 19)
+
+# get the cross-entropy of all runs for K = 3
+ce = cross.entropy(project_LD, K = 2)
+ce
+# select the run with the lowest cross-entropy for K = 2
+best = which.min(ce)
+
+# display the Q-matrix
+Q.matrix <- as.matrix(Q(project_LD, K = 2, run = best))
+dim(Q.matrix)
+cluster <- apply(Q.matrix, 1, which.max)
+my.colors <- c("tomato", "lightblue")#, "olivedrab")#, "gold")
+
+ord <- order(ind$envi)
+dim(Q.matrix)
+par(mfrow=c(1,1), mar=c(4,4,3,1))
+bp <- barplot(t(Q.matrix[ord,]), 
+        border = NA, 
+        space = 0, 
+        col = my.colors, 
+        xlab = "Individuals (sorted by environment)",
+        ylab = "Ancestry proportions", 
+        main = "Ancestry matrix") 
+        
+#axis(1, at = 1:nrow(Q.matrix), labels = bp$order, las = 3, cex.axis = .4)
+
+
+# get the ancestral genotype frequency matrix, G, for the 2nd run for K = 4. 
+G.matrix = G(project, K = 3, run = 2)
+
+```
+
+
+## OutFLANK
+
+### All data
+
+```{r}
+dim(training$G)
+
+FstDataFrame <- MakeDiploidFSTMat(t(training$G),training$position,ind$group)
+
+head(FstDataFrame)
+#str(FstDataFrame)
+par(mfrow=c(1,1))
+plot(FstDataFrame$He, FstDataFrame$FST)
+
+plot(as.numeric(FstDataFrame$LocusName), FstDataFrame$He, ylim=c(0,0.5), pch=19, col=rgb(0,0,0,0.1))
+plot_layers(y_head=0.1, y_arrows=c(0.1,0.06))
+
+plot(as.numeric(FstDataFrame$LocusName)[FstDataFrame$He>0.1], FstDataFrame$FST[FstDataFrame$He>0.1], ylim=c(0,0.2), pch=19, col=rgb(0,0,0,0.1))
+plot_layers(y_head=0.1, y_arrows=c(0.1,0.06))
+
+k <- 39 ## Number of pops 
+out_ini <- OutFLANK(FstDataFrame, NumberOfSamples=k) 
+  ## Run outflank on FST dataframe
+#out_ini <- OutFLANK(FstDataFrame[FstDataFrame$He>0.05,], NumberOfSamples=k) 
+  ## Run outflank without low He loci
+
+# Plot results to compare chi-squared distribution vs. actual FST distribution
+OutFLANKResultsPlotter(out_ini, withOutliers = TRUE,
+                       NoCorr = TRUE, Hmin = 0.1, binwidth = 0.001, Zoom =
+                         FALSE, RightZoomFraction = 0.05, titletext = NULL)
+## Poor fit, particularly on right tail
+OutFLANKResultsPlotter(out_ini, withOutliers = TRUE,
+                       NoCorr = TRUE, Hmin = 0.1, binwidth = 0.001, Zoom =
+                         TRUE, RightZoomFraction = 0.15, titletext = NULL)
+
+# Histogram of P-values weird
+hist(out_ini$results$pvaluesRightTail,breaks = 20)
+```
+
+
+
+### With LD pruning
+```{r}
+#### LD Pruning ####
+
+#### Evaluating OutFLANK with pruned data ####
+plot(FstDataFrame$He[which_pruned], FstDataFrame$FST[which_pruned])
+Fstdf2 <- FstDataFrame[which_pruned,] 
+dim(Fstdf2)
+Fstdf3 <- Fstdf2[Fstdf2$He>0.05,]
+
+### Trimming without He trimming
+out_trim1 <- OutFLANK(Fstdf2, NumberOfSamples=k, Hmin = 0.05)
+OutFLANKResultsPlotter(out_trim1, withOutliers = TRUE,
+                       NoCorr = TRUE, Hmin = 0.1, binwidth = 0.001, Zoom =
+                         FALSE, RightZoomFraction = 0.15, titletext = NULL)
+
+out_trim <- OutFLANK(Fstdf3, NumberOfSamples=k)
+  # I do not think that OutFLANK is removing low H loci correctly
+  # The fit is much better if I remove these manually than if I do not
+head(out_trim$results)
+plot(out_trim$results$He, out_trim$results$FST)
+OutFLANKResultsPlotter(out_trim, withOutliers = TRUE,
+                       NoCorr = TRUE, Hmin = 0.1, binwidth = 0.001, Zoom =
+                         FALSE, RightZoomFraction = 0.15, titletext = NULL)
+OutFLANKResultsPlotter(out_trim, withOutliers = TRUE,
+                       NoCorr = TRUE, Hmin = 0.1, binwidth = 0.001, Zoom =
+                         TRUE, RightZoomFraction = 0.10, titletext = NULL)
+# Decent distribution fit, no trimming needed. 
+hist(out_trim$results$pvaluesRightTail,breaks = 20)
+  # still a conservative histogram, which is typical of outflank
+
+outliers_crit <- out_trim$results$qvalues<0.2
+(outliers_LD <- out_trim$results$LocusName[outliers_crit])
+# outliers identified 
+
+### Plot trimmed data only
+plot(out_trim$results$LocusName,out_trim$results$FST, ylim=c(0,0.1), xaxs="i")
+plot_layers(y_head=0.1, y_arrows=c(0.1,0.06))
+points(out_trim$results$LocusName[outliers_crit], 
+       out_trim$results$FST[outliers_crit], pch=19)
+
+
+### Ad-hoc estimates of p-values for all data
+Fstdf_adhoc <- FstDataFrame
+new_dist <- FstDataFrame$FSTNoCorr*out_trim$dfInferred/out_trim$FSTNoCorrbar
+hist(new_dist)
+Fstdf_adhoc$p <- pchisq(new_dist, df = out_trim$dfInferred)
+Fstdf_adhoc$p[Fstdf_adhoc$He<0.1] <- NA
+hist(Fstdf_adhoc$p)
+plot(-log10(1-Fstdf_adhoc$p), Fstdf_adhoc$FST)
+Fstdf_adhoc$q <- qvalue(1-Fstdf_adhoc$p)$qvalues
+plot(Fstdf_adhoc$q, Fstdf_adhoc$FST)
+plot(as.numeric(Fstdf_adhoc$LocusName)[Fstdf_adhoc$He>0.1], Fstdf_adhoc$FST[Fstdf_adhoc$He>0.1], ylim=c(0,0.1), xaxs="i")
+  plot_layers(y_head=0.1, y_arrows=c(0.09, 0.07))
+  points(Fstdf_adhoc$LocusName[Fstdf_adhoc$q<0.2], Fstdf_adhoc$FST[Fstdf_adhoc$q<0.2], pch=20)
+```
+
+
+
+## Population structure
+
+### Principle components based on all data
+```{r}
+aux<-pcadapt(training$G,K=10)
+
+str(aux)
+plot(aux,option="screeplot")
+#num <- max(which(training$position<300000))
+num <- length(training$position)
+x <-pcadapt(training$G[1:num,],K=4)
+summary(x)
+
+
+par(mar=c(4,4,1,1))
+plot(x$scores[,1], x$scores[,2])
+
+
+haplotype <- as.factor(training$G[inv_index,])
+table(haplotype)
+
+qplot(x$scores[,1], x$scores[,2], colour=haplotype, main="Individual scores without LD pruning") + scale_colour_manual(values = two.colors(n=3,"red", "blue", middle="grey")) + theme_bw()
+
+```
+
+
+#### Loading of genomic regions onto PC axes calculated from all data
+```{r}
+
+#plot_layers(ylim=c(min(x$loadings[,1]), max(x$loadings[,1])), ylab="Loadings PC1")
+layout(matrix(c(1,2,3,4,6,5,5,6),nrow=4),widths=c(0.8,0.2))
+par(oma=c(3,3,1,0), mar=c(2,2,0,0))
+## Top plot
+  summary(x$loadings[,1])
+  plot(training$position,x$loadings[,1], xaxs="i", pch=20, ylim=c(-11, 15)) 
+  plot_layers(y_head = 12, y_arrows=c(-8, -11))
+## Middle plot
+  summary(x$loadings[,2])
+  plot(training$position,x$loadings[,2], xaxs="i", pch=20, ylim=c(-11, 13)) 
+  plot_layers(y_head = 20, y_arrows=c(-8, -11))
+##  Middle plot 
+  summary(x$loadings[,3])
+  plot(training$position,x$loadings[,3], xaxs="i", pch=20, ylim=c(-15, 15)) 
+  plot_layers(y_head = 20, y_arrows=c(-12, -15))
+##  Bottom plot 
+  summary(x$loadings[,4])
+  plot(training$position,x$loadings[,3], xaxs="i", pch=20, ylim=c(-13, 13)) 
+  plot_layers(y_head = 20, y_arrows=c(-10, -13))
+## Right plot
+  plot_r_legend()
+  mtext("Position (bp)", outer=TRUE, side=1, line=1, adj=0.4)
+  mtext("Loading on PC axis", outer=TRUE, side=2, line=1, adj=0.5)
+```
+
+```{r}
+  par(mfrow=c(1,1))
+  plot(training$position[1:num], sqrt(x$chi2.stat))
+  plot_layers(y_head = 20, y_arrows=c(-10, -13))  
+```
+
+
+### Principle components based on removal of low H sites
+```{r}
+
+x <-pcadapt(training$G[FstDataFrame$He>0.1,],K=4)
+summary(x)
+
+
+par(mar=c(4,4,1,1))
+plot(x$scores[,1], x$scores[,2])
+
+
+haplotype <- as.factor(training$G[inv_index,])
+table(haplotype)
+
+qplot(x$scores[,1], x$scores[,2], colour=haplotype, main="Individual scores without LD pruning") + scale_colour_manual(values = two.colors(n=3,"red", "blue", middle="grey")) + theme_bw()
+
+```
+
+
+### Principle components based on pruned data
+```{r}
+dim(training$G)
+aux<-pcadapt(training$G[which_pruned,],K=30)
+
+str(aux)
+plot(aux,option="screeplot")
+x_LD <-pcadapt(training$G[which_pruned,],K=3)
+summary(x_LD)
+
+par(mar=c(4,4,1,1))
+
+qplot(x_LD$scores[,1], x_LD$scores[,2], colour=ind$envi, main="Individual scores with LD pruning", xlab="PC1 scores", ylab="PC2 scores" ) + theme_bw() + labs(colour="Envi") + scale_color_gradient2( low="blue", mid="white",
+                     high="red", space ="Lab" )
+```
+
+#### Loading of genomic regions onto PC axes calculated from pruned data
+```{r}
+#plot_layers(ylim=c(min(x$loadings[,1]), max(x$loadings[,1])), ylab="Loadings PC1")
+layout(matrix(c(1,2,3,3),nrow=2),widths=c(0.8,0.2))
+par(oma=c(3,3,1,0), mar=c(2,2,0,0))
+## Top plot
+  summary(x_LD$loadings[,1])
+  plot(training$position[which_pruned],x_LD$loadings[,1], xaxs="i", pch=20, ylim=c(-11, 15)) 
+  plot_layers(y_head = 12, y_arrows=c(-5, -11))
+## Middle plot
+  summary(x_LD$loadings[,2])
+  plot(training$position[which_pruned],x_LD$loadings[,2], xaxs="i", pch=20, ylim=c(-11, 13)) 
+  plot_layers(y_head = 20, y_arrows=c(-8, -11))
+## Right plot
+  plot_r_legend()
+  mtext("Position (bp)", outer=TRUE, side=1, line=1, adj=0.4)
+  mtext("Loading on PC axis", outer=TRUE, side=2, line=1, adj=0.5)
+```  
+
+```{r}
+  par(mfrow=c(1,1))
+  plot(training$position[which_pruned], sqrt(x_LD$chi2.stat))
+  plot_layers(y_head = 10, y_arrows=c(2, 0))  
+```
+
+
+## PCADAPT
+### All data
+```{r}
+
+plot(x, option = "qqplot", threshold = 0.05, main="pcadapt")
+#plot(x, option = "stat.distribution")
+summary(x$chi2.stat)
+
+# Default output from PCAdapt
+  par(mfrow=c(1,1))
+  plot(training$position, sqrt(x$chi2.stat), col="black", pch=20, main="pcadapt without LD pruning", ylim=c(0,500))
+  plot_layers(y_head=450, y_arrows = c(50,0))
+```
+
+### With LD pruning
+```{r}
+
+plot(x_LD, option = "qqplot", threshold = 0.05, main="pcadapt")
+#plot(x, option = "stat.distribution")
+summary(x_LD$chi2.stat)
+
+# Default output from PCAdapt
+  par(mfrow=c(1,1))
+  plot(training$position[which_pruned], x_LD$chi2.stat, col="black", pch=20, main="pcadapt without LD pruning", ylim=c(0,100))
+  plot_layers(y_head=450, y_arrows = c(100,70))
+```
+
+
+## LFMM
+
+### Ridge regression model phenotype ~ genotype
+```{r lfmm ridge regression}
+
+# extract scaled genotypes
+scaled.genotype <- scale(as.matrix(t(training$G)))
+  #scaled.genotype <- as.matrix(t(sim1$G))
+# extract scaled phenotypes
+phen <- scale(as.matrix(ind$phenotype1))
+  # centering is important to remove mean
+  # x <- scale(as.matrix(sim1$phenotype1), center=TRUE, scale=FALSE)
+  # x <- as.matrix(sim1$phenotype1)
+  # to do mean and not SD. this might make it possible to get effect sizes
+#pc <- prcomp(scaled.genotype,)
+#plot(pc$sdev[1:20]^2)
+#points(5,pc$sdev[5]^2, type = "h", lwd = 3, col = "blue")
+
+
+# ridge regression
+lfmm.ridge <- lfmm::lfmm_ridge(Y = scaled.genotype, X = phen, K = 3, lambda = 1e-4)
+#The lfmm.ridge object contains estimates for the latent variables and for the effect sizes. Here, the estimates are used for computing calibrated significance values and for testing associations between the response matrix Y and the explanatory variable x. It can be done as follows:
+
+lfmm.test <- lfmm::lfmm_test(Y = scaled.genotype, X = phen, lfmm = lfmm.ridge, calibrate = "gif")
+p.values <- lfmm.test$calibrated.pvalue
+lfmm.test$gif
+
+
+hist(p.values, col = "lightgreen", main="LFMM ridge")
+qval <- qvalue::qvalue(p.values)
+plot(qval)
+#The plot suggests that setting fdr.level = 0.025 warrant few false positives.
+
+qval <- qvalue::qvalue(p.values, fdr.level = 0.005)
+candidates <- which(qval$significant)
+
+
+plot(training$position, -log10(p.values), cex = .5, pch = 19, col = "black", main="LFMM ridge", ylim=c(0, 60))
+  plot_layers(y_head=55, y_arrows=c(10, 0))
+```
+#### Effect sizes ridge regression
+step 1: run lfmm_ridge (or any lfmm model) and get the estimated latent factors from the U matrix (obj.lfmm$U). When lfmm is run with K factors and n individuals, U is an n by K matrix.
+
+step 2: perform a standard linear regression analysis of the phenotype on the SNP frequency (in the direction opposite to LFMM) by adding U as covariate to the model. This will estimate the LFMM effect size for each SNP. The R command should look like this: lm( y ~ . , data = data.frame(genotype[,i], U))
+```{r}
+str(lfmm.ridge)
+m2 <- which(training$position %in% (muts$position[muts$type=="m2" & muts$count==TRUE]))
+dim(G)
+effects <- data.frame(position=training$position[m2], est_coef_ridge=NA, est_coef_PC=NA)
+### Try Olivier's suggestion
+for (i in 1:length(m2)){
+  effects$est_coef_ridge[i] <- lm(phen ~., data = data.frame(gen = training$G[m2[i],], lfmm.ridge$U))$coef[2]
+}
+
+### Use PC axes as covariates
+for (i in 1:length(m2)){
+  effects$est_coef_PC[i] <- lm(phen ~., data = data.frame(gen = training$G[m2[i],], x_LD$scores))$coef[2]
+}
+effects
+(new_muts <- merge(muts,effects))
+plot(new_muts$selCoef, new_muts$est_coef_ridge, abline(0,1), col="blue", pch=19, xlab="True effect size", ylab="Estimated effect size")
+points(new_muts$selCoef, new_muts$est_coef_PC, abline(0,1), col="green", pch=15)
+```
+
+
+### LASSO model
+```{r lfmm lasso}
+#LFMM parameters can alternatively be estimated by solving regularized least-squares mimimization, with lasso penalty as follows.
+lfmm.lasso <- lfmm::lfmm_lasso(Y = scaled.genotype, X = phen, K = 3, nozero.prop = 0.02)
+ #The lfmm.lasso object contains new estimates for the latent variables and for the effect sizes. Note that for lasso, we didn't set the value of a regularization parameter. Instead, we set the proportion of non-null effects (here 2 percent).
+
+lfmm.test <- lfmm::lfmm_test(Y = scaled.genotype, X = phen, lfmm = lfmm.lasso, calibrate = "gif")
+p.values <- lfmm.test$calibrated.pvalue
+lfmm.test$gif
+hist(p.values, col = "lightblue")
+qval <- qvalue::qvalue(p.values)
+plot(qval)
+qval <- qvalue::qvalue(p.values, fdr.level = 0.005)
+candidates <- which(qval$significant)
+
+plot(training$position, -log10(p.values), cex = .5, pch = 19, col = "black", main="LFMM lasso", ylim=c(0, 50), xaxs="i")
+  plot_layers(y_head=45, y_arrows=c(5,0))
+```
+
+### Bayesian (LEA) model
+
+
+### iHS
+#### Conversion scripts
+```{r}
+library(rehh)
+### Convert vcf@gt to haplotype format .thap
+# one file for each chromosome
+#SNP1  SNP2  SNP3
+#IND1   hap1     A     T     A
+#IND1   hap2     A     C     T
+#IND2   hap1     G     C     T
+#IND2   hap2     A     T     A
+nlociperchrom <- table(vcf@fix[,"CHROM"])
+
+substring("0|1", 1, last=1)
+substring("0|1", 3, last=3)
+
+head(vcf_filt)
+rem2 <- which(duplicated(vcf_filt@fix[,"POS"]))
+sort(vcf_filt@fix[rem2,"POS"])
+
+vcf_filt2 = vcf_filt[-rem2,]
+
+### Get into right format
+for (i in 1:length(nlociperchrom)){
+  keep <- which((vcf_filt2@fix[,"CHROM"]==i))
+  head(vcf_filt2@gt[keep,1:10], 10)
+  hap1 <- apply(vcf_filt2@gt[keep,-1], 1, FUN=function(x) substring(x,1,1))
+  dim(hap1)
+  #head(hap1[,1:10])
+  hap2 <-  apply(vcf_filt2@gt[keep,-1], 1, FUN=function(x) substring(x,3,3))
+  #head(hap2[,1:10])
+  
+  hapt_out <- matrix(NA, nrow=2*1000, ncol=length(keep))
+  odd <- seq(1,(2*1000), by=2)
+  even <- odd +1
+  hapt_out[odd,] <- as.numeric(hap1)
+  rownames(hapt_out) <- rep("", nrow(hapt_out))
+  rownames(hapt_out)[odd] <- rownames(hap1)
+  rownames(hapt_out)[even] <- rownames(hap2)
+  hapt_out[even,] <- as.numeric(hap2)
+  #head(hapt_out[,1:10])
+  write.table(cbind(rownames(hapt_out), hapt_out+1), paste0("temp/",seed,"chrom",i,".thap"), row.names=F, col.names=F, quote = FALSE)
+}
+#a<- read.table("chrom1.thap")
+
+### Also need to convert map.inp
+#Each line contains five columns corresponding to:
+#1. the SNP name
+#2. the SNP chromosome (or scaffold) of origin
+#3. the SNP position on the chromosome (or scaffold). Note that it is up to the user to choose either
+#physical or genetic map positions (if available).
+#4. the SNP ancestral allele (as coded in the haplotype input file)
+#5. the SNP derived alleles (as coded in the haplotype input file)
+map <- data.frame(name=1:nrow(vcf_filt2), chrom=as.numeric(vcf_filt2@fix[,"CHROM"]), 
+                  pos=as.numeric(vcf_filt2@fix[,"POS"]), anc=1, derived=2)
+  # setting anc=0 and derived = 1 thinks missing data
+head(map)
+which(duplicated(map$pos))
+write.table(map, paste0("temp/",seed,"map.inp"), row.names=F, col.names=F)
+```
+
+#### iHS Analysis
+```{r}
+cnt=0
+for(i in 1:length(nlociperchrom)){
+ cnt=cnt+1
+ tmp.hapfile=paste0("temp/",seed,"chrom",i,".thap")
+ 
+ tmp.hap=data2haplohh(hap_file=tmp.hapfile, map_file=paste0("temp/",seed,"map.inp"), chr.name=i,haplotype.in.columns=FALSE)
+ 
+tmp.scan=scan_hh(tmp.hap,threads=4)
+ 
+ if(cnt==1){wgscan=tmp.scan}else{wgscan=rbind(wgscan,tmp.scan)}
+}
+
+dim(wgscan)
+
+ihs=ihh2ihs(wgscan,minmaf=0.05,freqbin=0.05)
+  head(ihs$iHS,25)
+  tail(ihs$iHS)
+  ihs$frequency.class
+  #distribplot(ihs$iHS$iHS)
+
+  #ihsplot(ihs)
+  ihs$iHS[which(ihs$iHS[,4]>2),]
+  
+  plot(ihs$iHS$POSITION,ihs$iHS$`-log10(p-value)`, col="grey", pch=20, main="REHH iHS")
+    plot_layers()
+
+  plot(ihs$iHS$POSITION,ihs$iHS$iHS, col="grey", pch=20, main="REHH iHS")
+    plot_layers()
+
+```

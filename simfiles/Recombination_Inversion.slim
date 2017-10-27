@@ -1,0 +1,341 @@
+
+// Run phenotype under stabilizing selection for 4Ne generations
+// Then implement landscape and run for 2000 more generations
+// At 100 generations before end, a selective sweep is introduced that sweeps across the entire metapopulation
+
+
+initialize() {
+	//setSeed(1502104253870);
+	defineConstant("my_seed", getSeed()); 
+	defineConstant("path", "~/Desktop/TestTheTests/TTT_RecombinationGenomeScans/results/");
+
+	defineConstant("sigma_C", 0.07); // smaller is weaker competition
+		// weaker competition allows more similar phenotypes to coexist
+		// weaker comp decreases local adaptation if all phenotypes in same envi
+	defineConstant("sigma_K", 0.05);
+	defineConstant("sigma_M", 0.5); // larger is less assortative mating
+	defineConstant("N", 1000);
+	defineConstant("r", 1e-05);
+	defineConstant("r_low", 1e-11);
+	defineConstant("r_med", 1e-08);
+	
+	initializeSLiMOptions(dimensionality="xyz");	initializeMutationRate(1e-6);	initializeMutationType("m1", 0.5, "f", 0.0);        // neutral	initializeMutationType("m2", 0.5, "n", 0.0, 0.7);   // QTL
+		// larger values if want fewer large effect mutations to arise, compare dnorm(0.0:2.0, 0, 0.4)
+		// smaller values for more mutations of smaller effect
+	initializeMutationType("m3", 0.5, "g", -0.1, 1.0); // deleterious alleles
+	initializeMutationType("m4", 1.0, "f", 1.0); // positive selection sweep
+	initializeMutationType("m5", 0.05, "f", -0.05); // inversion indicator variable
+	//initializeMutationType("m3", 0.5, "n", 0.0, 1.5);   // QTL2	m2.convertToSubstitution = F;
+	m2.mutationStackPolicy = "l";
+	m4.convertToSubstitution = F;
+	//m3.convertToSubstitution = F;	
+	initializeGenomicElementType("g0", c(m1), c(1));	initializeGenomicElementType("g1", c(m1, m2), c(0.98, 0.02)); //QTL
+	initializeGenomicElementType("g2", c(m1, m3), c(0.9, 0.1)); //deleterious
+	//initializeGenomicElementType("g3", c(m1, m4), c(0.99, 0.01)); //positive sweep	
+	//initializeGenomicElementType("g2", c(m1, m3), c(0.8, 0.2));
+	
+	// each chromosome 50000 bp
+	// note that code is redundant for all the neutral regions, but it is just helpful to think about
+	// where recombination breakpoints are
+	
+	// start chromosome 1: neutral	initializeGenomicElement(g0, 0, 50000); // neutral
+	
+		
+	// start chromosome 2: QTL	initializeGenomicElement(g1,  50001, 100000); // QTL mutations
+	
+	// start chromosome 3: QTL	initializeGenomicElement(g1,  100001, 150000); // QTL mutations
+	
+	// start chromosome 4: Selective sweep	initializeGenomicElement(g0,  150001, 200000);
+	//initializeGenomicElement(g3,  170001, 180000); // sweep region
+	//initializeGenomicElement(g0,  180001, 200000); 
+	
+	// start chromosome 5: in center 10000 bp background selection only	initializeGenomicElement(g0,  200001, 220000);
+	initializeGenomicElement(g2,  220001, 230000); // deleterious mutations
+	initializeGenomicElement(g0,  230001, 250000); 
+	
+	// start chromosome 6: in center 10000 bp background selection 
+	initializeGenomicElement(g0,  250001, 270000);
+	initializeGenomicElement(g2,  270001, 280000); // deleterious mutations
+	initializeGenomicElement(g0,  280001, 300000); 
+	
+	// start chromosome 7: in center 10000 bp low recombination only (inversion)
+	initializeGenomicElement(g0,  300001, 350000);
+	
+	// start chromosome 8: in center 10000 bp med recombination only
+	initializeGenomicElement(g0,  350001, 400000);
+		
+	// start chromosome 9: recombination variation
+	initializeGenomicElement(g0,  400001, 450000);
+	r_var = 10^(-1*(rnorm(10, mean=5, sd=2)));
+	
+	// start chromosome 10; neutral
+	initializeGenomicElement(g0,  450001, 500000);
+	
+	//initializeGenomicElement(g2, 50000+1, 1e5-1);	initializeRecombinationRate(c(r, 0.5, //chrom 1
+											r, 0.5, //chrom 2 QTL
+											r, 0.5, //chrom 3 QTL
+											r, 0.5, //chrom 4 sweep
+											r, 0.5, //chrom 5 background only
+											r, 0.5, //chrom 6 background and low recom
+											r, 0.5, //chrom 7 neutral low recom
+											r, r_med, r, 0.5, //chrom 8 neutral med recom
+											r_var, 0.5, //chrom 9 recombination variation (100 segments, ave every 500 bp)
+											r//, 0.5 // chrom 10 will have inversion modeled in recom. callback
+											//r, 0.5, // chrom 11
+										//	r, 0.5 // chrom 12
+											), //end
+											ends=c(
+											50000, 50001, //chrom 1
+											100000, 100001, //chrom 2
+											150000, 150001, //chrom 3
+											200000, 200001, //chrom 4
+											250000, 250001, //chrom 5
+											300000, 300001, //chrom 6
+											350000, 350001, //chrom 7	
+											370000, 380000, 400000, 400001, //chrom 8	
+											sort(sample(400002:449999, size=9, replace=F)), 450000, 450001,// chrom 9
+											500000//, 500001, // chrom 10
+											//550000//, 550001,  // chrom 11
+									//		600000 // chrom 12
+											)
+											);
+	// first chromosome: 0 to 300000 contains gene 1 locally adapting
+	// second chromosome: 30000 to 50000 contains background selection, with low recom region from 39908 to 42834
+	// third chromosome: 50000 to 80000 contains gene 2 locally adapting
+	// 4th chromosome: 80000 to 99999 neutral
+	// 5th chromosome: 100000 to 120000 positive sweep		initializeInteractionType(1, "xyz", reciprocal=T, maxDistance=sigma_C*5);     // competition	i1.setInteractionFunction("n", 1.0, sigma_C);
+		// if they are close in space and have similar phenotype, that is max interaction strength
+	initializeInteractionType(2, "xyz", reciprocal=T);     // mate choice	i2.setInteractionFunction("n", 1.0, sigma_M);
+		// 
+}
+1 late() {	
+	sim.addSubpop("p1", N);
+	
+	///////////////////////
+	// give half the population the inversion	//inverted = sample(p1.individuals, integerDiv(p1.individualCount, 2)); 			
+	//inverted.genomes.addNewDrawnMutation(m5, 470000); // chrom 10
+	///////////////////////
+	
+	p1.setSpatialBounds(c(0.0, 0.0, 0.0, 1.0, 1.0, 1.0));
+	
+	
+	/// map 1 is the adaptive map (after 1000 gen)
+	defineConstant("mapValues", rnorm(25, 0, 0.5)+ rep(c(-1.0,0.0,1.0,0.0,-1.0), 5));
+	p1.defineSpatialMap("map1", "xy", c(5, 5), mapValues, interpolate=T,
+		valueRange=c(-1.8, 1.8), colors=c("red", "yellow"));
+	
+	// map 2 is the static map (1st 1000 gen)
+	defineConstant("map2Values", rep(0.0, 25));
+	p1.defineSpatialMap("map2", "xy", c(5, 5), map2Values, interpolate=T,
+	valueRange=c(-3.0, 3.0), colors=c("blue", "white"));
+	
+	for (ind in p1.individuals)
+		ind.setSpatialPosition(p1.pointUniform());
+	p1.individuals.z = 0.0;
+	
+	head = "gen " + "segsites_m2 " + "mean_pheno " + "sd_pheno " +"corr_phen_env";
+	writeFile(paste(c(path, my_seed, "_Invers_outputPhenEnv.txt"), sep=""), head);
+
+	inverted = sample(p1.individuals, integerDiv(p1.individualCount, 2)); 
+	inverted.genomes.addNewDrawnMutation(m5, 320000);
+}
+
+modifyChild() {
+	// set offspring position based on parental position
+	do
+		pos = c(parent1.spatialPosition[0:1] + rnorm(2, 0, 0.004) , 0.0);//+ sample(c(0,2,-2), 2, replace=T, weights=c(0.8,0.5, 0.5)), 0.0);
+	while (!p1.pointInBounds(pos));
+	child.setSpatialPosition(pos);
+	
+	return T;
+}
+
+
+
+1: late() {	// construct phenotypes from the additive effects of QTLs	inds = sim.subpopulations.individuals;
+	//phenotype = apply(inds,	//	"sum(applyValue.genomes.mutationsOfType(m2).selectionCoeff);");
+	phenotype = inds.sumOfMutationsOfType(m2);
+		// BEN: FASTER TO USE : Sumofmutationsoftype
+	//phenotype2 = apply(inds,	//	"sum(applyValue.genomes.mutationsOfType(m3).selectionCoeff);");	inds.z = phenotype;
+	//inds.tagF = phenotype2;
+	
+	// color individuals according to phenotype	inds.color = p1.spatialMapColor("map1", phenotype);		// evaluate interactions	i1.evaluate();	i2.evaluate();
+	
+	if (sim.generation % 200 == 0){ 
+		// get positions of all m2 mutations and store in Q
+		g = sim.subpopulations.genomes;
+		// get the unique mutations in the sample, sorted by position		m = sortBy(unique(g.mutationsOfType(m2)), "position"); 
+		mut = sim.mutationsOfType(m2);
+
+		env=c();
+		for (ind in inds){
+  			env = c(env, p1.spatialMapValue("map1", ind.spatialPosition[0:1]));
+  		}
+  	
+		corr = sum((env- mean(env))/sd(env)*(inds.z-mean(inds.z))/sd(inds.z))/(size(inds.z)-1);		out = paste(c(sim.generation, size(m), mean(phenotype),  sd(phenotype), corr));
+		writeFile(paste(c(path, my_seed, "_Invers_outputPhenEnv.txt"), sep=""), out, append=T);
+
+   }
+}
+
+fitness(m2) {      // make QTLs intrinsically neutral	return 1.0;}
+
+////////////////////////////////////
+fitness(m5) {	// fitness of the inversion is frequency-dependent 
+	f = sim.mutationFrequencies(NULL, mut);	return 1.0 - (f - 0.5) * 0.2;
+	// the last number in this equation will control the strength of negative frequency dependence
+	// the smaller this number, the weaker the selection and the more drift (?) the inversion will experience
+	// across populations
+	// 0.2 seems to be a good number to maintain the inversion but also alow some drift
+//	return 1.0;}
+////////////////////////////////////
+fitness(NULL) {    // reward proximity to the optimum
+	location = individual.spatialPosition[0:1];
+	optimum1 = subpop.spatialMapValue("map1", location);
+	optimum2 = subpop.spatialMapValue("map2", location);
+	// w = exp(-0.5*t(phen-opt)%*%omega%*%(phen-opt))
+	// phen is vector of each phenotype
+	// opt is vector of each optimum, for now assume variance is sigma_k with no covariance	if (sim.generation < 4000){
+		return 1.0 + dnorm(optimum2 - individual.z, mean=0.0, sd=3);
+			// to create genetic variance to occupy all envi niches, it's important to confirm
+			// that the fitness at the extreme values of the environment (~-3.6 to +3.6) is not 
+			// much lower than the fitness at the average
+			// if it is, the pop will occupy ave envi by end of burn-in
+			// the down-side is that the phenotype drifts some more
+			//sort(rnorm(25, 0, 0.5)+ rep(c(-1.0,0.0,1.0,0.0,-1.0),5)) // landscape
+			// dnorm(0.0:5.0, 0, 1.5)/dnorm(0.0,0,1.5)
+	}
+	else {
+		return 1.0 + dnorm(optimum1 - individual.z, mean=0.0, sd=sigma_K);
+	}
+	//return exp(-0.5*((individual.z-optimum1)^2*sigma_K + (individual.tagF-optimum2)^2*sigma_K));}
+fitness(NULL) {    // trying logistic growth
+	P = sum(i1.strength(individual)); 
+	 // if they are close in space and have similar phenotype, that is max interaction strength	if(sim.generation < 100){
+		f = exp( 0.0009*sim.generation*P*((1-P)));
+	}else{
+		f = exp( 0.0009*100*P*((1-P)));
+		// adding interaction strengths between focal individual and other individuals in model
+		// strengths
+	}
+	
+	//if (sim.generation % 50 == 0) {
+	//	cat(P, sep=" "); 
+	//	cat(" ");
+	//	cat(i1.strength(individual));
+	//	cat("\n");
+	//}
+	
+	//return exp(0.2*P*((10-P)/10));
+	return f;}
+
+mateChoice() {
+	return i2.strength(individual);
+}
+
+//////////////////////////////
+recombination() {	if (genome1.containsMarkerMutation(m5, 320000) ==		genome2.containsMarkerMutation(m5, 320000)) 
+		return F;	inInv = (breakpoints > 320000) & (breakpoints < 330000); 
+	if (sum(inInv) == 0)		return F;	breakpoints = breakpoints[!inInv];		return T; 
+	}
+//////////////////////////////
+
+//////////////////////////////////
+//// INTRODUCE SWEEP MUTATION AT 125,000 bp
+// reintroduce for 20 gen if lost
+///////////////////////////////////
+5880:5900 late(){
+	my_gen = sim.generation;
+	ga = sim.subpopulations.genomes;
+	ma = sortBy(unique(c(ga.mutationsOfType(m4))), "position"); 
+	ma_freqs = sim.mutationFrequencies(p1, ma);	fixed = ma_freqs > 0;
+	if  (size(fixed)==0){ 
+		target = sample(p1.genomes, 1);		target.addNewDrawnMutation(m4, 175000);
+	}
+}
+
+
+5999 late(){
+		ga = sim.subpopulations.genomes;
+		ma = sortBy(unique(c(ga.mutationsOfType(m4))), "position"); 
+		ma_freqs = sim.mutationFrequencies(p1, ma);		fixed = ma_freqs > 0.90;		if (size(fixed)>0) {
+			if(fixed){				cat(my_seed + ": m4 > 0.90 \n");
+			}
+			else{
+				cat(my_seed + ": m4 < 0.90 ");
+			}		}		else		{			cat(my_seed + ": LOST");			sim.simulationFinished();
+		}
+	}
+
+
+////////////////////////////////////////
+////////////////////////////////////////6000 late() {
+//samp_ind = c();
+pop_id = c();
+env_ind = c();
+
+
+////////////////////////////////////////////
+// loop through all sampled individuals and output their stats	
+////////////////////////////////////////////
+inds = sim.subpopulations.individuals;
+env=c();
+		for (ind in inds){
+  			env = c(env, p1.spatialMapValue("map1", ind.spatialPosition[0:1]));
+  		}
+  	
+cor = sum((env- mean(env))/sd(env)*(inds.z-mean(inds.z))/sd(inds.z))/(size(inds.z)-1);
+
+
+// output simulation stats
+output_sim = "seed "+ getSeed()+ "\n"+
+	//"sample_size "+ size(samp_ind)+ "\n"+
+	//"num_pops "+ size(sample_x)+ "\n"+
+	"corr_phen_env_all " + cor + "\n" + 
+	//"corr_phen_env_samp " + cor_samp + "\n" +
+	"recomb_rates " + paste(sim.chromosome.recombinationRates, sep=" ") + "\n" +
+	"recomb_rates_end " + paste(sim.chromosome.recombinationEndPositions, sep= " ") + "\n" +
+	"mutation_rate " + sim.chromosome.mutationRate + "\n" +
+	"N " + p1.individualCount + "\n"  
+	;
+
+writeFile(paste(c(path, my_seed,"_Invers_outputSim.txt"), sep=""), output_sim);
+
+//output all
+p1.individuals.genomes.outputVCF(paste(c(path,my_seed,  "_Invers_VCFallsim1.vcf"), sep=""));
+
+phenotype = inds.sumOfMutationsOfType(m2);
+		
+output_ind = "id " + "x "+ "y " + "phenotype1 " + "envi " + "phenotype2 " + "\n";
+i=0;
+for (ind in p1.individuals){
+   output_ind = output_ind + ind.index +" " + ind.spatialPosition[0] + " " + ind.spatialPosition[1] + " " +    ind.spatialPosition[2] + " " +  p1.spatialMapValue("map1", ind.spatialPosition[0:1]) + " " + phenotype[i] +    "\n";
+  	i= i+1;
+}
+writeFile(paste(c(path, my_seed, "_Invers_outputIndAll.txt"), sep=""), output_ind);
+
+// output mutations
+g = sim.subpopulations.genomes;
+		// get the unique mutations in the sample, sorted by positionm = sortBy(unique(c(g.mutationsOfType(m2))), "position"); 
+m_freqs = sim.mutationFrequencies(p1, m);
+
+out_m = "position " + "selCoef " + "originGen " + "type " + "freq" + "\n";
+
+for(i in 0:(size(m)-1)){
+	out_m = out_m + m.position[i] +" "+ m.selectionCoeff[i]+" " + m.originGeneration[i]+" " + "m2 " + m_freqs[i] + "\n";
+}
+
+m4_muts = sortBy(unique(c(g.mutationsOfType(m4))), "position"); 
+if (size(m4_muts)>0){
+	m4_freqs = sim.mutationFrequencies(p1, m4_muts);
+	for(i in 0:(size(m4_muts)-1)){
+		out_m = out_m + m4_muts.position[i] +" "+ m4_muts.selectionCoeff[i]+" " + m4_muts.originGeneration[i]+" " + "m4 " + m4_freqs[i] + "\n";
+	}
+}
+writeFile(paste(c(path, my_seed, "_Invers_outputMuts.txt"), sep=""), out_m);
+
+p1.outputMSSample(1000, replace=F, filePath = paste(c(path, my_seed, "_Invers_outputMS.txt"), sep=""));}
+
+6001 late() {
+	sim.simulationFinished();
+}
