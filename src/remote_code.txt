@@ -1,0 +1,38 @@
+
+#### Trying to get github connection ####
+ls -al ~/.ssh
+# check for ssh key files
+
+
+cd ~/.ssh/authorized_keys
+cat ~/.ssh/authorized_keys
+(go to github website and add keys)
+
+
+git clone git://github.com/TestTheTests/TTT_RecombinationGenomeScans.git
+
+
+#### Direct upload/download ####
+
+## src folder ###
+katie@Katies-MacBook-Air:~/Desktop/TestTheTests/TTT_RecombinationGenomeScans$ scp -r src k.lotterhos@defiance.neu.edu:/home/k.lotterhos/k_store/TestTheTests/TTT_RecombinationGenomeScans
+
+## simulations folder ###
+katie@Katies-MacBook-Air:~/Desktop/TestTheTests/TTT_RecombinationGenomeScans$ scp -r simfiles k.lotterhos@defiance.neu.edu:/home/k.lotterhos/k_store/TestTheTests/TTT_RecombinationGenomeScans
+
+
+### Start simulations ###
+comp5
+
+tmux new-session -s trial 
+	# open a remote tmux window 
+
+k.lotterhos@comp5[TTT_RecombinationGenomeScans]# src/repRecomLowRegion.sh
+	# run replicates
+	
+control-b d
+	# detach tmux window
+	
+tmux list-sessions
+tmux attach -t trial
+
