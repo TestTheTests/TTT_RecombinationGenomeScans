@@ -13,9 +13,11 @@ knitr::opts_chunk$set(echo = TRUE)
   library(devtools)
 #  source("http://bioconductor.org/biocLite.R")
 #  biocLite("qvalue")
-# install_github("whitlock/OutFLANK")
+# install_github("whitlock/OutFLANK", ref="development")
   library(OutFLANK)
   if(!("adegenet" %in% installed.packages())){install.packages("adegenet")}
+source("https://bioconductor.org/biocLite.R")
+biocLite("LEA")
 
   library(vcfR)
   library(adegenet)
@@ -34,8 +36,10 @@ library(fields)
 
 ```
 
+setwd("~/Desktop/TestTheTests/TTT_RecombinationGenomeScans")
+
 ```{r}
-folder <- "results/"
+folder <- "evals/"
 seed <- "1509520718392"
 type <- "Invers"
 
@@ -761,8 +765,59 @@ plot(training$position, -log10(p.values), cex = .5, pch = 19, col = "black", mai
   plot_layers(y_head=45, y_arrows=c(5,0))
 ```
 
-### Bayesian (LEA) model
+## Bayesian (LEA) model
+```{r}
+dim(G)
+dim(G0)
 
+# Creation of the genotype file: "genotypes.lfmm"
+# 400 SNPs for 50 individuals.
+gename <- paste0(folder, seed, "_genotypes.lfmm")
+envname <- paste0(folder, seed, "_gradients.env")
+write.lfmm(t(training$G), gename)
+# creation of the environment file, gradient.env.
+# It contains 1 environmental variable for 50 individuals.
+write.env(ind$envi,envname)
+
+################
+# running lfmm #
+################
+
+# main options, K: (the number of latent factors), 
+#           CPU: the number of CPUs.
+
+# Runs with K = 3 and 5 repetitions.
+# runs with 6000 iterations 
+# including 3000 iterations for burnin.
+# Around 30 seconds per run.
+project = lfmm( gename, 
+                envname, 
+                 K = 3, 
+                 repetitions = 3, 
+                 project = "new")
+
+project = load.lfmmProject(paste0(sub(".lfmm","",gename),"_",seed,"_gradients.lfmmProject"))
+
+# summary of the project
+summary(project)
+
+# get adjusted p-values using all runs
+pv<-  lfmm.pvalues(project, K = 3)
+pv<- adjusted.pvalues(project, K = 3)
+str(pv)
+
+# get the z-scores for the 2nd run for K = 3
+z <-z.scores(project, K = 3)
+str(z)
+z_ave <- rowMeans(z)
+
+plot(training$position, -log10(pv$pvalues), cex = .5, pch = 19, col = "black", main="LFMM GEA", ylim=c(0, 50), xaxs="i")
+  plot_layers(y_head=45, y_arrows=c(5,0))
+  
+plot(training$position, abs(z_ave), cex = .5, pch = 19, col = "black", main="LFMM GEA", ylim=c(0, 50), xaxs="i")
+  plot_layers(y_head=45, y_arrows=c(5,0))
+  
+```
 
 ### iHS
 #### Conversion scripts
@@ -782,22 +837,23 @@ substring("0|1", 3, last=3)
 
 head(vcf_filt)
 rem2 <- which(duplicated(vcf_filt@fix[,"POS"]))
-sort(vcf_filt@fix[rem2,"POS"])
+rem2
 
 vcf_filt2 = vcf_filt[-rem2,]
 
 ### Get into right format
 for (i in 1:length(nlociperchrom)){
   keep <- which((vcf_filt2@fix[,"CHROM"]==i))
-  head(vcf_filt2@gt[keep,1:10], 10)
+  #head(vcf_filt2@gt[keep,1:10], 10)
   hap1 <- apply(vcf_filt2@gt[keep,-1], 1, FUN=function(x) substring(x,1,1))
-  dim(hap1)
+  #dim(hap1)
   #head(hap1[,1:10])
   hap2 <-  apply(vcf_filt2@gt[keep,-1], 1, FUN=function(x) substring(x,3,3))
   #head(hap2[,1:10])
   
-  hapt_out <- matrix(NA, nrow=2*1000, ncol=length(keep))
-  odd <- seq(1,(2*1000), by=2)
+  nind <- nrow(ind)
+  hapt_out <- matrix(NA, nrow=2*nind, ncol=length(keep))
+  odd <- seq(1,(2*nind), by=2)
   even <- odd +1
   hapt_out[odd,] <- as.numeric(hap1)
   rownames(hapt_out) <- rep("", nrow(hapt_out))
@@ -805,7 +861,7 @@ for (i in 1:length(nlociperchrom)){
   rownames(hapt_out)[even] <- rownames(hap2)
   hapt_out[even,] <- as.numeric(hap2)
   #head(hapt_out[,1:10])
-  write.table(cbind(rownames(hapt_out), hapt_out+1), paste0("temp/",seed,"chrom",i,".thap"), row.names=F, col.names=F, quote = FALSE)
+  write.table(cbind(rownames(hapt_out), hapt_out+1), paste0("results/",seed,"_chrom",i,".thap"), row.names=F, col.names=F, quote = FALSE)
 }
 #a<- read.table("chrom1.thap")
 
@@ -822,7 +878,7 @@ map <- data.frame(name=1:nrow(vcf_filt2), chrom=as.numeric(vcf_filt2@fix[,"CHROM
   # setting anc=0 and derived = 1 thinks missing data
 head(map)
 which(duplicated(map$pos))
-write.table(map, paste0("temp/",seed,"map.inp"), row.names=F, col.names=F)
+write.table(map, paste0("results/",seed,"_map.inp"), row.names=F, col.names=F)
 ```
 
 #### iHS Analysis

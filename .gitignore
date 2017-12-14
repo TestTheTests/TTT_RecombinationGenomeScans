@@ -1,4 +1,6 @@
+evals/*
 temp/*
 */temp/*
 .DS_Store
 results/*
+.Rproj.user

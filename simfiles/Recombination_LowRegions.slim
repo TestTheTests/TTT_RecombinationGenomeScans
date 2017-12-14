@@ -6,8 +6,8 @@
 
 initialize() {
 	//setSeed(1502104253870);
-	defineConstant("my_seed", getSeed()); 
-	defineConstant("path", "~/Desktop/TestTheTests/TTT_RecombinationGenomeScans/results/");
+	defineConstant("my_seed", seed); 
+	defineConstant("path", mypath);
 
 	defineConstant("sigma_C", 0.07); // smaller is weaker competition
 		// weaker competition allows more similar phenotypes to coexist
@@ -18,8 +18,9 @@ initialize() {
 	defineConstant("r", 1e-05);
 	defineConstant("r_low", 1e-11);
 	defineConstant("r_med", 1e-08);
+	defineConstant("mu", 1e-06);
 	
-	initializeSLiMOptions(dimensionality="xyz");	initializeMutationRate(1e-6);	initializeMutationType("m1", 0.5, "f", 0.0);        // neutral	initializeMutationType("m2", 0.5, "n", 0.0, 0.7);   // QTL
+	initializeSLiMOptions(dimensionality="xyz");	initializeMutationRate(mu);	initializeMutationType("m1", 0.5, "f", 0.0);        // neutral	initializeMutationType("m2", 0.5, "n", 0.0, 0.7);   // QTL
 		// larger values if want fewer large effect mutations to arise, compare dnorm(0.0:2.0, 0, 0.4)
 		// smaller values for more mutations of smaller effect
 	initializeMutationType("m3", 0.5, "g", -0.1, 1.0); // deleterious alleles
@@ -73,7 +74,7 @@ initialize() {
 	// start chromosome 12; neutral
 	//initializeGenomicElement(g0,  550001, 600000);
 	
-	//initializeGenomicElement(g2, 50000+1, 1e5-1);	initializeRecombinationRate(c(r, 0.5, //chrom 1
+	//initializeGenomicElement(g2, 50000+1, 1e5-1); 	initializeRecombinationRate(c(r, 0.5, //chrom 1 neut
 											r, 0.5, //chrom 2 QTL
 											r, 0.5, //chrom 3 QTL
 											r, 0.5, //chrom 4 sweep
@@ -82,9 +83,7 @@ initialize() {
 											r, r_low, r, 0.5, //chrom 7 neutral low recom
 											r, r_med, r, 0.5, //chrom 8 neutral med recom
 											r_var, 0.5, //chrom 9 recombination variation (100 segments, ave every 500 bp)
-											r//, 0.5 // chrom 10 will have inversion modeled in recom. callback
-											//r, 0.5, // chrom 11
-										//	r, 0.5 // chrom 12
+											r//, 0.5 // chrom 10 neut
 											), //end
 											ends=c(
 											50000, 50001, //chrom 1
@@ -97,15 +96,9 @@ initialize() {
 											370000, 380000, 400000, 400001, //chrom 8	
 											sort(sample(400002:449999, size=9, replace=F)), 450000, 450001,// chrom 9
 											500000//, 500001, // chrom 10
-											//550000//, 550001,  // chrom 11
-									//		600000 // chrom 12
 											)
 											);
-	// first chromosome: 0 to 300000 contains gene 1 locally adapting
-	// second chromosome: 30000 to 50000 contains background selection, with low recom region from 39908 to 42834
-	// third chromosome: 50000 to 80000 contains gene 2 locally adapting
-	// 4th chromosome: 80000 to 99999 neutral
-	// 5th chromosome: 100000 to 120000 positive sweep		initializeInteractionType(1, "xyz", reciprocal=T, maxDistance=sigma_C*5);     // competition	i1.setInteractionFunction("n", 1.0, sigma_C);
+		initializeInteractionType(1, "xyz", reciprocal=T, maxDistance=sigma_C*5);     // competition	i1.setInteractionFunction("n", 1.0, sigma_C);
 		// if they are close in space and have similar phenotype, that is max interaction strength
 	initializeInteractionType(2, "xyz", reciprocal=T);     // mate choice	i2.setInteractionFunction("n", 1.0, sigma_M);
 		// 
@@ -185,7 +178,8 @@ modifyChild() {
 	optimum2 = subpop.spatialMapValue("map2", location);
 	// w = exp(-0.5*t(phen-opt)%*%omega%*%(phen-opt))
 	// phen is vector of each phenotype
-	// opt is vector of each optimum, for now assume variance is sigma_k with no covariance	if (sim.generation < 4000){
+	// opt is vector of each optimum, for now assume variance is sigma_k with no covariance
+		if (sim.generation < 4000){
 		return 1.0 + dnorm(optimum2 - individual.z, mean=0.0, sd=3);
 			// to create genetic variance to occupy all envi niches, it's important to confirm
 			// that the fitness at the extreme values of the environment (~-3.6 to +3.6) is not 
@@ -199,7 +193,7 @@ modifyChild() {
 		return 1.0 + dnorm(optimum1 - individual.z, mean=0.0, sd=sigma_K);
 	}
 }
-fitness(NULL) {    // trying logistic growth
+fitness(NULL) {    // competition fitness component
 	P = sum(i1.strength(individual)); 
 	 // if they are close in space and have similar phenotype, that is max interaction strength	if(sim.generation < 100){
 		f = exp( 0.0009*sim.generation*P*((1-P)));
@@ -246,14 +240,14 @@ mateChoice() {
 
 
 ////////////////////////////////////////
-////////////////////////////////////////6000 late() {
-//samp_ind = c();
+//////////////////////// ////////////////6000 late() {
+
 pop_id = c();
 env_ind = c();
 
 
 ////////////////////////////////////////////
-// loop through all sampled individuals and output their stats	
+// loop through all individuals and output their stats	
 ////////////////////////////////////////////
 inds = sim.subpopulations.individuals;
 env=c();
@@ -273,7 +267,7 @@ output_sim = "seed "+ getSeed()+ "\n"+
 	//"corr_phen_env_samp " + cor_samp + "\n" +
 	"recomb_rates " + paste(sim.chromosome.recombinationRates, sep=" ") + "\n" +
 	"recomb_rates_end " + paste(sim.chromosome.recombinationEndPositions, sep= " ") + "\n" +
-	"mutation_rate " + sim.chromosome.mutationRate + "\n" +
+	"mutation_rate " + mu + "\n" +
 	"N " + p1.individualCount + "\n"  
 	;
 
