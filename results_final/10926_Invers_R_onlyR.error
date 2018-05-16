@@ -1,0 +1,37 @@
+Loading required package: qvalue
+
+   *****       ***   vcfR   ***       *****
+   This is vcfR 1.6.0 
+     browseVignettes('vcfR') # Documentation
+     citation('vcfR') # Citation
+   *****       *****      *****       *****
+
+Warning message:
+package ‘vcfR’ was built under R version 3.4.3 
+Loading required package: methods
+Loading required package: ade4
+
+   /// adegenet 2.1.1 is loaded ////////////
+
+   > overview: '?adegenet'
+   > tutorials/doc/questions: 'adegenetWeb()' 
+   > bug reports/feature requests: adegenetIssues()
+
+
+Warning messages:
+1: package ‘adegenet’ was built under R version 3.4.3 
+2: package ‘ade4’ was built under R version 3.4.3 
+Loading required package: bigstatsr
+Loading required package: tools
+Loading required package: ggplot2
+Loading required package: rehh.data
+Loading required package: gplots
+
+Attaching package: ‘gplots’
+
+The following object is masked from ‘package:stats’:
+
+    lowess
+
+Error: no loop for break/next, jumping to top level
+Execution halted

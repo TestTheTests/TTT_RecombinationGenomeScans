@@ -1,0 +1,403 @@
+---
+title: "Eval_Inversion_Reps"
+author: "Katie Lotterhos"
+date: "3/13/2018"
+output: html_document
+---
+setwd("/Users/katie/Desktop/TestTheTests/TTT_RecombinationGenomeScans")
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tibble.width = 10)
+#install.packages("ROCR")
+
+library(tidyverse)
+library(RSQLite)
+library(dbplyr)
+library(ROCR)
+```
+
+Read in files
+```{r}
+inver_files = list.files("results_final", pattern = "Invers_ScanResults")
+inver_files
+inver_simID <- substr(inver_files, start = 1, stop=5)
+
+
+x_all <- NULL
+for (i in 1:length(inver_files)){
+  x1 <- read_delim(paste0("results_final/", inver_files[i]), delim=" ")
+  head(x1)
+  x1$type = "Inversion"
+  class(x1)
+  
+  x_all <- rbind(x_all, x1)
+}
+
+levels(factor(x_all$simID))
+nlevels(factor(x_all$simID))
+print(tbl_df(x_all), n=5)
+colnames(x_all)
+
+# error 10901
+#Error in merge(final_df2.2, final_df, all.x = TRUE) : 
+#  object 'final_df2.2' not found
+# Execution halted
+```
+
+
+## Set up genetic map for figures
+```{r}
+
+### Color recombination regions ####
+  lgs <- seq(50000, 500000, by=50000) # linkage groups recombination breakpoints 0.5
+  lg_whereplot <- lgs - 25000
+  r <- 1e-05
+  r_low <- 1e-11
+  r_med <- 1e-08
+  r_var = 10^(-1*(rnorm(1000, mean=5, sd=2)))
+  quantile(log10(r_var), probs = c(0.1, 0.9))
+  
+  # each chrom 50000 bp long
+  # chrom 1 neutral r
+  # chrom 2 QTL r
+  # chrom 3 QTL r
+  # chrom 4 sweep r
+  # chrom 5, 6 background r
+  # chrom 7 had inversion 320000-330000
+  # chrom 8 had r_med 370000-380000
+  # chrom 9 had recombination variation
+  # chrom 10 neutral r
+  
+### Plot function
+
+plot_layers <- function(y_head=0, y_arrows=c(1,0.25), thisSim=NULL, ...){
+ 
+  polygon(x=c(320000, 330000, 330000, 320000),
+          y = c(-10000, -10000, 10000, 10000),
+          col=rgb(1,0,0,0.3), border=NA)
+  # Inversion
+  
+  abline(v=lgs, col=adjustcolor("grey", 0.5))
+  
+  polygon(x=c(370000, 380000, 380000, 370000),
+          y = c(-10000, -10000, 10000, 10000),
+          col=rgb(0,0,1,0.3), border=NA)
+  # Low Recomb region
+  
+  polygon(x=c(400000, 450000, 450000, 400000),
+          y = c(-10000, -10000, 10000, 10000),
+          col=rgb(0,0,1,0.1), border=NA)
+  
+  text(lg_whereplot, y = y_head, 
+       labels = c("LG1\nNeut", "LG2\nQTL", "LG3\nQTL",
+                  "LG4\nSS", "LG5\nBS",
+                  "LG6\nBS", "LG7\nNeut\nInversion",
+                  "LG8\n r=1e-08", "LG9\nr var", "LG10\nNeut"))
+  
+  
+  ### Add QTLs and Sweep Location
+  if(length(thisSim)>0){
+  muts <- x_all %>% filter(simID==thisSim)
+  arrows(muts$pos[muts$muttype=="MT=2"],  y_arrows[1], muts$pos[muts$muttype=="MT=2"],  y_arrows[2], col="orange", lwd=muts$prop[muts$muttype=="MT=2"]*20, length = 0.1)
+  }
+  
+  arrows(175001, y_arrows[1], 175001, y_arrows[2], col="purple", lwd=2, length = 0.1)
+} #end plot function
+
+pdf("figures/InversionMap.pdf", width=12, height=4)
+  par(mar=c(4,2,1,2))
+  plot(0,0, col="white", xlim=c(0, 500000), ylim=c(-1,1), xaxs="i", yaxt="n", ylab="", xlab="Position (bp)")
+  plot_layers()
+dev.off()  
+```
+
+
+## Effect size and allele frequency
+```{r effect size a_freq}
+
+head(x_all)
+levels(factor(x_all$simID))
+nlevels(factor(x_all$simID))
+sum(is.na(x_all$simID))
+  
+  mean(tapply(x_all$simID, x_all$simID, length)) # ave number of SNPs after filtering
+  
+    mean(tapply(x_all$prop>=0.01, x_all$simID, sum, na.rm=TRUE)) # ave number of SNPs after filtering
+    
+    # check that AGV sums to 1 for all simulations
+    tapply(x_all$prop, x_all$simID, sum, na.rm=TRUE)
+      # all mutations here
+    mean(tapply(x_all$prop, x_all$simID, max, na.rm=TRUE)) # ave effect size of max SNP
+    
+    #x <- x_all[which(x_all$simID==10903 & x_all$muttype=="MT=2"),]#& x_all$keep_loci==FALSE & x_all$count==TRUE),]
+  
+  # check no NA's
+  sum(is.na(x_all$keep_loci))
+  sum(is.na(x_all$a_freq_final))
+    
+  countbutnotinfinal <- which(x_all$keep_loci==FALSE & x_all$prop>=0.01 & x_all$muttype=="MT=2") # rare alleles of large effect
+  keepcount<- which(x_all$keep_loci==TRUE & x_all$prop>=0.01 & x_all$muttype=="MT=2")  # common alleles of large effect
+  dontkeepdontcount <- which(x_all$keep_loci==FALSE & x_all$prop<0.01 & x_all$muttype=="MT=2") # rare alleles small effect
+  keepdontcount <- which(x_all$keep_loci==TRUE & x_all$prop<0.01 & x_all$muttype=="MT=2")
+    # common alleles of small effect
+  
+  #sanity check
+    sum(x_all$muttype=="MT=2") # number of M2 mutations
+    length(c( countbutnotinfinal, keepcount, dontkeepdontcount, keepdontcount))
+    # these should be equal
+
+  length(countbutnotinfinal)
+    # $keep_loci means they were not in the final vcf file
+
+  mean(x_all$prop[countbutnotinfinal], na.rm=TRUE)
+
+pdf("figures/PlotFreqVsEffectSize.pdf", width=7, height=9)
+  par(mfrow=c(2,1), mar=c(3,3,1,1), oma=c(3,3,0,0))
+  
+    # common causal alleles
+    plot(x_all$a_freq_final[keepcount], abs(x_all$selCoef[keepcount]), col=adjustcolor("#F0AE2D", 0.5), pch=19, ylim=c(0,3.2), ylab="", xlab="")
+
+    # rare causal alleles of smaller effect
+    points(x_all$a_freq_final[dontkeepdontcount], abs(x_all$selCoef[dontkeepdontcount]), pch=2, col=adjustcolor("#0067E5", 0.5))
+    
+    # common causal alleles of smaller effect
+    points(x_all$a_freq_final[keepdontcount], abs(x_all$selCoef[keepdontcount]), pch=1, col=adjustcolor("#00397F", 0.5))
+    
+    # rare causal alleles of larger effect
+    points(x_all$a_freq_final[countbutnotinfinal], abs(x_all$selCoef[countbutnotinfinal]), pch=17, col=adjustcolor("#B27600", 0.5))
+  
+  # zoom in on x-axis
+      legend(0.3,3, c("Common alleles > 1% AGV", "Common alleles < 1% AGV", "Rare alleles > 1% AGV", "Rare alleles < 1% AGV"), pch=c(19,1, 17, 2), col=c("#F0AE2D", "#00397F", "#B27600", "#0067E5"),bty="n")
+      
+    plot(x_all$a_freq_final[keepcount], abs(x_all$selCoef[keepcount]), col=adjustcolor("#F0AE2D", 0.5), pch=19, ylim=c(0,3.2), ylab="", xlab="", xlim=c(0,0.02))
+    points(x_all$a_freq_final[dontkeepdontcount], abs(x_all$selCoef[dontkeepdontcount]), pch=2, col=adjustcolor("#0067E5", 0.5))
+    points(x_all$a_freq_final[keepdontcount], abs(x_all$selCoef[keepdontcount]), pch=1, col=adjustcolor("#00397F", 0.5))
+    points(x_all$a_freq_final[countbutnotinfinal], abs(x_all$selCoef[countbutnotinfinal]), pch=17, col=adjustcolor("#B27600", 0.5))
+    abline(v = 0.01, col="grey")
+    text(0.075,3.1, "Zoom in on x-axis")
+    mtext("Frequency", 1, outer=TRUE)
+    mtext("Effect Size", 2, outer=TRUE)
+  dev.off()
+
+# For each simulation, let's see how much genetic variance remains unexplained by causal loci that are not in the final dataset, but contribute more than 1% to AGV
+    # these are rare loci of large effect
+  (totAGV_rareLarge <- 
+   tapply(x_all$prop[countbutnotinfinal], x_all$simID[countbutnotinfinal], sum, na.rm=TRUE))
+   (totAGV_rareLargenum <- tapply(x_all$prop[countbutnotinfinal], x_all$simID[countbutnotinfinal], length)) # note this doesn't include 0s
+  
+    # supp figure
+  #quantile(totAGV_rareLarge, c(0.025, 0.975))
+  # on average 17% of genetic variance remains unexplained by causal loci not in the final dataset
+  
+# For each simulation, let's see how much genetic variance remains unexplained by causal loci that are not in the final dataset, and contribute LESS than 1% to AGV
+  # rare alleles of small effect
+  (totAGV_rareSmall <-   tapply(x_all$prop[dontkeepdontcount], x_all$simID[dontkeepdontcount], sum, na.rm=TRUE))
+   (totAGV_rareSmallNum <-   tapply(x_all$prop[dontkeepdontcount], x_all$simID[dontkeepdontcount], length))
+  
+    (totAGV_commonSmall <-   tapply(x_all$prop[keepdontcount], x_all$simID[keepdontcount], sum, na.rm=TRUE))
+  (totAGV_commonSmallNum <-   tapply(x_all$prop[keepdontcount], x_all$simID[keepdontcount], length))
+  
+# For each simulation, let's see how much genetic variance is explained by common alleles that are in the dataset
+  (totAGV_common <-   tapply(x_all$prop[keepcount], x_all$simID[keepcount], sum, na.rm=TRUE))
+   (totAGV_commonNum <-   tapply(x_all$prop[keepcount], x_all$simID[keepcount], length))
+  
+
+  totAGV <- data.frame(simID=names(totAGV_common), totAGV_common, totAGV_commonNum, totAGV_rareSmall, totAGV_rareSmallNum) %>% merge( data.frame(simID=names(totAGV_rareLarge), totAGV_rareLarge, totAGV_rareLargenum), all.x=TRUE) %>% merge( data.frame(simID=names(totAGV_commonSmall), totAGV_commonSmall, totAGV_commonSmallNum), all.x=TRUE) 
+  totAGV$sum <- rowSums(totAGV[,c(2,4,6,8)], na.rm=TRUE)  
+  totAGV[is.na(totAGV)] <- 0
+  apply(totAGV[,2:10], 2, quantile, c(0.05, 0.5, 0.95, 1.0))
+  totAGV
+  
+   
+# Make a plot of histograms
+  pdf("figures/PropAGVacrossSims.pdf", width=5, height = 4)
+  #par(mfrow=c(3,1))
+  #hist(totAGV_rareSmall, breaks=seq(0,1,0.05))
+  #hist(totAGV_rareLarge, breaks=seq(0,1,0.05))
+  #hist(totAGV_common, breaks=seq(0,1,0.05)) 
+    par(mfrow=c(1,1), mar=c(3,4,1,1), oma=c(3,0,0,0))
+    barplot(rbind(totAGV$totAGV_common, totAGV$totAGV_rareLarge, 
+                  totAGV$totAGV_commonSmall, totAGV$totAGV_rareSmall), 
+                  col=c("#F0AE2D","#B27600" , "#00397F", "#0067E5"),  
+                  ylab="Proportion of additive genetic variance", 
+                  names.arg = rep("", nrow(totAGV)))
+    mtext("Simulation replicate", 1)
+    par(fig = c(0, 1, 0, 1), oma = c(0, 1, 0, 1), mar = c(3, 4, 1, 4), new = TRUE)
+    plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n", ylab="", xlab="")
+    legend("bottom", c("Common alleles", "Rare alleles\nlarge effect", "Common alleles\nsmall effect", "Rare alleles\nsmall effect"), xpd = TRUE, horiz = TRUE, inset = c(0, 0), bty = "n",  fill= c("#F0AE2D","#B27600" , "#00397F", "#0067E5"), cex =0.7, border="black")
+  dev.off()
+```
+
+### Visualize signals
+```{r}
+
+
+thisim = 10902
+forpdf <- x_all[x_all$simID==thisim,]
+
+pdf("figures/Manhattan1.pdf", width=8, height= 10)
+par(mfrow=c(6,1), mar=c(0.5, 4, 0.5,0.1), oma=c(3,0,0,0))
+  plot(forpdf$pos, forpdf$Hscan_v1.3_H12,
+     ylim= c(0, 15000), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "H12 (H-scan)", xaxt="n")#, 
+     #xlim=c(170000 , 180000))
+  plot_layers(y_head=12000, y_arrows=c(10000, 8000), thisSim = thisim)
+  
+  plot(forpdf$pos, forpdf$rehh_2.0.2_ALL_log10p,
+     ylim= c(0, 9), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "-log10(P) iHS", xaxt="n")
+  plot_layers(y_head=90, y_arrows=c(8, 6), thisSim=thisim)
+
+  plot(forpdf$pos, forpdf$pcadapt_3.0.4_ALL_log10p,
+      ylim= c(0, 500), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "-log10(P) PCAdapt Naive", xaxt="n")
+  plot_layers(y_head=400, y_arrows=c(300, 200), thisSim = thisim)
+
+  plot(forpdf$pos, forpdf$pcadapt_3.0.4_PRUNED_log10p,
+     ylim= c(0, 40), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "-log10(P) PCAdapt B.P.", xaxt="n")
+  plot_layers(y_head=380, y_arrows=c(38,30), thisSim=thisim)
+
+  plot(forpdf$pos, forpdf$OutFLANK_0.2_ALL_log10p,
+     ylim= c(0, 19), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "-log10(P) OutFLANK Naive", xaxt="n")
+  plot_layers(y_head=16, y_arrows=c(13,10), thisSim=thisim)
+
+  plot(forpdf$pos, forpdf$OutFLANK_0.2_PRUNED_log10p,
+     ylim= c(0, 14), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "-log10(P) OutFLANK B.P.")
+  plot_layers(y_head=160, y_arrows=c(13,10), thisSim=thisim)
+  
+  mtext("Position (bp)", side=1, outer=TRUE, line=2)
+dev.off()
+  
+plot(forpdf$pos, forpdf$LFMM_ridge_0.0_ALL_log10p,
+     ylim= c(0, 21), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i")
+plot_layers(y_head=19, y_arrows=c(16,13), thisSim=thisim)
+
+
+plot(forpdf$pos, forpdf$LFMM_lasso_0.0_ALL_log10p,
+     ylim= c(0, 21), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i")
+plot_layers(y_head=19, y_arrows=c(16,13), thisSim=thisim)
+
+plot(forpdf$pos, forpdf$Spearmans_ALL_rho,
+     ylim= c(0, 0.5), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i")
+plot_layers(y_head=0.45, y_arrows=c(0.4, 0.3), thisSim=thisim)
+
+
+
+```
+
+### ROC and AUC
+```{r}
+
+  # Loop through each statistic
+  # Set up a list of predictions
+label_list <- list()
+x_all <- x_all %>% mutate(count = FALSE)
+x_all$count[x_all$prop>=0.01] <- TRUE
+
+for (i in 1:length(inver_simID)){
+  label_list[[i]] <- x_all$count[which(x_all$simID == inver_simID[i])]
+}
+
+# loop through columns of data
+
+togetcols <- c("Hscan_v1.3_H12", "rehh_2.0.2_ALL_log10p", "pcadapt_3.0.4_ALL_log10p", "pcadapt_3.0.4_PRUNED_log10p", "OutFLANK_0.2_ALL_log10p", "OutFLANK_0.2_PRUNED_log10p", "LFMM_ridge_0.0_ALL_log10p", "LFMM_lasso_0.0_ALL_log10p", "Spearmans_ALL_rho")
+
+perf_df <- data.frame(method=NULL, perf=NULL)
+for (j in 1:length(togetcols)){
+  print(c(j, "of", length(togetcols)))
+  predict_list <- list()
+  for (i in 1:length(inver_simID)){
+  predict_list[[i]] <- as.numeric(unlist(x_all[x_all$simID==inver_simID[i], which(colnames(x_all)==togetcols[j])]))
+  }
+  #str(predict_list)
+  
+  manypred = prediction(predict_list, label_list)
+  auc.perf = performance(manypred, measure = "auc")
+  perf <- as.numeric(unlist(auc.perf@y.values))
+  #abline(h=0.5)
+  perf_df <- rbind(perf_df, data.frame(method=togetcols[j], perf=perf))
+}
+
+par(mar=c(12, 4, 1,1))
+boxplot(perf_df$perf~perf_df$method, las=2)
+abline(h=0.5)
+# maybe split up into two boxplots, one for comparing Naive to BP
+# and the other for methods that don't have that comparison
+```
+
+
+
+```{r}
+library(data.table)
+library(mltools)
+
+getQuant_region <- function(method, simid, region){
+    bob <- x_all %>% filter(simID==simid) %>% 
+          select(c("prop", method, "simID", "pos")) 
+    P <- ecdf(unlist(bob[,method]))
+    bob$cdf <-  P(unlist(bob[,method]))
+  if (region=="LEQTL"){ # large effect QTL
+    whichbob <- which(bob$prop==max(bob$prop, na.rm=TRUE))
+  }
+  if (region=="Inversion"){
+    whichbob <- which(bob$pos > 320000 & bob$pos < 330000)
+  }
+  if (region=="SS"){ #175001
+    whichbob <- which(bob$pos > 170000 & bob$pos < 180000)
+  }
+  if (region=="lowRecom"){
+    whichbob <- which(bob$pos > 370000 & bob$pos < 380000)
+  }
+
+  data.frame(method, simid, cdf=bob$cdf[whichbob])
+}
+
+### Quantiles for largest effect QTL
+leqtl_df <- data.frame()
+for (j in 1:length(togetcols)){
+  print(c(j, "of", length(togetcols)))
+  for (i in 1:length(inver_simID)){
+    leqtl_df <- rbind (leqtl_df, getQuant_region(togetcols[j], inver_simID[i], "LEQTL"))
+  }
+}
+par(mar=c(10, 4, 0,0))
+boxplot(leqtl_df$cdf ~ leqtl_df$method, las=2)
+    
+### Quantiles for neutral inversion
+invers_df <- data.frame()
+for (j in 1:length(togetcols)){
+  print(c(j, "of", length(togetcols)))
+  for (i in 1:length(inver_simID)){
+    invers_df <- rbind (invers_df, getQuant_region(togetcols[j], inver_simID[i], "Inversion"))
+  }
+}
+par(mar=c(10, 4, 0,0))
+boxplot(invers_df$cdf ~ invers_df$method, las=2)
+
+### Quantiles for selective sweep region
+SS_df <- data.frame()
+for (j in 1:length(togetcols)){
+  print(c(j, "of", length(togetcols)))
+  for (i in 1:length(inver_simID)){
+    SS_df <- rbind (SS_df, getQuant_region(togetcols[j], inver_simID[i], "SS"))
+  }
+}
+par(mar=c(10, 4, 0,0))
+boxplot(SS_df$cdf ~ SS_df$method, las=2)
+
+### Quantiles for low recombination region
+lowRecom_df <- data.frame()
+for (j in 1:length(togetcols)){
+  print(c(j, "of", length(togetcols)))
+  for (i in 1:length(inver_simID)){
+    lowRecom_df <- rbind (lowRecom_df, getQuant_region(togetcols[j], inver_simID[i], "lowRecom"))
+  }
+}
+par(mar=c(10, 4, 0,0))
+boxplot(lowRecom_df$cdf ~ lowRecom_df$method, las=2)
+
+

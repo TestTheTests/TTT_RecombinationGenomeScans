@@ -1,0 +1,59 @@
+Loading required package: qvalue
+
+   *****       ***   vcfR   ***       *****
+   This is vcfR 1.6.0 
+     browseVignettes('vcfR') # Documentation
+     citation('vcfR') # Citation
+   *****       *****      *****       *****
+
+Warning message:
+package ‘vcfR’ was built under R version 3.4.3 
+Loading required package: methods
+Loading required package: ade4
+
+   /// adegenet 2.1.1 is loaded ////////////
+
+   > overview: '?adegenet'
+   > tutorials/doc/questions: 'adegenetWeb()' 
+   > bug reports/feature requests: adegenetIssues()
+
+
+Warning messages:
+1: package ‘adegenet’ was built under R version 3.4.3 
+2: package ‘ade4’ was built under R version 3.4.3 
+Loading required package: bigstatsr
+Loading required package: tools
+Loading required package: ggplot2
+Loading required package: rehh.data
+Loading required package: gplots
+
+Attaching package: ‘gplots’
+
+The following object is masked from ‘package:stats’:
+
+    lowess
+
+Warning message:
+In cor.test.default(final_df$pcadapt_3.0.4_ALL_log10p, final_df$pcadapt_3.0.4_PRUNED_log10p,  :
+  Cannot compute exact p-value with ties
+It = 1/100, err2 = 0.998993963787492
+It = 2/100, err2 = 0.979555087097034
+It = 3/100, err2 = 0.979566624349661
+It = 4/100, err2 = 0.979567606781687
+=== lambda = 0.240172514149248, no zero B proportion = 0.00830177687154093
+It = 1/100, err2 = 0.979567692155487
+It = 2/100, err2 = 0.979556014622766
+=== lambda = 0.229256302713757, no zero B proportion = 0.0101951645790853
+It = 1/100, err2 = 0.979555047888561
+It = 2/100, err2 = 0.979541894477219
+It = 3/100, err2 = 0.979540769410682
+=== lambda = 0.218836249935415, no zero B proportion = 0.0126711331197204
+It = 1/100, err2 = 0.979540668977711
+It = 2/100, err2 = 0.979526909889941
+It = 3/100, err2 = 0.979525650648242
+=== lambda = 0.208889804637514, no zero B proportion = 0.0164579085348092
+It = 1/100, err2 = 0.97952552957858
+It = 2/100, err2 = 0.979509402237133
+It = 3/100, err2 = 0.979507819889196
+=== lambda = 0.199395440629131, no zero B proportion = 0.0209729099912613
+There were 50 or more warnings (use warnings() to see the first 50)

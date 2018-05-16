@@ -1,5 +1,5 @@
 
-#### Trying to get github connection ####
+#### Trying to get github connection - not working ####
 ls -al ~/.ssh
 # check for ssh key files
 
@@ -14,25 +14,124 @@ git clone git://github.com/TestTheTests/TTT_RecombinationGenomeScans.git
 
 #### Direct upload/download ####
 
-## src folder ###
-katie@Katies-MacBook-Air:~/Desktop/TestTheTests/TTT_RecombinationGenomeScans$ scp -r src k.lotterhos@defiance.neu.edu:/home/k.lotterhos/k_store/TestTheTests/TTT_RecombinationGenomeScans
+	NOTE: CANNOT SCP directly to shared_lab folder on defiance
+	shared_lab is only accessible once you are logged into one of the comps
+	files transferred to the head node are not accessible through one of the comps
 
-## simulations folder ###
-katie@Katies-MacBook-Air:~/Desktop/TestTheTests/TTT_RecombinationGenomeScans$ scp -r simfiles k.lotterhos@defiance.neu.edu:/home/k.lotterhos/k_store/TestTheTests/TTT_RecombinationGenomeScans
-
+## src folder to defiance ###
+  ## LAPTOP	
+	katie@Katies-MacBook-Air:~/Desktop/TestTheTests/TTT_RecombinationGenomeScans$ 
+	scp -r src k.lotterhos@defiance.neu.edu:/home/k.lotterhos/k_store/src
+  ## DEFIANCE
+	k.lotterhos@comp5[TTT_RecombinationGenomeScans]# rm -rf src
+	k.lotterhos@comp5[TTT_RecombinationGenomeScans]# mv -f ~/k_store/src .
 
 ### Start simulations ###
 comp5
 
-tmux new-session -s trial 
-	# open a remote tmux window 
 
-k.lotterhos@comp5[TTT_RecombinationGenomeScans]# src/repRecomLowRegion.sh
-	# run replicates
+########################################################
+#### run replicates	####
+########################################################
+	k.lotterhos@comp5[TTT_RecombinationGenomeScans]# 
+
+	### recom low region
+	tmux new-session -s RecomLowReg        OR            tmux attach -t RecomLowReg
+	src/repRecomLowRegion.sh > repRecomLowRegion.out 2> repRecomLowRegion.error
 	
+	### Inversion
+	tmux new-session -s Invers        OR            tmux attach -t Invers
+	src/repInversion.sh > repInversion.out 2> repInversion.error
+	
+	src/repInversion_onlyRscripts.sh > repInversion_onlyRscripts.out 2> repInversion_onlyRscripts.error
+
+########################################################
+#### TMUX #####	
+########################################################
 control-b d
 	# detach tmux window
 	
 tmux list-sessions
 tmux attach -t trial
+tmux attach -t RecomLowReg
+tmux kill-session -t RecomLowReg
+tmux kill-session -t Invers
+tmux attach -t Invers
 
+killall R
+
+tmux new-session -s RecomLowRegTryFail
+ncpus=1
+start=9901
+finish=$(($start + $ncpus-1))
+echo $start $finish
+less 9901_RecomLowReg_R.out
+
+########################################################
+#### RUNNING FILES THAT DIDN'T WORK FOR RECOMB LOW REG ####
+########################################################
+cd results_final
+ls | grep vcf | cut -c1-4 | grep 99 > done_list.txt
+ls | grep muts | cut -c1-4 | grep 99 > all_list.txt
+grep -v -f done_list.txt all_list.txt > todo_list.txt
+todo=$(grep -v -f done_list.txt all_list.txt)
+
+echo $todo
+cd ../results
+for i in $todo
+do
+    echo $i
+    Rscript --vanilla ../src/Proc_Sims.R ${i} 'RecomLowReg' > ${i}"_RecomLowReg_R.out" 2> ${i}"_RecomLowReg_R.error" & echo $!
+	sleep 1m
+done
+
+########################################################
+#### RUNNING FILES THAT DIDN'T WORK FOR INVERSIONS ####
+########################################################
+
+tmux attach -t Invers
+
+cd ../results_final
+ls | grep Invers | grep vcf.gz | cut -c1-5 | grep 109 > Invers_done_list.txt
+echo "" > Invers_all_list.txt
+for i in $(seq 10900 10961)
+do
+ echo $i >> Invers_all_list.txt 
+done
+#less Invers_all_list.txt
+grep -v -f Invers_done_list.txt Invers_all_list.txt > Inverse_todo_list.txt
+todo=$(grep -v -f Invers_done_list.txt Invers_all_list.txt)
+
+
+cd ../results
+echo $todo
+for i in $todo
+do
+    Rscript --vanilla ../src/Proc_Sims.R ${i} 'Invers' > ${i}"_Invers_R.out" 2> ${i}"_Invers_R.error" & 
+    echo $i '   jobid' $!
+    sleep 1m
+done
+
+########################################################
+### moving files
+########################################################
+tomove=$(ls | grep _RecomLowReg_R.)
+echo $tomove
+
+########################################################
+### shasum checksums
+########################################################
+cd results_final
+shasum * > all_checksums.sha
+cat all_checksums.sha
+
+# ON MY LAPTOP
+cd ~/Desktop/TestTheTests/TTT_RecombinationGenomeScans
+scp -r k.lotterhos@defiance.neu.edu:~/k_store/TestTheTests/TTT_RecombinationGenomeScans/results_final .
+
+# Then, we can use shasum’s check option (-c) to validate that these files match the original versions:
+cd results_final
+shasum -c all_checksums.sha
+
+### md5 checksums
+md5sum -c md5sum.txt

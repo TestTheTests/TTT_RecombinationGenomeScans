@@ -1,0 +1,69 @@
+Loading required package: qvalue
+
+   *****       ***   vcfR   ***       *****
+   This is vcfR 1.6.0 
+     browseVignettes('vcfR') # Documentation
+     citation('vcfR') # Citation
+   *****       *****      *****       *****
+
+Warning message:
+package ‘vcfR’ was built under R version 3.4.3 
+Loading required package: methods
+Loading required package: ade4
+
+   /// adegenet 2.1.1 is loaded ////////////
+
+   > overview: '?adegenet'
+   > tutorials/doc/questions: 'adegenetWeb()' 
+   > bug reports/feature requests: adegenetIssues()
+
+
+Warning messages:
+1: package ‘adegenet’ was built under R version 3.4.3 
+2: package ‘ade4’ was built under R version 3.4.3 
+Loading required package: bigstatsr
+Loading required package: tools
+Loading required package: ggplot2
+Loading required package: rehh.data
+Loading required package: gplots
+
+Attaching package: ‘gplots’
+
+The following object is masked from ‘package:stats’:
+
+    lowess
+
+Warning message:
+In cor.test.default(final_df$pcadapt_3.0.4_ALL_log10p, final_df$pcadapt_3.0.4_PRUNED_log10p,  :
+  Cannot compute exact p-value with ties
+It = 1/100, err2 = 0.998992950654498
+It = 2/100, err2 = 0.982212115732087
+It = 3/100, err2 = 0.982218528245861
+=== lambda = 0.280331198744779, no zero B proportion = 0.00380729242934544
+It = 1/100, err2 = 0.982218768815692
+It = 2/100, err2 = 0.982205750039703
+=== lambda = 0.267589713115991, no zero B proportion = 0.004685898374579
+It = 1/100, err2 = 0.982205230591096
+It = 2/100, err2 = 0.982190468107056
+=== lambda = 0.255427347673452, no zero B proportion = 0.00629667594084053
+It = 1/100, err2 = 0.982189830341996
+It = 2/100, err2 = 0.982173620255633
+=== lambda = 0.243817780510919, no zero B proportion = 0.00688241323766291
+It = 1/100, err2 = 0.982172929258284
+It = 2/100, err2 = 0.982156482457416
+=== lambda = 0.232735886093412, no zero B proportion = 0.00834675647971885
+It = 1/100, err2 = 0.982155767629087
+It = 2/100, err2 = 0.982137948832124
+=== lambda = 0.222157680880291, no zero B proportion = 0.009371796749158
+It = 1/100, err2 = 0.982137174899635
+It = 2/100, err2 = 0.982118442382678
+=== lambda = 0.212060271419854, no zero B proportion = 0.0109825743154195
+It = 1/100, err2 = 0.982117620323762
+It = 2/100, err2 = 0.982096273277591
+It = 3/100, err2 = 0.982095213519751
+=== lambda = 0.202421804803111, no zero B proportion = 0.0152291697173818
+It = 1/100, err2 = 0.982095160869378
+It = 2/100, err2 = 0.982067743946689
+It = 3/100, err2 = 0.982066218758373
+=== lambda = 0.193221421369512, no zero B proportion = 0.0215258456582223
+There were 50 or more warnings (use warnings() to see the first 50)

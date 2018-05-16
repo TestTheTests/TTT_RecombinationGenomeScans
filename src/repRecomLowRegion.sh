@@ -5,10 +5,10 @@ set -o pipefail
 
 # This script only works if you are able to run ncpus in the background at once
 
-#mypath="/shared_lab/TestTheTests/TTT_RecombinationGenomeScans"
-mypath="/Users/katie/Desktop/TestTheTests/TTT_RecombinationGenomeScans"
+mypath="/home/k.lotterhos/k_store/TestTheTests/TTT_RecombinationGenomeScans"
+#mypath="/Users/katie/Desktop/TestTheTests/TTT_RecombinationGenomeScans"
 cd $mypath
-ncpus=2
+ncpus=60
 start=9900
 finish=$(($start + $ncpus-1))
 echo $start $finish
@@ -38,7 +38,7 @@ wait ${!} #wait until the last background process is finished
 #############
 
 cd results
-gzip *.vcf
+gzip -f *.vcf
 
 
 ##############
@@ -60,13 +60,13 @@ wait ${!} #wait until the last background process is finished
 ##############
 #### run R script
 #############
-Rscript Installs.r > Install_output.txt
-Rscript 
+#Rscript ../../Installs.r > Install_output.txt
+#Rscript TO DO DELETE THIS LINE
 
+echo "Running R scripts"
 for i in $(seq $start $finish)
-# read all .MS files
 do
-    Rscript src/Proc_Sims.R ${i} --vanilla > ${i}"_RecomLowReg_Rout.txt" &
+    echo $i
+    Rscript --vanilla ../src/Proc_Sims.R ${i} 'RecomLowReg' > ${i}"_RecomLowReg_R.out" 2> ${i}"_RecomLowReg_R.error" & echo $!
+    sleep 1m #offsetting by one minute important for some R fuctions that tend to crash cluster
 done
-
-

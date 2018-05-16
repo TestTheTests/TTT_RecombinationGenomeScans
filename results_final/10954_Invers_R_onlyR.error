@@ -1,0 +1,56 @@
+Loading required package: qvalue
+
+   *****       ***   vcfR   ***       *****
+   This is vcfR 1.6.0 
+     browseVignettes('vcfR') # Documentation
+     citation('vcfR') # Citation
+   *****       *****      *****       *****
+
+Warning message:
+package ‘vcfR’ was built under R version 3.4.3 
+Loading required package: methods
+Loading required package: ade4
+
+   /// adegenet 2.1.1 is loaded ////////////
+
+   > overview: '?adegenet'
+   > tutorials/doc/questions: 'adegenetWeb()' 
+   > bug reports/feature requests: adegenetIssues()
+
+
+Warning messages:
+1: package ‘adegenet’ was built under R version 3.4.3 
+2: package ‘ade4’ was built under R version 3.4.3 
+Loading required package: bigstatsr
+Loading required package: tools
+Loading required package: ggplot2
+Loading required package: rehh.data
+Loading required package: gplots
+
+Attaching package: ‘gplots’
+
+The following object is masked from ‘package:stats’:
+
+    lowess
+
+Warning message:
+In cor.test.default(final_df$pcadapt_3.0.4_ALL_log10p, final_df$pcadapt_3.0.4_PRUNED_log10p,  :
+  Cannot compute exact p-value with ties
+It = 1/100, err2 = 0.998993963786349
+It = 2/100, err2 = 0.983361304955359
+It = 3/100, err2 = 0.983386308954745
+It = 4/100, err2 = 0.983390116874579
+=== lambda = 0.193306755093625, no zero B proportion = 0.0114406779661017
+It = 1/100, err2 = 0.983390733531932
+It = 2/100, err2 = 0.983381731643793
+It = 3/100, err2 = 0.983380304951566
+=== lambda = 0.184520664736927, no zero B proportion = 0.0145480225988701
+It = 1/100, err2 = 0.983380073566261
+It = 2/100, err2 = 0.983369690013031
+It = 3/100, err2 = 0.983367928564437
+=== lambda = 0.17613391574685, no zero B proportion = 0.0189265536723164
+It = 1/100, err2 = 0.983367625137215
+It = 2/100, err2 = 0.983355169463925
+It = 3/100, err2 = 0.983352968997684
+=== lambda = 0.168128357441961, no zero B proportion = 0.0248587570621469
+There were 50 or more warnings (use warnings() to see the first 50)

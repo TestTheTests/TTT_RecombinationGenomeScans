@@ -155,7 +155,7 @@ plot_layers <- function(y_head=0, y_arrows=c(1,0.25), ...){
   text(lg_whereplot, y = y_head, 
        labels = c("LG1\nNeut", "LG2\nQTL", "LG3\nQTL",
                   "LG4\nSS", "LG5\nBS",
-                  "LG6\nBS", "LG7\n Inversion",
+                  "LG6\nBS", "LG7\nNeut\nInversion",
                   "LG8\nmed r", "LG9\nr var", "LG10\nNeut"))
   
   
@@ -585,10 +585,15 @@ par(oma=c(3,3,1,0), mar=c(2,2,0,0))
   mtext("Loading on PC axis", outer=TRUE, side=2, line=1, adj=0.5)
 ```
 
+### Plot PCADAPT P-values ###
 ```{r}
-  par(mfrow=c(1,1))
-  plot(training$position[1:num], sqrt(x$chi2.stat))
-  plot_layers(y_head = 20, y_arrows=c(-10, -13))  
+  par(mfrow=c(1,1), mar=c(4,4,1,2))
+  plot(training$position[1:num], -log10(x$pvalues), pch=19, col=rgb(0,0,0,0.5), ylim= c(0, 550), 
+       ylab= "-log10 P-value from PCADAPT",
+       xlim=c(0, 350000), xlab="Position", xaxs="i")
+  
+  plot_layers(y_head = 475, y_arrows=c(400, 325))  
+  points(training$position[1:num], -log10(x$pvalues), pch=19, col=rgb(0,0,0,0.5))
 ```
 
 
