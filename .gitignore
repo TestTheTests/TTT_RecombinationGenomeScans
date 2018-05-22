@@ -4,3 +4,6 @@ temp/*
 .DS_Store
 results/*
 .Rproj.user
+recom_low_region/*
+*R.error
+*R.out

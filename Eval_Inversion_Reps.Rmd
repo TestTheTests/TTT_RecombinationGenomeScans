@@ -20,7 +20,9 @@ library(ROCR)
 Read in files
 ```{r}
 inver_files = list.files("results_final", pattern = "Invers_ScanResults")
+LEA_files = list.files("results_final", pattern = "Invers_Results_LEA")
 inver_files
+LEA_files
 inver_simID <- substr(inver_files, start = 1, stop=5)
 
 
@@ -31,7 +33,16 @@ for (i in 1:length(inver_files)){
   x1$type = "Inversion"
   class(x1)
   
-  x_all <- rbind(x_all, x1)
+  x1_LEA <- read_delim(paste0("results_final/", LEA_files[i]), delim=" ")
+  if (sum(x1$keep_loci)!=nrow(x1_LEA)){
+    print("Error: wrong number of loci in LEA file"
+    )
+  }
+  x1_LEA$unique <- x1$unique[which(x1$keep_loci)]
+  
+  x_final <- left_join(x1, x1_LEA, by="unique")
+  dim(x_final)
+  x_all <- rbind(x_all, x_final)
 }
 
 levels(factor(x_all$simID))
@@ -39,6 +50,7 @@ nlevels(factor(x_all$simID))
 print(tbl_df(x_all), n=5)
 colnames(x_all)
 
+# plot(x_all$rehh_2.0.2_ALL_iHS, x_all$rehh_2.0.2_ALL_log10p)
 # error 10901
 #Error in merge(final_df2.2, final_df, all.x = TRUE) : 
 #  object 'final_df2.2' not found
@@ -304,7 +316,9 @@ for (i in 1:length(inver_simID)){
 
 # loop through columns of data
 
-togetcols <- c("Hscan_v1.3_H12", "rehh_2.0.2_ALL_log10p", "pcadapt_3.0.4_ALL_log10p", "pcadapt_3.0.4_PRUNED_log10p", "OutFLANK_0.2_ALL_log10p", "OutFLANK_0.2_PRUNED_log10p", "LFMM_ridge_0.0_ALL_log10p", "LFMM_lasso_0.0_ALL_log10p", "Spearmans_ALL_rho")
+togetcols <- c("Hscan_v1.3_H12", "rehh_2.0.2_ALL_log10p", "pcadapt_3.0.4_ALL_log10p", "pcadapt_3.0.4_PRUNED_log10p", "OutFLANK_0.2_ALL_log10p", "OutFLANK_0.2_PRUNED_log10p", "LFMM_ridge_0.0_ALL_log10p", "LFMM_lasso_0.0_ALL_log10p", 
+  "LEA_1.2.0_ALL_K3_log10p")
+#"Spearmans_ALL_rho", )
 
 perf_df <- data.frame(method=NULL, perf=NULL)
 for (j in 1:length(togetcols)){
