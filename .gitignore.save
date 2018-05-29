@@ -5,4 +5,3 @@ temp/*
 results/*
 .Rproj.user
 *pruned.vcf
-run_baypass/*
