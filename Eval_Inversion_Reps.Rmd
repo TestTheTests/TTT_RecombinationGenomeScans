@@ -15,12 +15,15 @@ library(tidyverse)
 library(RSQLite)
 library(dbplyr)
 library(ROCR)
+library(vcfR)
 ```
 
 Read in files
 ```{r}
 inver_files = list.files("results_final", pattern = "Invers_ScanResults")
+LEA_files = list.files("results_final", pattern = "Invers_Results_LEA")
 inver_files
+LEA_files
 inver_simID <- substr(inver_files, start = 1, stop=5)
 
 
@@ -31,7 +34,16 @@ for (i in 1:length(inver_files)){
   x1$type = "Inversion"
   class(x1)
   
-  x_all <- rbind(x_all, x1)
+  x1_LEA <- read_delim(paste0("results_final/", LEA_files[i]), delim=" ")
+  if (sum(x1$keep_loci)!=nrow(x1_LEA)){
+    print("Error: wrong number of loci in LEA file"
+    )
+  }
+  x1_LEA$unique <- x1$unique[which(x1$keep_loci)]
+  
+  x_final <- left_join(x1, x1_LEA, by="unique")
+  dim(x_final)
+  x_all <- rbind(x_all, x_final)
 }
 
 levels(factor(x_all$simID))
@@ -39,6 +51,7 @@ nlevels(factor(x_all$simID))
 print(tbl_df(x_all), n=5)
 colnames(x_all)
 
+# plot(x_all$rehh_2.0.2_ALL_iHS, x_all$rehh_2.0.2_ALL_log10p)
 # error 10901
 #Error in merge(final_df2.2, final_df, all.x = TRUE) : 
 #  object 'final_df2.2' not found
@@ -72,21 +85,30 @@ colnames(x_all)
 ### Plot function
 
 plot_layers <- function(y_head=0, y_arrows=c(1,0.25), thisSim=NULL, ...){
- 
+
+  polygon(x=c(220000, 230000, 230000, 220000),
+          y = c(-10000, -10000, 100000, 100000),
+          col=rgb(0,0,0,0.2), border=NA)
+    # BS
+  polygon(x=c(270000, 280000, 280000, 270000),
+          y = c(-10000, -10000, 100000, 100000),
+          col=rgb(0,0,0,0.2), border=NA)
+    # BS
+  
   polygon(x=c(320000, 330000, 330000, 320000),
-          y = c(-10000, -10000, 10000, 10000),
+          y = c(-10000, -10000, 100000, 100000),
           col=rgb(1,0,0,0.3), border=NA)
   # Inversion
   
   abline(v=lgs, col=adjustcolor("grey", 0.5))
   
   polygon(x=c(370000, 380000, 380000, 370000),
-          y = c(-10000, -10000, 10000, 10000),
+          y = c(-10000, -10000, 100000, 100000),
           col=rgb(0,0,1,0.3), border=NA)
   # Low Recomb region
   
   polygon(x=c(400000, 450000, 450000, 400000),
-          y = c(-10000, -10000, 10000, 10000),
+          y = c(-10000, -10000, 100000, 100000),
           col=rgb(0,0,1,0.1), border=NA)
   
   text(lg_whereplot, y = y_head, 
@@ -229,10 +251,156 @@ pdf("figures/PlotFreqVsEffectSize.pdf", width=7, height=9)
   dev.off()
 ```
 
-### Visualize signals
+### Multiplot function
+copied from cookbook for R
+```{r}
+# Multiple plot function
+#
+# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
+# - cols:   Number of columns in layout
+# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
+#
+# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
+# then plot 1 will go in the upper left, 2 will go in the upper right, and
+# 3 will go all the way across the bottom.
+#
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  library(grid)
+
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+
+  numPlots = length(plots)
+
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout)) {
+    # Make the panel
+    # ncol: Number of columns of plots
+    # nrow: Number of rows needed, calculated from # of cols
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                    ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+
+ if (numPlots==1) {
+    print(plots[[1]])
+
+  } else {
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+      # Get the i,j matrix positions of the regions that contain this subplot
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
+```
+
+### Evaluate population structure
+
 ```{r}
 
+thisim = 10903
+forpdf <- x_all[x_all$simID==thisim,]
+(inv_index <- which(forpdf$muttype=="MT=5"))
 
+### PC scores of individuals ####
+  # load individual data
+  inddf <- read_delim(paste0("results_final/",
+                             thisim,"_Invers_indFILT.txt"),
+                      delim=" ")
+  head(inddf)
+  ind_geno <- read.vcfR(paste0("results_final/",
+                             thisim, "_Invers_VCFallFILT.vcf.gz", sep=""))
+  (inv_index <- grep("MT=5", ind_geno@fix[,"INFO"]))
+  
+  genoinv <- (ind_geno@gt[inv_index,-1])
+  # check dimensions
+    dim(inddf[which(inddf$infinal),])
+    length(genoinv)
+    genoinv[which(genoinv=="1|0")] <- "0|1" # set heterozygotes equal
+    levels(factor(genoinv))
+    library(RColorBrewer)
+    myColors <- brewer.pal(3,"Set2")
+    names(myColors) <- levels(factor(genoinv))
+    colScale <- scale_colour_manual(name = "Inversion\ngenotype",values = myColors)
+  
+pdf("figures/PC_scores_compare.pdf", width=6, height=9)    
+ 
+  # Individual scores without LD pruning
+  p1 <- qplot(inddf$pca_ALL_PC1_scores[inddf$infinal], inddf$pca_ALL_PC2_scores[inddf$infinal],
+        colour=genoinv, 
+        main="A) Individual scores (all SNPs)") + 
+    colScale + theme_bw() + xlab("PC1 score") + ylab("PC2 score")
+
+  # Individual scores with LD pruning
+  p2<- qplot(inddf$pca_PRUNED_PC1_scores, inddf$pca_PRUNED_PC2_scores,
+        colour=inddf$envi, main="B) Individual scores (thinned SNPs)", xlab="PC1 score", ylab="PC2 score" ) + theme_bw() + labs(colour="Environm.") + scale_color_gradient2( low="blue", mid="white", high="red", space ="Lab" )
+  
+  multiplot(p1, p2, cols=1)
+  dev.off()
+
+### PC loadings of loci ####
+par(mar=c(4,4,1,1))
+plot(forpdf$pos, forpdf$pca_ALL_PC1_loadings,
+     ylim=c(-8, 13),
+      pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "PC1 loadings", xaxt="n")#, 
+     #xlim=c(170000 , 180000))
+  plot_layers(y_head=10, y_arrows=c(10000, 8000), thisSim = thisim)
+  plot(forpdf$pos, forpdf$pca_ALL_PC2_loadings,
+     ylim=c(-8, 13),
+      pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "PC1 loadings", xaxt="n")#, 
+     #xlim=c(170000 , 180000))
+  plot_layers(y_head=10, y_arrows=c(10000, 8000), thisSim = thisim)
+  
+  plot(forpdf$pos, forpdf$pca_PRUNED_PC1_loadings,
+     ylim=c(-8, 13),
+      pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "PC1 loadings", xaxt="n")#, 
+     #xlim=c(170000 , 180000))
+  plot_layers(y_head=10, y_arrows=c(10, 8), thisSim = thisim)
+  plot(forpdf$pos, forpdf$pca_PRUNED_PC2_loadings,
+     ylim=c(-8, 13),xlim=c(0,5e05),
+      pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "PC1 loadings", xaxt="n")#, 
+     #xlim=c(170000 , 180000))
+  plot_layers(y_head=10, y_arrows=c(10, 8), thisSim = thisim)
+  
+  ### which locations load onto PC all data ####
+pdf("figures/WhichLocationsPCs.pdf", width=9, height=6)  
+  par(mar=c(4, 4,1,1), oma=c(0,2,0,0), mfrow=c(3,1))
+  d <- density(x_all$pos[which(abs(x_all$pca_ALL_PC1_loadings)>3)], bw = 1000)
+  plot(d, main="A) Locations of outlier PC1 loadings (all SNPs)", bty="n", las=1, ylim=c(0, 13e-05), xlim=c(0,5e05),
+       ylab="", xlab="")
+  polygon(d, col="black")
+  plot_layers(y_head=0.00011, y_arrows=c(10, 8), thisSim = thisim)
+  
+  d <- density(x_all$pos[which(abs(x_all$pca_ALL_PC2_loadings)>3)], bw = 1000)
+    plot(d, main="B) Locations of outlier PC2 loadings (all SNPs)", bty="n", las=1, ylim=c(0, 6e-05), xlim=c(0,5e05),
+       ylab="", xlab="")
+  polygon(d, col="black")
+  plot_layers(y_head=10, y_arrows=c(10, 8), thisSim = thisim)
+  
+  d <- density(x_all$pos[which(abs(x_all$pca_PRUNED_PC1_loadings)>3)], bw = 1000)
+    plot(d, main="C) Locations of outlier PC1 loadings (trimmed SNPs)", bty="n", las=1, ylim=c(0, 2e-05), xlim=c(0,5e05),
+       ylab="", xlab="Position (bp)")
+  polygon(d, col="black")
+  plot_layers(y_head=1.7e-05, y_arrows=c(10, 8), thisSim = thisim)
+  
+  mtext("Density", side = 2, outer=TRUE, line=0)
+dev.off()  
+
+```
+
+### Visualize genome scans: Manhattan plots
+```{r}
 thisim = 10902
 forpdf <- x_all[x_all$simID==thisim,]
 
@@ -298,19 +466,22 @@ label_list <- list()
 x_all <- x_all %>% mutate(count = FALSE)
 x_all$count[x_all$prop>=0.01] <- TRUE
 
-for (i in 1:length(inver_simID)){
+for (i in 1:14){#length(inver_simID)){
   label_list[[i]] <- x_all$count[which(x_all$simID == inver_simID[i])]
 }
 
 # loop through columns of data
 
-togetcols <- c("Hscan_v1.3_H12", "rehh_2.0.2_ALL_log10p", "pcadapt_3.0.4_ALL_log10p", "pcadapt_3.0.4_PRUNED_log10p", "OutFLANK_0.2_ALL_log10p", "OutFLANK_0.2_PRUNED_log10p", "LFMM_ridge_0.0_ALL_log10p", "LFMM_lasso_0.0_ALL_log10p", "Spearmans_ALL_rho")
+togetcols <- c("Hscan_v1.3_H12", "rehh_2.0.2_ALL_log10p", "pcadapt_3.0.4_ALL_log10p", "pcadapt_3.0.4_PRUNED_log10p", "OutFLANK_0.2_ALL_log10p", "OutFLANK_0.2_PRUNED_log10p", "LFMM_ridge_0.0_ALL_log10p", "LFMM_lasso_0.0_ALL_log10p", 
+  "LEA_1.2.0_ALL_K3_log10p")
+#"Spearmans_ALL_rho", )
 
 perf_df <- data.frame(method=NULL, perf=NULL)
 for (j in 1:length(togetcols)){
   print(c(j, "of", length(togetcols)))
   predict_list <- list()
-  for (i in 1:length(inver_simID)){
+  for (i in 1:14){#length(inver_simID)){
+    print(i)
   predict_list[[i]] <- as.numeric(unlist(x_all[x_all$simID==inver_simID[i], which(colnames(x_all)==togetcols[j])]))
   }
   #str(predict_list)

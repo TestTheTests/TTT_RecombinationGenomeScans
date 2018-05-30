@@ -4,5 +4,11 @@ temp/*
 .DS_Store
 results/*
 .Rproj.user
+<<<<<<< HEAD
 *pruned.vcf
 run_baypass/*
+=======
+recom_low_region/*
+*R.error
+*R.out
+>>>>>>> 48172c2e2ca6c96ba6713f74bdf5a9861a0c0d33

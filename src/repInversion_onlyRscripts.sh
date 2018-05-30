@@ -18,19 +18,13 @@ echo $start $finish
 cd results
 
 ##############
-#### run R script
+#### run R script LEA
 #############
-#Rscript ../../Installs.r > Install_output.txt
-#Rscript TO DO DELETE THIS LINE
 
-echo "Running R scripts"
+echo "Running R LEA"
 for i in $(seq $start $finish)
 do
     echo $i
-    Rscript --vanilla ../src/Proc_Sims.R ${i} 'Invers' > ${i}"_Invers_R_onlyR.out" 2> ${i}"_Invers_R_onlyR.error" & echo $!
-    sleep 1m
+    Rscript --vanilla ../src/Proc_Sims_LEA.R ${i} 'Invers' > ${i}"_Invers_R_LEAonlyR.out" 2> ${i}"_Invers_R_LEAonlyR.error" & echo $!
+    sleep 10s
 done
-
-## Some of the R simulations failed the first time around, which I think happened because R was trying to read files that weren't completely written yet
-## I added some wait times to the code, but all simulations worked the second time around
-##
