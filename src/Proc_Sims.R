@@ -149,6 +149,11 @@
     # total # derived alleles / total # individuals
   #rem = c(which(rowSums(G)==0), which(rowSums(G-2)==0)) ## fixed loci
   keep1 <- which(final_df0$a_freq_old > 0.05 & final_df0$a_freq_old< 0.95)
+  set.seed(99999)
+    # note that in the current output, the seed was not set.
+    # So if this code is rerun, it will give slightly different relatedness
+    # for individuals, potentially giving different filtering and vcf files.
+    # and would require re-running LEA and BayPass results
   keep2 <- sort(sample(keep1, 800, replace = FALSE))
   
   final_df0$for_relatedness <- FALSE
