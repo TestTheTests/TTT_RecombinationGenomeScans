@@ -11,11 +11,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #install.packages("ROCR")
 
+if(!("tidyverse" %in% installed.packages())){install.packages("tidyverse")}
 library(tidyverse)
+if(!("RSQLite" %in% installed.packages())){install.packages("RSQLite")}
 library(RSQLite)
+if(!("dbplyr" %in% installed.packages())){install.packages("dbplyr")}
 library(dbplyr)
+if(!("ROCR" %in% installed.packages())){install.packages("ROCR")}
 library(ROCR)
+if(!("vcfR" %in% installed.packages())){install.packages("vcfR")}
 library(vcfR)
+if(!("data.table" %in% installed.packages())){install.packages("data.table")}
+library(data.table)
 
 options(readr.show_progress=FALSE)
 ```
@@ -978,8 +985,6 @@ dev.off()
 
 
 ```{r}
-library(data.table)
-library(mltools)
 
 perf_df2 <- perf_df2 %>% mutate(uniq=paste(method, simID, sep="_"))
 head(perf_df2)
@@ -1111,6 +1116,8 @@ Rvar_quant <- function(method){
   tapply(unlist(yo1[,method]), yo1$simID, function(x){sum(x>q, na.rm=TRUE)/sum(!is.na(x))})
 }
 summary(Rvar_quant("Hscan_v1.3_H12"))
+summary(Rvar_quant("rehh_2.0.2_ALL_log10p"))
+summary(Rvar_Pval("rehh_2.0.2_ALL_log10p"))
 
 
 # Quantify BF for inversion region
@@ -1123,4 +1130,8 @@ mean(Inv_BF("baypass_2.1_ALL_BF_env"))
 mean(Inv_BF("baypass_2.1_PRUNED_BF_env"))
 quantile(unlist(x_all[,"baypass_2.1_ALL_BF_env"]), c(0.5,0.6), na.rm=TRUE)
 
+```
+
+```{r}
+sessionInfo()
 ```
