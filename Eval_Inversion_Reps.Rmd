@@ -688,19 +688,19 @@ plot(forpdf$pos, forpdf$pca_ALL_PC1_loadings,
 pdf("figures/WhichLocationsPCs.pdf", width=9, height=6)  
   par(mar=c(4, 4,1,1), oma=c(0,2,0,0), mfrow=c(3,1))
   d <- density(x_all$pos[which(abs(x_all$pca_ALL_PC1_loadings)>3)], bw = 1000)
-  plot(d, main="A) Locations of outlier PC1 loadings (all SNPs)", bty="n", las=1, ylim=c(0, 13e-05), xlim=c(0,5e05),
+  plot(d, main="A) Locations of outlier PC1 loadings (all SNPs)", bty="n", las=1, ylim=c(0, 13e-05), xlim=c(0,5e05),adj=0,
        ylab="", xlab="")
   polygon(d, col="black")
   plot_layers(y_head=0.00011, y_arrows=c(10, 8), thisSim = thisim)
   
   d <- density(x_all$pos[which(abs(x_all$pca_ALL_PC2_loadings)>3)], bw = 1000)
-    plot(d, main="B) Locations of outlier PC2 loadings (all SNPs)", bty="n", las=1, ylim=c(0, 6e-05), xlim=c(0,5e05),
+    plot(d, main="B) Locations of outlier PC2 loadings (all SNPs)", bty="n", las=1, ylim=c(0, 6e-05), xlim=c(0,5e05), adj=0,
        ylab="", xlab="")
   polygon(d, col="black")
   plot_layers(y_head=10, y_arrows=c(10, 8), thisSim = thisim)
   
   d <- density(x_all$pos[which(abs(x_all$pca_PRUNED_PC1_loadings)>3)], bw = 1000)
-    plot(d, main="C) Locations of outlier PC1 loadings (trimmed SNPs)", bty="n", las=1, ylim=c(0, 2e-05), xlim=c(0,5e05),
+    plot(d, main="C) Locations of outlier PC1 loadings (trimmed SNPs)", bty="n", las=1, ylim=c(0, 2e-05), xlim=c(0,5e05),adj=0,
        ylab="", xlab="Position (bp)")
   polygon(d, col="black")
   plot_layers(y_head=1.7e-05, y_arrows=c(10, 8), thisSim = thisim)
@@ -715,115 +715,122 @@ This plot compares a few of the different methods, but is not comprehensive. Dep
 
 ```{r}
 thisim = 10944
-# 10944 This is an interesting case when the inversion drifted to some diverse frequencies in a couple of the subpopulations, and resulted in a slightly elevated signal in the inversion. Note that this did not happen in many of the simulations.
+# 10944 and 10946 This is an interesting case when the inversion drifted to some diverse frequencies in a couple of the subpopulations, and resulted in a slightly elevated signal in the inversion. Note that this did not happen in many of the simulations.
+# 10945, an interesting comparison.
 
 # Note that the y-axes in the below graphs are specific to this simulation
 
-forpdf <- x_all[x_all$simID==thisim,]
-
-### Manahattan plot comparing selective sweep sims ###
-pdf(paste0("figures/Manhattan_SS_",thisim,".pdf"), width=8, height= 4)
-par(mfrow=c(2,1), mar=c(0.5, 4, 0.5,0.1), oma=c(3,0,0,0))
+makeManhattans <- function(thisim){
+  forpdf <- x_all[x_all$simID==thisim,]
   
-plot(forpdf$pos[forpdf$keep_loci], forpdf$Hscan_v1.3_H12[forpdf$keep_loci],
-     ylim= c(0, 15000), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-     cex=0.7, ylab= "H12 (H-scan)", xaxt="n",  type="h", bty="l")#, 
-     #xlim=c(170000 , 180000))
-  plot_layers(y_head=12000, y_arrows=c(9500, 7600), thisSim = thisim)
+  ### Manahattan plot comparing selective sweep sims ###
+  pdf(paste0("figures/Manhattan_SS_",thisim,".pdf"), width=8, height= 4)
+  par(mfrow=c(2,1), mar=c(0.5, 4, 2,0.1), oma=c(3,0,0,0))
+    
+  plot(forpdf$pos[forpdf$keep_loci], forpdf$Hscan_v1.3_H12[forpdf$keep_loci],
+       ylim= c(0, 15000), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       cex=0.7, ylab= "  H12 (H-scan)", xaxt="n",  type="h", bty="l",
+       main="A) H12", adj=0)#, 
+       #xlim=c(170000 , 180000))
+    plot_layers(y_head=12000, y_arrows=c(9500, 7600), thisSim = thisim)
+    
+    plot(forpdf$pos, forpdf$rehh_2.0.2_ALL_log10p,
+       ylim= c(0, 6), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       cex=0.7, ylab= "  -log10(P) iHS",  type="h", bty="l",
+       main="B) iHS", adj=0)
+    plot_layers(y_head=90, y_arrows=c(5.5, 4), thisSim=thisim)
+    
+    mtext("Position (bp)", side=1, outer=TRUE, line=2)
+  dev.off()
+    
+  ### Manahattan plot comparing Differentiation Outliers ###
+  pdf(paste0("figures/Manhattan_DO",thisim,".pdf"), width=8, height= 10)
+  par(mfrow=c(6,1), mar=c(0.5, 4, 2,0.1), oma=c(3,0,0,0))
+    plot(forpdf$pos, forpdf$pcadapt_3.0.4_ALL_log10p,
+        ylim= c(0, 500), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       cex=0.5, ylab= "-log10(P) PCAdapt Naive", xaxt="n", type="h", bty="l", main="A) PCAdapt Naive", adj=0)
+    plot_layers(y_head=400, y_arrows=c(300, 200), thisSim = thisim)
   
-  plot(forpdf$pos, forpdf$rehh_2.0.2_ALL_log10p,
-     ylim= c(0, 6), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-     cex=0.7, ylab= "-log10(P) iHS",  type="h", bty="l")
-  plot_layers(y_head=90, y_arrows=c(5.5, 4), thisSim=thisim)
+    plot(forpdf$pos, forpdf$pcadapt_3.0.4_PRUNED_log10p,
+       ylim= c(0, 43), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       cex=0.5, ylab= "-log10(P) PCAdapt B.P.", xaxt="n", type="h", bty="l", main="B) PCAdapt Best Practice", adj=0)
+    plot_layers(y_head=380, y_arrows=c(41,33), thisSim=thisim)
+  
+    plot(forpdf$pos, forpdf$OutFLANK_0.2_ALL_log10p,
+       ylim= c(0, 24), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       cex=0.5, ylab= "-log10(P) OutFLANK Naive", xaxt="n", type="h", bty="l", main="C) OutFLANK (Fst) Naive", adj=0)
+    plot_layers(y_head=20, y_arrows=c(13.5+4,11+4), thisSim=thisim)
+  
+    plot(forpdf$pos, forpdf$OutFLANK_0.2_PRUNED_log10p,
+       ylim= c(0, 24), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       cex=0.5, ylab= "-log10(P) OutFLANK B.P.", type="h", xaxt="n", bty="l", main="D) OutFLANK (Fst) Best Practice", adj=0)
+    plot_layers(y_head=160, y_arrows=c(13.5+4,11+4), thisSim=thisim)
+    
+    plot(forpdf$pos, forpdf$baypass_2.1_ALL_XTX,
+       ylim= c(25, 175), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       cex=0.5, ylab= "           XTX Naive", xaxt="n", type="h", bty="l", main="E) BayPass (XTX) Naive", adj=0)
+    plot_layers(y_head=150, y_arrows=c(135,115), thisSim=thisim)
+  
+    plot(forpdf$pos, forpdf$baypass_2.1_PRUNED_XTX,
+       ylim= c(25, 175), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       cex=0.5, ylab= "              XTX B.P.", type="h", bty="l", main="F) BayPass (XTX) Best Practice", adj=0)
+    plot_layers(y_head=0, y_arrows=c(135,115), thisSim=thisim)
+    
+    mtext("Position (bp)", side=1, outer=TRUE, line=2)
+  dev.off()
+    
+  
+  
+  ### Manahattan plot comparing Association Tests ###
+  
+  cor.test(x_all$baypass_2.1_ALL_BF_env, x_all$baypass_2.1_ALL_BF_pheno)
+  cor.test(x_all$baypass_2.1_ALL_BF_env, x_all$baypass_2.1_PRUNED_BF_env)
+  cor.test(x_all$baypass_2.1_PRUNED_BF_pheno, x_all$baypass_2.1_PRUNED_BF_env)
+  cor.test(x_all$baypass_2.1_PRUNED_BF_pheno, x_all$baypass_2.1_ALL_BF_pheno)
+    # Results for environment and phenotype are very similar, just use one
+  
+  summary(x_all$baypass_2.1_PRUNED_BF_pheno)
+  summary(x_all$baypass_2.1_PRUNED_BF_env)
+  summary(x_all$baypass_2.1_ALL_BF_pheno)
+  summary(x_all$baypass_2.1_ALL_BF_env)
+  summary(forpdf$baypass_2.1_ALL_BF_env)
+  
+  pdf(paste0("figures/Manhattan_Assoc",thisim,".pdf"), width=8, height= 10)
+  par(mfrow=c(6,1), mar=c(0.5, 4, 2,0.1), oma=c(3,0,0,0))
+  
+  plot(forpdf$pos, forpdf$LFMM_ridge_0.0_ALL_log10p,
+       ylim= c(0, 150), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="A) LFMM ridge (phenotype)", adj=0, ylab="-log10 P (LFMM ridge)", xaxt="n")
+  plot_layers(y_head=130, y_arrows=c(120,100), thisSim=thisim)
+  
+  
+  plot(forpdf$pos, forpdf$LFMM_lasso_0.0_ALL_log10p,
+       ylim= c(0, 140), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="B) LFMM lasso (phenotype)", adj=0, ylab="-log10 P (LFMM lasso)", xaxt="n")
+  plot_layers(y_head=-100, y_arrows=c(130,110), thisSim=thisim)
+  
+  plot(forpdf$pos, forpdf$Spearmans_ALL_rho,
+       ylim= c(0, 0.9), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="C) Spearman's rho (environment)", adj=0, ylab="     abs(Spearman's rho)", xaxt="n")
+  plot_layers(y_head=0.7, y_arrows=c(0.6, 0.5), thisSim=thisim)
+  
+  plot(forpdf$pos, forpdf$LEA_1.2.0_ALL_K3_log10p,
+       ylim= c(0, 90), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="D) LEA (environment)", adj=0, ylab="        -log10 P (LEA)", xaxt="n")
+  plot_layers(y_head=-10, y_arrows=c(90, 75), thisSim=thisim)
+  
+  plot(forpdf$pos, forpdf$baypass_2.1_ALL_BF_env,
+       ylim= c(-20, 90), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="E) BayPass Bayes Factor - Naive (environment)", adj=0, ylab="        Bayes Factor Naive", xaxt="n")
+  plot_layers(y_head=70, y_arrows=c(60, 45), thisSim=thisim)
+  
+  plot(forpdf$pos, forpdf$baypass_2.1_PRUNED_BF_env,
+       ylim= c(-20, 90), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="E) BayPass Bayes Factor - Best Practice (environment)", adj=0, ylab="               Bayes Factor B.P.")
+  plot_layers(y_head=-40, y_arrows=c(60, 45), thisSim=thisim)
   
   mtext("Position (bp)", side=1, outer=TRUE, line=2)
-dev.off()
   
-### Manahattan plot comparing Differentiation Outliers ###
-pdf(paste0("figures/Manhattan_DO",thisim,".pdf"), width=8, height= 10)
-par(mfrow=c(6,1), mar=c(0.5, 4, 2,0.1), oma=c(3,0,0,0))
-  plot(forpdf$pos, forpdf$pcadapt_3.0.4_ALL_log10p,
-      ylim= c(0, 500), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-     cex=0.5, ylab= "-log10(P) PCAdapt Naive", xaxt="n", type="h", bty="l", main="A) PCAdapt Naive", adj=0)
-  plot_layers(y_head=400, y_arrows=c(300, 200), thisSim = thisim)
+  dev.off()
+}# end makeManhattans
 
-  plot(forpdf$pos, forpdf$pcadapt_3.0.4_PRUNED_log10p,
-     ylim= c(0, 43), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-     cex=0.5, ylab= "-log10(P) PCAdapt B.P.", xaxt="n", type="h", bty="l", main="B) PCAdapt Best Practice", adj=0)
-  plot_layers(y_head=380, y_arrows=c(41,33), thisSim=thisim)
-
-  plot(forpdf$pos, forpdf$OutFLANK_0.2_ALL_log10p,
-     ylim= c(0, 19), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-     cex=0.5, ylab= "-log10(P) OutFLANK Naive", xaxt="n", type="h", bty="l", main="C) OutFLANK (Fst) Naive", adj=0)
-  plot_layers(y_head=16, y_arrows=c(13.5,11), thisSim=thisim)
-
-  plot(forpdf$pos, forpdf$OutFLANK_0.2_PRUNED_log10p,
-     ylim= c(0, 19), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-     cex=0.5, ylab= "-log10(P) OutFLANK B.P.", type="h", xaxt="n", bty="l", main="D) OutFLANK (Fst) Best Practice", adj=0)
-  plot_layers(y_head=160, y_arrows=c(13.5,11), thisSim=thisim)
-  
-  plot(forpdf$pos, forpdf$baypass_2.1_ALL_XTX,
-     ylim= c(25, 165), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-     cex=0.5, ylab= "           XTX Naive", xaxt="n", type="h", bty="l", main="E) BayPass (XTX) Naive", adj=0)
-  plot_layers(y_head=150, y_arrows=c(135,115), thisSim=thisim)
-
-  plot(forpdf$pos, forpdf$baypass_2.1_PRUNED_XTX,
-     ylim= c(25, 165), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-     cex=0.5, ylab= "              XTX B.P.", type="h", bty="l", main="F) BayPass (XTX) Best Practice", adj=0)
-  plot_layers(y_head=0, y_arrows=c(135,115), thisSim=thisim)
-  
-  mtext("Position (bp)", side=1, outer=TRUE, line=2)
-dev.off()
-  
-
-
-### Manahattan plot comparing Association Tests ###
-
-cor.test(x_all$baypass_2.1_ALL_BF_env, x_all$baypass_2.1_ALL_BF_pheno)
-cor.test(x_all$baypass_2.1_ALL_BF_env, x_all$baypass_2.1_PRUNED_BF_env)
-cor.test(x_all$baypass_2.1_PRUNED_BF_pheno, x_all$baypass_2.1_PRUNED_BF_env)
-cor.test(x_all$baypass_2.1_PRUNED_BF_pheno, x_all$baypass_2.1_ALL_BF_pheno)
-  # Results for environment and phenotype are very similar, just use one
-
-summary(x_all$baypass_2.1_PRUNED_BF_pheno)
-summary(x_all$baypass_2.1_PRUNED_BF_env)
-summary(x_all$baypass_2.1_ALL_BF_pheno)
-summary(x_all$baypass_2.1_ALL_BF_env)
-summary(forpdf$baypass_2.1_ALL_BF_env)
-
-pdf(paste0("figures/Manhattan_Assoc",thisim,".pdf"), width=8, height= 10)
-par(mfrow=c(6,1), mar=c(0.5, 4, 2,0.1), oma=c(3,0,0,0))
-
-plot(forpdf$pos, forpdf$LFMM_ridge_0.0_ALL_log10p,
-     ylim= c(0, 150), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="A) LFMM ridge (phenotype)", adj=0, ylab="-log10 P (LFMM ridge)", xaxt="n")
-plot_layers(y_head=130, y_arrows=c(120,100), thisSim=thisim)
-
-
-plot(forpdf$pos, forpdf$LFMM_lasso_0.0_ALL_log10p,
-     ylim= c(0, 140), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="B) LFMM lasso (phenotype)", adj=0, ylab="-log10 P (LFMM lasso)", xaxt="n")
-plot_layers(y_head=-100, y_arrows=c(130,110), thisSim=thisim)
-
-plot(forpdf$pos, forpdf$Spearmans_ALL_rho,
-     ylim= c(0, 0.8), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="C) Spearman's rho (environment)", adj=0, ylab="     abs(Spearman's rho)", xaxt="n")
-plot_layers(y_head=0.7, y_arrows=c(0.6, 0.45), thisSim=thisim)
-
-plot(forpdf$pos, forpdf$LEA_1.2.0_ALL_K3_log10p,
-     ylim= c(0, 70), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="D) LEA (environment)", adj=0, ylab="        -log10 P (LEA)", xaxt="n")
-plot_layers(y_head=-10, y_arrows=c(60, 50), thisSim=thisim)
-
-plot(forpdf$pos, forpdf$baypass_2.1_ALL_BF_env,
-     ylim= c(-20, 90), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="E) BayPass Bayes Factor - Naive (environment)", adj=0, ylab="        Bayes Factor Naive", xaxt="n")
-plot_layers(y_head=70, y_arrows=c(60, 50), thisSim=thisim)
-
-plot(forpdf$pos, forpdf$baypass_2.1_PRUNED_BF_env,
-     ylim= c(-20, 90), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="E) BayPass Bayes Factor - Best Practice (environment)", adj=0, ylab="               Bayes Factor B.P.")
-plot_layers(y_head=-40, y_arrows=c(60, 50), thisSim=thisim)
-
-mtext("Position (bp)", side=1, outer=TRUE, line=2)
-
-dev.off()
-
-
+makeManhattans(10944)
+makeManhattans(10945)
+makeManhattans(10946)
 ```
 
 ### AUC
@@ -973,7 +980,7 @@ pdf("figures/AUC.pdf", width=6, height=10)
        density=dval, angle=aval)
   
   outstat2 <- boxplot(perf_df2$perf_QTN~perf_df2$name, las=2, 
-          main = "B) All QTNs",  ylim=c(0,1), col=as.character(plot_df$color))
+          main = "B) Causal QTNs",  ylim=c(0,1), col=as.character(plot_df$color))
   abline(h=0.5)
   rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
        density=dval, angle=aval)
@@ -1033,21 +1040,21 @@ table(perf_df3$method, is.na(perf_df3$cdf_Inversion))
 pdf("figures/Quantiles_lowR.pdf", width=6, height=10)
   par(mar=c(1, 1, 2,1), mfrow=c(2, 1), oma=c(10, 4,0,0))
   
-  outstat <- boxplot(perf_df3$cdf_Inversion~perf_df3$name, las=2, names=NA,
+  outstat <- boxplot(perf_df3$cdf_Inversion*100~perf_df3$name, las=2, names=NA,
           main = "A) Inversion (LG 7)", col=as.character(plot_df$color),
-          ylim=c(0,1), density=20)
-  abline(h=0.5)
+          ylim=c(0,100), density=20)
+  abline(h=50)
   rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
        density=dval, angle=aval)
   
-  outstat2 <- boxplot(perf_df3$cdf_lowR~perf_df3$name, las=2, 
-          main = "B) Low recombination (r = 1e-08, LG 8)",  ylim=c(0,1), col=as.character(plot_df$color))
-  abline(h=0.5)
+  outstat2 <- boxplot(perf_df3$cdf_lowR*100~perf_df3$name, las=2, 
+          main = "B) Low recombination (r = 1e-08, LG 8)",  ylim=c(0,100), col=as.character(plot_df$color))
+  abline(h=50)
   rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
        density=dval, angle=aval)
   
   
-  mtext("Mean quantile", side=2, outer=TRUE, line=2, cex=1.5)
+  mtext("Mean percentile", side=2, outer=TRUE, line=2, cex=1.5)
 dev.off()
 
 
@@ -1056,27 +1063,27 @@ dev.off()
 pdf("figures/Quantiles_other.pdf", width=6, height=10)
   par(mar=c(1, 1, 2,1), mfrow=c(3, 1), oma=c(10, 4,0,0))
   
-  outstat <- boxplot(perf_df3$cdf_SS~perf_df3$name, las=2, names=NA,
-          main = "A) Global sweep (LG 1)", col=as.character(plot_df$color),
-          ylim=c(0,1), density=20)
-  abline(h=0.5)
+  outstat <- boxplot(perf_df3$cdf_SS*100~perf_df3$name, las=2, names=NA,
+          main = "A) Global sweep (LG 4)", col=as.character(plot_df$color),
+          ylim=c(0,100), density=20, adj=0)
+  abline(h=50)
   rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
        density=dval, angle=aval)
   
-  outstat2 <- boxplot(perf_df3$cdf_LEQTL~perf_df3$name, las=2, 
-          main = "B) Largest effect QTN",  ylim=c(0,1), col=as.character(plot_df$color),
+  outstat2 <- boxplot(perf_df3$cdf_LEQTL*100~perf_df3$name, las=2, 
+          main = "B) Largest effect QTN (LG 2 or 3)",  ylim=c(0,100), col=as.character(plot_df$color), adj=0,
           names=NA)
-  abline(h=0.5)
+  abline(h=50)
   rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
        density=dval, angle=aval)
   
-  outstat2 <- boxplot(perf_df3$cdf_BS~perf_df3$name, las=2, 
-          main = "C) Background selection (LG 5 and 6)",  ylim=c(0,1), col=as.character(plot_df$color))
-  abline(h=0.5)
+  outstat2 <- boxplot(perf_df3$cdf_BS*100~perf_df3$name, las=2, 
+          main = "C) Background selection (LG 5 and 6)",  ylim=c(0,100), adj=0, col=as.character(plot_df$color))
+  abline(h=50)
   rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
        density=dval, angle=aval)
   
-  mtext("Mean quantile", side=2, outer=TRUE, line=2, cex=1.5)
+  mtext("Mean percentile", side=2, outer=TRUE, line=2, cex=1.5)
 dev.off()
 ```
 
@@ -1129,6 +1136,10 @@ Inv_BF <- function(method){
 mean(Inv_BF("baypass_2.1_ALL_BF_env"))
 mean(Inv_BF("baypass_2.1_PRUNED_BF_env"))
 quantile(unlist(x_all[,"baypass_2.1_ALL_BF_env"]), c(0.5,0.6), na.rm=TRUE)
+
+# Quantify p-value outliers in inversion region
+
+
 
 ```
 
