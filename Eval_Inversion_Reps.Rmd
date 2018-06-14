@@ -1137,7 +1137,7 @@ mean(Inv_BF("baypass_2.1_ALL_BF_env"))
 mean(Inv_BF("baypass_2.1_PRUNED_BF_env"))
 quantile(unlist(x_all[,"baypass_2.1_ALL_BF_env"]), c(0.5,0.6), na.rm=TRUE)
 
-# Quantify p-value outliers in inversion region
+# 
 
 
 
