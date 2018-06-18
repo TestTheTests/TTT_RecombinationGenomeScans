@@ -15,43 +15,55 @@
 
 
 ### input arguments ####
-args    <- commandArgs(TRUE)
-start   <- args[1]             # first sim in set
-end     <- args[2]             # last sim in set
-myDir   <- args[3]             # directory /results/ is in, which contains the tables to combine
-simType <- args[4]             # ex: 'Invers'
+# args    <- commandArgs(TRUE)
+start   <-  args[1]             # first sim in set
+end     <-  args[2]             # last sim in set
+myDir   <-  args[3]             # directory /results/ is in, which contains the tables to combine
+simType <-  args[4]             # ex: 'Invers'
 
 for (sim in start:end){
   print(sim)
   # skip sim if the corresponding files do not exist
-  unpruned.file <- paste(myDir,"/results/raw_data/", sim, "_", simType, "_loadings_raw.txt", sep="")
+  unpruned.file <- paste(myDir,"/RDA_envi_results/raw_data/", sim, "_", simType, "_loadings_raw.txt", sep="")
   if(!file.exists(unpruned.file)){
     print(paste(sep = " ", "Skipping sim number", sim, "file not found:", unpruned.file))
     next()
   }
-  pruned.file <- paste(myDir,"/results/raw_data/", sim, "_PRUNED_", simType, "_loadings_raw.txt", sep="")
+  pruned.file <- paste(myDir,"/RDA_envi_results/raw_data/", sim, "_PRUNED_", simType, "_loadings_raw.txt", sep="")
   if(!file.exists(pruned.file)){
     print(paste(sep = " ", "Skipping sim number", sim, "file not found:", pruned.file))
     next()
   }
   
   # unpruned sim
-  load.rda <- read.table(paste(sep="", myDir, "/results/raw_data/", sim, "_", simType, "_loadings_raw.txt"), header = TRUE)
+  load.rda <- read.table(unpruned.file, header = TRUE)
   load.rda <- as.data.frame(load.rda)
-  colnames(load.rda) <- c("position", "RDAvegan_v2.5.2_ALL_loading_RDA1", "RDAvegan_v2.5.2_ALL_loading_RDA2",
-                                 "RDAvegan_v2.5.2_ALL_loading_PCA1", "RDAvegan_v2.5.2_ALL_loading_PCA2", 
-                                 "RDAvegan_v2.5.2_ALL_loading_PCA3")
+  colnames(load.rda) <- c("position_index", "position", 
+                          "RDAvegan_v2.5.2_ALL_loading_RDA1_envi", 
+                          "RDAvegan_v2.5.2_ALL_loading_PCA1_envi", 
+                          "RDAvegan_v2.5.2_ALL_loading_PCA2_envi", 
+                          "RDAvegan_v2.5.2_ALL_loading_PCA3_envi")
 
   # pruned sim
-  load.rda.pruned <- read.table(paste(sep="", myDir, "/results/raw_data/", sim, "_PRUNED_", simType, "_loadings_raw.txt"), header = TRUE)
+  load.rda.pruned <- read.table(pruned.file, header = TRUE)
   load.rda.pruned <- as.data.frame(load.rda.pruned)
-  colnames(load.rda.pruned) <- c("position", "RDAvegan_v2.5.2_PRUNED_loading_RDA1", "RDAvegan_v2.5.2_PRUNED_loading_RDA2",
-                                 "RDAvegan_v2.5.2_PRUNED_loading_PCA1", "RDAvegan_v2.5.2_PRUNED_loading_PCA2", 
-                                 "RDAvegan_v2.5.2_PRUNED_loading_PCA3")
+  load.rda.pruned <- subset(load.rda.pruned, select=-c(position))
+  colnames(load.rda.pruned) <- c("position_index", 
+                                 "RDAvegan_v2.5.2_PRUNED_loading_RDA1_envi",
+                                 "RDAvegan_v2.5.2_PRUNED_loading_PCA1_envi", 
+                                 "RDAvegan_v2.5.2_PRUNED_loading_PCA2_envi", 
+                                 "RDAvegan_v2.5.2_PRUNED_loading_PCA3_envi")
 
   #combine data frames
-  combinedDF <- merge(load.rda.pruned, load.rda, by.x = 'position', all = T)
-  write.table(combinedDF, paste(sep="", myDir, "/results/", sim, "_", simType, "_RDA_loadings.txt"))
+  combinedDF <- merge(load.rda, load.rda.pruned, by= 'position_index', all = T)
+  write.table(combinedDF, paste(sep="",
+                                myDir, 
+                                "/RDA_envi_results/", 
+                                sim, 
+                                "_", 
+                                simType, 
+                                "_RDA_loadings_envi.txt"), 
+              row.names = FALSE)
 }
 
 
