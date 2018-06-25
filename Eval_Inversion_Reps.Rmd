@@ -4,6 +4,8 @@ author: "Katie Lotterhos"
 date: "3/13/2018"
 output: html_document
 ---
+First, remember to set your working directory:
+
 setwd("/Users/katie/Desktop/TestTheTests/TTT_RecombinationGenomeScans")
 
 ```{r setup, include=FALSE}
@@ -107,11 +109,13 @@ inver_simID <- substr(inver_files, 1, 5)
 
 LEA_files = paste0(inver_simID, "_Invers_Results_LEA.txt")
 Baypass_files = paste0(inver_simID, "_baypass_results.txt")
+RDA_files = paste0(inver_simID, "_Invers_RDA_loadings_envi.txt")
 # To add new results, add a line of code here to get a list of the files
 
 length(inver_files)
 length(LEA_files)
 length(Baypass_files)
+length(RDA_files)
 # To add new results, add a line of code here to check that the number of files is the same as the number of simulations
 
 
@@ -138,6 +142,14 @@ for (i in 1:length(inver_files)){
   }
   x1_baypass$unique <- x1$unique[which(x1$keep_loci)]
   
+  ## RDA results
+  x1_rda <- read.table(paste0("results_final/", RDA_files[i]), header=TRUE)
+    if (sum(x1$keep_loci)!=nrow(x1_rda)){
+    print("Error: wrong number of loci in RDA file"
+    )
+  }
+  x1_rda$unique <- x1$unique[which(x1$keep_loci)]
+  
   ### New Results
   ### To add new results, copy and paste this code (leave this example for others), and rename it using the same structure as above
   ### Make sure you choose the appropriate delimiter
@@ -151,19 +163,19 @@ for (i in 1:length(inver_files)){
   ## Combine all tables
   x_final1 <- left_join(x1, x1_LEA, by="unique")
   x_final2 <- left_join(x_final1, x1_baypass, by="unique")
-  x_final <- x_final2
-  
-  
+  x_final3 <- left_join(x_final2, x1_rda, by="unique")
+  x_final <- x_final3
   ### To add new results, reword this code and write a new example for others
-  ### x_final3 <- left_join(x_final2, x1_new, by="unique")
-  ### x_final <- x_final3
-  ### rm(x_final1, x_final2, x_final3)
+  ### x_final4 <- left_join(x_final3, x1_new, by="unique")
+  ### x_final <- x_final4
+  ### rm(x_final1, x_final2, x_final4)
   
   if(nrow(x_final)!=nrow(x1)){
     print("Error in merging files, number of rows has changed")
   }
   x_all <- rbind(x_all, x_final)
-  rm(x_final1, x_final2)
+  rm(x_final, x_final1, x_final2, x_final3)
+  # If adding new results, be sure to remove above
 }
 
 table(x_all$simID)
@@ -173,6 +185,9 @@ names(x_all)[2] <- "pos"
 
 x_all
   # number of rows should be 414474
+if(nrow(x_all) != 414474){
+  print("Error in data upload"); break;
+}
 ```
 
 
@@ -252,6 +267,16 @@ pdf("figures/InversionMap.pdf", width=12, height=4)
 dev.off()  
 ```
 
+## Deleterious allels
+```{r deleterious}
+summary(tapply(x_all$muttype=="MT=3",x_all$simID, sum))
+```
+
+## Proportion of loci in inversion
+```{r deleterious}
+xin <- x_all[x_all$pos > 320000 & x_all$pos < 330000,]
+summary(tapply(xin$pos,xin$simID, length)/tapply(x_all$pos,x_all$simID, length))
+```
 
 ## Effect size and allele frequency
 No need to edit this code if you are adding a new method
@@ -710,6 +735,38 @@ dev.off()
 
 ```
 
+### PC from RDA
+```{r}
+quantile(abs(x_all$RDAvegan_v2.5.2_ALL_loading_PCA1_envi), 0.95, na.rm = TRUE)
+quantile(abs(x_all$RDAvegan_v2.5.2_ALL_loading_PCA2_envi), 0.95, na.rm = TRUE)
+quantile(abs(x_all$RDAvegan_v2.5.2_ALL_loading_PCA3_envi), 0.95, na.rm = TRUE)
+
+ ### which locations load onto PC all data ####
+pdf("figures/WhichLocationsPCs_RDA.pdf", width=9, height=6)  
+  par(mar=c(4, 4,1,1), oma=c(0,2,0,0), mfrow=c(3,1))
+  d <- density(x_all$pos[which(abs(x_all$RDAvegan_v2.5.2_ALL_loading_PCA1_envi)>0.08)], bw = 1000)
+  plot(d, main="A) Locations of outlier PC1 loadings in RDA (all SNPs)", bty="n", las=1, ylim=c(0, 13e-05), xlim=c(0,5e05),adj=0,
+       ylab="", xlab="")
+  polygon(d, col="black")
+  plot_layers(y_head=0.00011, y_arrows=c(0.00008, 0.00004), thisSim = thisim)
+  
+  d <- density(x_all$pos[which(abs(x_all$RDAvegan_v2.5.2_ALL_loading_PCA2_envi)>0.09)], bw = 1000)
+    plot(d, main="B) Locations of outlier PC2 loadings in RDA (all SNPs)", bty="n", las=1, ylim=c(0, 3e-05), xlim=c(0,5e05), adj=0,
+       ylab="", xlab="")
+  polygon(d, col="black")
+  plot_layers(y_head=10, y_arrows=c(10, 8), thisSim = thisim)
+  
+  d <- density(x_all$pos[which(abs(x_all$RDAvegan_v2.5.2_ALL_loading_PCA3_envi)>0.09)], bw = 1000)
+    plot(d, main="C) Locations of outlier PC3 loadings in RDA (all SNPs)", bty="n", las=1, ylim=c(0, 3e-05), xlim=c(0,5e05),adj=0,
+       ylab="", xlab="Position (bp)")
+  polygon(d, col="black")
+  plot_layers(y_head=10, y_arrows=c(10, 8), thisSim = thisim)
+  
+  mtext("Density", side = 2, outer=TRUE, line=0)
+dev.off()  
+
+```
+
 ### Visualize genome scans: Manhattan plots
 This plot compares a few of the different methods, but is not comprehensive. Depending on the methods to be compared, the code could be copied and used to produce similar plots.
 
@@ -795,8 +852,8 @@ makeManhattans <- function(thisim){
   summary(x_all$baypass_2.1_ALL_BF_env)
   summary(forpdf$baypass_2.1_ALL_BF_env)
   
-  pdf(paste0("figures/Manhattan_Assoc",thisim,".pdf"), width=8, height= 10)
-  par(mfrow=c(6,1), mar=c(0.5, 4, 2,0.1), oma=c(3,0,0,0))
+  pdf(paste0("figures/Manhattan_Assoc",thisim,".pdf"), width=8, height= 12)
+  par(mfrow=c(7,1), mar=c(0.5, 4, 2,0.1), oma=c(3,0,0,0))
   
   plot(forpdf$pos, forpdf$LFMM_ridge_0.0_ALL_log10p,
        ylim= c(0, 150), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="A) LFMM ridge (phenotype)", adj=0, ylab="-log10 P (LFMM ridge)", xaxt="n")
@@ -807,7 +864,7 @@ makeManhattans <- function(thisim){
        ylim= c(0, 140), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="B) LFMM lasso (phenotype)", adj=0, ylab="-log10 P (LFMM lasso)", xaxt="n")
   plot_layers(y_head=-100, y_arrows=c(130,110), thisSim=thisim)
   
-  plot(forpdf$pos, forpdf$Spearmans_ALL_rho,
+  plot(forpdf$pos, abs(forpdf$Spearmans_ALL_rho),
        ylim= c(0, 0.9), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="C) Spearman's rho (environment)", adj=0, ylab="     abs(Spearman's rho)", xaxt="n")
   plot_layers(y_head=0.7, y_arrows=c(0.6, 0.5), thisSim=thisim)
   
@@ -820,8 +877,12 @@ makeManhattans <- function(thisim){
   plot_layers(y_head=70, y_arrows=c(60, 45), thisSim=thisim)
   
   plot(forpdf$pos, forpdf$baypass_2.1_PRUNED_BF_env,
-       ylim= c(-20, 90), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="E) BayPass Bayes Factor - Best Practice (environment)", adj=0, ylab="               Bayes Factor B.P.")
+       ylim= c(-20, 90), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="F) BayPass Bayes Factor - Best Practice (environment)", adj=0, ylab="               Bayes Factor B.P.", xaxt="n")
   plot_layers(y_head=-40, y_arrows=c(60, 45), thisSim=thisim)
+  
+  plot(forpdf$pos, abs(forpdf$RDAvegan_v2.5.2_ALL_loading_RDA1_envi),
+       ylim= c(0, 0.35), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="G) RDA (environment)", adj=0, ylab="        loading (RDA)")
+  plot_layers(y_head=-10, y_arrows=c(0.32, 0.25), thisSim=thisim)
   
   mtext("Position (bp)", side=1, outer=TRUE, line=2)
   
@@ -869,6 +930,9 @@ for (i in 1:length(inver_simID)){
 # in the x_all dataframe here
 # in the order you would like to see them plotted
 # (note that it is easy to remove columns for plotting)
+x_all <- x_all %>% mutate(RDAvegan_v2.5.2_ALL_loading_RDA1_envi_abs = abs(RDAvegan_v2.5.2_ALL_loading_RDA1_envi), Spearmans_ALL_rho_abs = abs(Spearmans_ALL_rho))
+  #note that because of directionality of the association the abs() is taken for evaluation
+
 togetcols <- c(
   ##SS methods
       "Hscan_v1.3_H12", "rehh_2.0.2_ALL_log10p", 
@@ -878,15 +942,16 @@ togetcols <- c(
       "baypass_2.1_ALL_XTX", "baypass_2.1_PRUNED_XTX",
   ## Assoc methods
       "LFMM_ridge_0.0_ALL_log10p", "LFMM_lasso_0.0_ALL_log10p",
-      "LEA_1.2.0_ALL_K3_log10p", "Spearmans_ALL_rho",
-      "baypass_2.1_ALL_BF_env", "baypass_2.1_PRUNED_BF_env")
+      "LEA_1.2.0_ALL_K3_log10p", "Spearmans_ALL_rho_abs",
+      "baypass_2.1_ALL_BF_env", "baypass_2.1_PRUNED_BF_env",
+      "RDAvegan_v2.5.2_ALL_loading_RDA1_envi_abs")
 
 # This code loops through each statistic and each replicate simulation
 # and creates a list - basically just putting things into format for analysis
 perf_df <- data.frame(method=NULL, perf_SS=NULL, perf_QTN=NULL)
 predict_list <- list()
 for (j in 1:length(togetcols)){
-  print(c(j, "of", length(togetcols)))
+  print(paste(j, "of", length(togetcols), togetcols[j], sep=" "))
   for (i in 1:length(inver_simID)){
     #print(i)
   predict_list[[i]] <- as.numeric(unlist(x_all[x_all$simID==inver_simID[i], which(colnames(x_all)==togetcols[j])]))
@@ -907,6 +972,10 @@ for (j in 1:length(togetcols)){
   perf_df <- rbind(perf_df, data.frame(method=togetcols[j], perf_QTN=perf_QTN, perf_SS=perf_SS, simID = inver_simID))
 }
 
+if (nrow(perf_df) != length(togetcols)*length(inver_simID)){
+  print("Error: performance data frame of wrong length"); break;
+}
+
 ## If adding new results, update the name of the variable here
 ## to be the name for plotting
 perf_df2 <- perf_df %>%
@@ -924,9 +993,10 @@ perf_df2 <- perf_df %>%
       LFMM_ridge_0.0_ALL_log10p = "LFMM ridge (pheno)", 
       LFMM_lasso_0.0_ALL_log10p = "LFMM lasso (pheno)",
       LEA_1.2.0_ALL_K3_log10p = "LEA (envi)", 
-      Spearmans_ALL_rho = "Spearman's rho (envi)",
+      Spearmans_ALL_rho_abs = "Spearman's rho (envi)",
       baypass_2.1_ALL_BF_env = "BayPass (envi) Naive", 
-      baypass_2.1_PRUNED_BF_env = "BayPass (envi) BP"
+      baypass_2.1_PRUNED_BF_env = "BayPass (envi) BP",
+      RDAvegan_v2.5.2_ALL_loading_RDA1_envi_abs = "RDA (envi) loading"
       ) # end recode
    )
 
@@ -955,20 +1025,25 @@ plot_df <- plot_df %>% mutate(color = recode(method,
       LFMM_ridge_0.0_ALL_log10p = "#2b9ddb", # Dark stormy sea on color-hex.com
       LFMM_lasso_0.0_ALL_log10p = "#394856",
       LEA_1.2.0_ALL_K3_log10p = "#7cfac3", 
-      Spearmans_ALL_rho = "#00ab84",
+      Spearmans_ALL_rho_abs = "#00ab84",
       baypass_2.1_ALL_BF_env = "#9db69f", 
-      baypass_2.1_PRUNED_BF_env = "#9db69f"
+      baypass_2.1_PRUNED_BF_env = "#9db69f",
+      RDAvegan_v2.5.2_ALL_loading_RDA1_envi_abs = "#808000"
       )# end recode
 ) 
 
 head(plot_df)
 
 head(perf_df2)  
+tail(perf_df2)
 
   ngroups<- length(togetcols)
-  dval = c(0,0,10,0,10,0,10,0,0,0,0,0,10,0) # If adding new results, may need to edit this line. Naive approach should be hatched.
+  dval = c(0,0,10,0,10,0,10,0,0,0,0,0,10,0, 0) # If adding new results, may need to edit this line. Naive approach should be hatched (e.g. 10)
   aval=45
-  
+```
+
+## Make AUC figure
+```{r}
 pdf("figures/AUC.pdf", width=6, height=10)
   par(mar=c(1, 1, 1,1), mfrow=c(2, 1), oma=c(10, 4,0,0))
   
@@ -1087,6 +1162,8 @@ pdf("figures/Quantiles_other.pdf", width=6, height=10)
 dev.off()
 ```
 
+
+
 ```{r}
 
 # Quantify outliers in recombination variation region based on P-value
@@ -1138,9 +1215,6 @@ mean(Inv_BF("baypass_2.1_PRUNED_BF_env"))
 quantile(unlist(x_all[,"baypass_2.1_ALL_BF_env"]), c(0.5,0.6), na.rm=TRUE)
 
 # 
-
-
-
 ```
 
 ```{r}
