@@ -25,7 +25,8 @@ if(!("vcfR" %in% installed.packages())){install.packages("vcfR")}
 library(vcfR)
 if(!("data.table" %in% installed.packages())){install.packages("data.table")}
 library(data.table)
-
+if(!("PRROC" %in% installed.packages())){install.packages("PRROC")}
+library(PRROC)
 options(readr.show_progress=FALSE)
 ```
 
@@ -100,7 +101,14 @@ Here is a list of the columns and descriptions:
 "baypass_2.1_PRUNED_BF_pheno" 
 "baypass_2.1_PRUNED_BF_env"  
 "baypass_2.1_PRUNED_XTX" 
-
+"RDAvegan_v2.5.2_ALL_loading_RDA1_envi"   
+"RDAvegan_v2.5.2_ALL_loading_PCA1_envi"   
+"RDAvegan_v2.5.2_ALL_loading_PCA2_envi"   
+"RDAvegan_v2.5.2_ALL_loading_PCA3_envi"   
+"RDAvegan_v2.5.2_PRUNED_loading_RDA1_envi"
+"RDAvegan_v2.5.2_PRUNED_loading_PCA1_envi"
+"RDAvegan_v2.5.2_PRUNED_loading_PCA2_envi"
+"RDAvegan_v2.5.2_PRUNED_loading_PCA3_envi"
 
 ```{r}
 
@@ -894,7 +902,7 @@ makeManhattans(10945)
 makeManhattans(10946)
 ```
 
-### AUC
+### AUC-ROC
 
 This section has some code that will need to be edited if results are added.
 
@@ -902,8 +910,9 @@ For programs designed to detect the global sweep, these are evaluated at the swe
 
 For programs designed to detect the loci that differ in allele frequency among populations, or loci that have an association with phenotype or environment, these are evaluated at the QTNs.
 
-The overall evaluatation is based on Area Under the Curve (AUC).
+There are two performance metrics calculated. The first metric is the Area Under the Curve for the Receiver Operating Characteristics graph (AUC-ROC). The second metric is the Area Under the Curve for the precision-recall graph (AUC-PR), and is probably better because our data contain many neutral loci and only a few selected loci.
 
+This next chunk of code does not need to be edited if adding a new statstic:
 ```{r}
 
   # Loop through each statistic
@@ -925,7 +934,11 @@ for (i in 1:length(inver_simID)){
 }
 
 # loop through columns of data
+```
 
+
+If adding new results, please add the desired statistic here:
+```{r}
 # To add results to the evaluation, add the names of the columns 
 # in the x_all dataframe here
 # in the order you would like to see them plotted
@@ -945,7 +958,10 @@ togetcols <- c(
       "LEA_1.2.0_ALL_K3_log10p", "Spearmans_ALL_rho_abs",
       "baypass_2.1_ALL_BF_env", "baypass_2.1_PRUNED_BF_env",
       "RDAvegan_v2.5.2_ALL_loading_RDA1_envi_abs")
+```
 
+Now your new statistic will be evaluated in this loop:
+```{r}
 # This code loops through each statistic and each replicate simulation
 # and creates a list - basically just putting things into format for analysis
 perf_df <- data.frame(method=NULL, perf_SS=NULL, perf_QTN=NULL)
@@ -961,21 +977,59 @@ for (j in 1:length(togetcols)){
   # QTN performance
   manypred_QTN = prediction(predict_list, label_list_QTN)
   auc.perf_QTN = performance(manypred_QTN, measure = "auc")
-  perf_QTN <- as.numeric(unlist(auc.perf_QTN@y.values))
+  AUCroc_QTN <- as.numeric(unlist(auc.perf_QTN@y.values))
 
   # SS performance
   # note that with only one prediction (sweep site), can't compute AUC
   manypred_SS = prediction(predict_list, label_list_SS)
   auc.perf_SS = performance(manypred_SS, measure = "auc")
-  perf_SS <- as.numeric(unlist(auc.perf_SS@y.values))
+  AUCroc_SS <- as.numeric(unlist(auc.perf_SS@y.values))
   
-  perf_df <- rbind(perf_df, data.frame(method=togetcols[j], perf_QTN=perf_QTN, perf_SS=perf_SS, simID = inver_simID))
-}
+  
+### AUC- PR calculations for QTN
+  getAUCpr_QTN <- function(x){
+    sel <- predict_list[[x]][label_list_QTN[[x]]]
+    sel <- sel[!is.na(sel)]
+    neut <- predict_list[[x]][!label_list_QTN[[x]]]
+    neut <- neut[!is.na(neut)]
+    AUCpr_QTN_tot <- pr.curve(scores.class0 = sel, 
+                          scores.class1 = neut, 
+                          rand.compute = TRUE
+                          )
+    return(data.frame(AUCpr_QTN = AUCpr_QTN_tot$auc.integral,
+                      AUCpr_QTN_rand = AUCpr_QTN_tot$rand$auc.integral))
+  }
+  AUCpr_QTN_final <- matrix(unlist(lapply(1:length(predict_list), getAUCpr_QTN)), nrow=length(predict_list), ncol=2, byrow=TRUE)
+  colnames(AUCpr_QTN_final) <- c("AUCpr_QTN", "AUCpr_QTN_rand")
+
+### AUC- PR calculations for SS
+  getAUCpr_SS <- function(x){
+    selSS <- predict_list[[x]][label_list_SS[[x]]]
+    selSS <- selSS[!is.na(selSS)]
+    neutSS <- predict_list[[x]][!label_list_SS[[x]]]
+    neutSS <- neutSS[!is.na(neutSS)]
+    AUCpr_SS_tot <- pr.curve(scores.class0 = selSS, 
+                          scores.class1 = neutSS, 
+                          rand.compute = TRUE
+                          )
+    return(data.frame(AUCpr_SS = AUCpr_SS_tot$auc.integral,
+    AUCpr_SS_rand = AUCpr_SS_tot$rand$auc.integral))
+  }
+    AUCpr_SS_final <- matrix(unlist(lapply(1:length(predict_list), getAUCpr_SS)), nrow=length(predict_list), ncol=2, byrow=TRUE)
+  colnames(AUCpr_SS_final) <- c("AUCpr_SS", "AUCpr_SS_rand")
+
+  
+    
+    perf_df <- rbind(perf_df, cbind(data.frame(method=togetcols[j], AUCroc_QTN =AUCroc_QTN , AUCroc_SS=AUCroc_SS, simID = inver_simID), AUCpr_QTN_final, AUCpr_SS_final))
+} # end loop through
 
 if (nrow(perf_df) != length(togetcols)*length(inver_simID)){
   print("Error: performance data frame of wrong length"); break;
 }
+```
 
+Now add the name of how you want your new statistic to be plotted:
+```{r}
 ## If adding new results, update the name of the variable here
 ## to be the name for plotting
 perf_df2 <- perf_df %>%
@@ -999,7 +1053,10 @@ perf_df2 <- perf_df %>%
       RDAvegan_v2.5.2_ALL_loading_RDA1_envi_abs = "RDA (envi) loading"
       ) # end recode
    )
+```
 
+And add the color scheme for the new statistic:
+```{r}
 ## Determine color scheme. 
   # If adding new results, you may need to update the color scheme based on the information below:
     # For Only option, blank patterning. 
@@ -1042,30 +1099,77 @@ tail(perf_df2)
   aval=45
 ```
 
-## Make AUC figure
+## Make AUC-ROC figure
 ```{r}
-pdf("figures/AUC.pdf", width=6, height=10)
+pdf("figures/AUC-ROC.pdf", width=6, height=10)
   par(mar=c(1, 1, 1,1), mfrow=c(2, 1), oma=c(10, 4,0,0))
   
-  outstat <- boxplot(perf_df2$perf_SS~perf_df2$name, las=2, names=NA,
+  outstat <- boxplot(perf_df2$AUCroc_SS~perf_df2$name, las=2, names=NA,
           main = "A) Global sweep", col=as.character(plot_df$color),
           ylim=c(0,1), density=20)
   abline(h=0.5)
   rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
        density=dval, angle=aval)
   
-  outstat2 <- boxplot(perf_df2$perf_QTN~perf_df2$name, las=2, 
+  outstat2 <- boxplot(perf_df2$AUCroc_QTN ~perf_df2$name, las=2, 
           main = "B) Causal QTNs",  ylim=c(0,1), col=as.character(plot_df$color))
   abline(h=0.5)
   rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
        density=dval, angle=aval)
   
-  mtext("AUC", side=2, outer=TRUE, line=2, cex=1.5)
+  mtext("AUC - ROC", side=2, outer=TRUE, line=2, cex=1.5)
 dev.off()
 ```
 
+## Make AUC-pr boxplot figure
+```{r}
 
+boxplot(perf_df2$AUCpr_SS_rand~perf_df2$name)
+boxplot(perf_df2$AUCpr_QTN_rand~perf_df2$name)
 
+pdf("figures/AUC-pr.pdf", width=6, height=10)
+  par(mar=c(1, 1, 1,1), mfrow=c(2, 1), oma=c(10, 4,0,0))
+  
+  outstat <- boxplot(perf_df2$AUCpr_SS~perf_df2$name, las=2, names=NA,
+          main = "A) Global sweep", col=as.character(plot_df$color),
+          ylim=c(0,1), density=20)
+  
+  rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
+       density=dval, angle=aval)
+  polygon(c(0,100,100,0),c(summary(perf_df2$AUCpr_SS_rand)[1],
+                           summary(perf_df2$AUCpr_SS_rand)[1],
+                           summary(perf_df2$AUCpr_SS_rand)[6],
+                           summary(perf_df2$AUCpr_SS_rand)[6]),
+          border=NA, col="grey")
+  
+  
+  outstat2 <- boxplot(perf_df2$AUCpr_QTN~perf_df2$name, las=2, 
+          main = "B) Causal QTNs",  ylim=c(0,1), col=as.character(plot_df$color))
+  polygon(c(0,100,100,0),c(summary(perf_df2$AUCpr_QTN_rand)[1],
+                           summary(perf_df2$AUCpr_QTN_rand)[1],
+                           summary(perf_df2$AUCpr_QTN_rand)[6],
+                           summary(perf_df2$AUCpr_QTN_rand)[6]),
+          border=NA, col="grey")
+  rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
+       density=dval, angle=aval)
+  
+  mtext("AUC: Precision-recall", side=2, outer=TRUE, line=2, cex=1.5)
+dev.off()
+```
+
+## Make AUC-pr curve for a sim
+```{r}
+thisim = 10944
+
+start plot
+loop through columns
+  wpr <- pr.curve(scores.class0 = sel, scores.class1 = neut, curve = TRUE)
+  #roc.curve(scores.class0 = x, scores.class1 = y, curve = TRUE)
+  #get curve from wpr
+  add points(wpr)
+```
+
+## Make figures showing percentiles of signals in different regions
 ```{r}
 
 perf_df2 <- perf_df2 %>% mutate(uniq=paste(method, simID, sep="_"))
@@ -1162,7 +1266,7 @@ pdf("figures/Quantiles_other.pdf", width=6, height=10)
 dev.off()
 ```
 
-
+## Some other checks and data analysis
 
 ```{r}
 
