@@ -1158,15 +1158,55 @@ dev.off()
 ```
 
 ## Make AUC-pr curve for a sim
+This is way too much code for this plot, but it works
 ```{r}
-thisim = 10944
 
-start plot
-loop through columns
-  wpr <- pr.curve(scores.class0 = sel, scores.class1 = neut, curve = TRUE)
-  #roc.curve(scores.class0 = x, scores.class1 = y, curve = TRUE)
-  #get curve from wpr
-  add points(wpr)
+MakeAUCPRcurve <- function(thisim, let){  
+  prdf <- x_all %>% filter(simID==thisim)
+  labels <- label_list_QTN[[which(inver_simID==thisim)]]
+  
+  todo <- c(4,6,8) #compare pcadapt, outflank, and baypass
+    togetcols[todo]
+  
+  aucz = c()  
+  for (i in todo){
+    print(togetcols[i])
+    stat <- unlist(prdf[,togetcols[i]])
+    neut <- stat[!labels]
+    neut <- neut[!is.na(neut)]
+    sel <- stat[which(labels)]
+    sel <- sel[!is.na(sel)]
+    wpr <- pr.curve(scores.class0 = sel, scores.class1 = neut, curve = TRUE)
+    #plot(wpr)
+    print("top signals for neutral loci")
+    print(head(as.numeric(sort(neut, decreasing = TRUE))))
+    print("top hits for causal loci")
+    print(head(as.numeric(sort(sel, decreasing = TRUE))))
+    aucz = c(aucz, wpr$auc.integral) 
+    if(i==4){
+      plot(wpr$curve[,1], wpr$curve[,2], col="purple", ylim=c(0,1), type="l",
+           bty="l", xlab="Recall\n(proportion of causal loci discovered)", ylab="Precision\n(proportion of positive hits\nthat are causal loci)", lwd=2, main=paste(let,") Simulation ", thisim, sep=""))
+    }
+    if(i==6){
+      points(wpr$curve[,1], wpr$curve[,2], col="orange", ylim=c(0,1), type="l", lty=2, lwd=2)
+    }
+    if(i==8){
+      points(wpr$curve[,1], wpr$curve[,2], col="lightblue", ylim=c(0,1), type="l", lty=3, lwd=2.5)
+    }
+  }# end loop
+    aucz=round(aucz,2)
+    legend(0.4,1, c(paste("PCAdapt AUC = ",aucz[1]), 
+                    paste("OutFLANK AUC = ", aucz[2]),
+                    paste("XTX AUC = ", aucz[3])),
+           lwd=c(2,2,2.5), lty=c(1,2,3), col=c("purple", "orange", "lightblue"), bty="n")
+}
+
+pdf("figures/AUC-pr-curves.pdf", width=4, height=8)
+  par(mar=c(4,6,4,1), mfrow=c(3,1), oma=c(0,0,0,0))
+MakeAUCPRcurve(10944, "A") # pcadapt and baypass
+MakeAUCPRcurve(10945, "B") # outflank and pcadapt
+MakeAUCPRcurve(10947, "C") # outflank and baypass
+dev.off()
 ```
 
 ## Make figures showing percentiles of signals in different regions
@@ -1269,6 +1309,10 @@ dev.off()
 ## Some other checks and data analysis
 
 ```{r}
+# low he sites
+par(mar=c(4,4,1,1), mfrow=c(1,1))
+hist(x_all$pos[x_all$OutFLANK_0.2_He<0.05], breaks=seq(0,500000, by=10000))
+plot_layers()
 
 # Quantify outliers in recombination variation region based on P-value
 -log10(0.05/7000)
