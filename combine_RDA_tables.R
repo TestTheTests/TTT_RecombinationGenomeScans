@@ -7,7 +7,7 @@
 # combine_RDA_tables.R takes a number of arguments that point it
 # towards a set of results from an RDA analysis on pruned and
 # unpruned data sets. It combines the pruned and unpruned results
-# into one table based on the "position" column, so the SNPs at
+# into one table based on SNPs, so the SNPs at
 # each position can be easily compared between pruned and unpruned.
 # It is meant to be run on the output of proc_sims_RDA.R
 # 
