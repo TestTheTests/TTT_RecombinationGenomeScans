@@ -1,10 +1,20 @@
 #!/usr/bin/bash
 ###################################################################
 # 
-# File : run_hapflk.sh
-# 
+# File   : run_hapflk.sh
+# History: created by Kevin Freeman June 2018
+#
 ###################################################################
 #
+# run_hapflk.sh is a script that runs hapflk analysis on a set
+# of VCFs. It should be run in a folder containing the 1) VCFs 
+# 2) "scan results files" indicating independence (for pruning)
+# and 3) a "src" subfolder that contains the following scripts:
+#   - vcf2plink.pl
+#   - splitPedMapbyChrom.pl
+#   - pruneSNPs.pl
+#   - runHapflkAllChroms.sh 
+#   - concat_chr.R
 #
 ###################################################################
 
