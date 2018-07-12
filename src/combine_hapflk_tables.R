@@ -22,12 +22,14 @@ if (length(args) == 0) {
   args[2] <- 10961
   args[3] <- "/home/kevin/LOTTERHOS_LAB/UsefulScripts/FreemanScripts/run_hapflk"
   args[4] <- "Invers"
+  args[5] <- "/home/kevin/LOTTERHOS_LAB/UsefulScripts/data/TTT_RecombinationGenomeScans/results_final"
 } else if (length(args) != 4){
   stop("Wrong number of arguments. This script requires 4 arguments:
        1) start (first sim)                   ---> default: 10900
        2) end   (last sim)                    ---> default: 10961
        3) directory containing results tables ---> default: ~/LOTTERHOS_LAB/UsefulScripts/FreemanScripts/run_hapflk
        4) type of sim                         ---> default: Invers
+       5) directory with indexes remaining    ---> default: /home/kevin/LOTTERHOS_LAB/UsefulScripts/data/TTT_RecombinationGenomeScans/results_final
 
       To use defaults, simply provide 0 arguments")
 }
@@ -35,9 +37,10 @@ start   <-  args[1]             # first sim in set
 end     <-  args[2]             # last sim in set
 myDir   <-  args[3]             # directory /results/ is in, which contains the tables to combine
 simType <-  args[4]             # ex: 'Invers'
+indDir  <-  args[5]             # directory where "indexes remaining" files are, telling script how to combine pruned and unpruned tables
 
 # indDir is directory that contains files indicating which indexes remain after pruning (tab-delimited text files, one for each sim)
-indDir <- "/home/kevin/LOTTERHOS_LAB/UsefulScripts/data/TTT_RecombinationGenomeScans/results_final"
+
 
 add1 <- function(x){
   y <- x+1
