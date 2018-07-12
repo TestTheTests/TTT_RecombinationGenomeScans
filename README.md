@@ -39,8 +39,8 @@ in this repository. The process:
 
 The hapflk [documenation](https://forge-dga.jouy.inra.fr/documents/588) includes a python script (scaling_chi2_hapflk.py) for calculating p-values
 from hapflk results. It depends on several python packages, some of which were not installed in my remote environment, so I kept this part of the 
-analysis separate from run_hapflk.sh. A simple bash for loop was used to apply scaling_chi2_hapflk.py to each table created in step 5 of the 
-hapflk analysis above.
+analysis separate from run_hapflk.sh. A simple bash for loop, which can be found in get_p_values.sh, was used to apply scaling_chi2_hapflk.py to 
+each table created in step 5 of the hapflk analysis above.
 
 ## combine hapflk_tables.R
 
