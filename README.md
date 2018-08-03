@@ -1,6 +1,6 @@
 # RDA
 
-These scripts are used to detect SNPs under detection by using the R package 'vegan' to perform an RDA. This workflow is based on the procedures detailed in this [vignette](https://popgen.nescent.org/2018-03-27_RDA_GEA.html#data-packages)
+These scripts are used to detect SNPs under selection by using the R package 'vegan' to perform an RDA. This workflow is based on the procedures detailed in this [vignette](https://popgen.nescent.org/2018-03-27_RDA_GEA.html#data-packages)
 
 * [run\_RDA\_sims.sh](#run_rda_simssh)
 * [proc\_sims\_RDA.R](#proc_sims_rdar)
