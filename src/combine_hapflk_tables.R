@@ -75,7 +75,9 @@ for (sim in start:end){
   colnames(ALL) <- c("rs", "chr", "pos", 
                      paste(sep ="", vers, "_ALL"), 
                      paste(sep="", vers, "_ALL_scaled"), 
-                     paste(sep = "", vers, "_ALL_pvalue"))
+                     paste(sep = "", vers, "_ALL_log_pvalue"))
+  # -log10(pvalues)
+  ALL$hapflk_v1.4_ALL_log_pvalue <- -log10(ALL$hapflk_v1.4_ALL_log_pvalue)
   
   # pruned sim
   PRUNED <- read.table(paste(myDir, "/results/PRUNED/", sim, "_allChr.hapflk_sc", sep = ""), header = TRUE)
@@ -83,8 +85,10 @@ for (sim in start:end){
   colnames(PRUNED) <- c("rs", "chr", "pos", 
                         paste(sep ="", vers, "_PRUNED"), 
                         paste(sep ="", vers, "_PRUNED_scaled"), 
-                        paste(sep ="", vers, "_PRUNED_pvalue"))
+                        paste(sep ="", vers, "_PRUNED_log_pvalue"))
   PRUNED <- PRUNED[, !(names(PRUNED) %in% c("chr", "pos"))]            # drop pos and col, would be dups with ALL df
+  # -log10(pvalues)
+  PRUNED$hapflk_v1.4_PRUNED_log_pvalue <- -log10(PRUNED$hapflk_v1.4_PRUNED_log_pvalue)
   
   # all data, pruned kinship sim
   ALL_PRUNED_KIN <- read.table(paste(myDir, "/results/ALL_PRUNED_KIN/", sim, "_allChr.hapflk_sc", sep = ""), header = TRUE)
@@ -92,8 +96,10 @@ for (sim in start:end){
   colnames(ALL_PRUNED_KIN) <- c("rs", "chr", "pos", 
                                 paste(sep = "", vers, "_PRUNED_KIN"),
                                 paste(sep = "", vers, "_PRUNED_KIN_scaled"),
-                                paste(sep = "", vers, "_PRUNED_KIN_pvalue"))
+                                paste(sep = "", vers, "_PRUNED_KIN_log_pvalue"))
   ALL_PRUNED_KIN <- ALL_PRUNED_KIN[, !(names(ALL_PRUNED_KIN) %in% c("chr", "pos"))]  # drop pos and col, would be dups with ALL df
+  # -log10(pval)
+  ALL_PRUNED_KIN$hapflk_v1.4_PRUNED_KIN_log_pvalue <- -log10(ALL_PRUNED_KIN$hapflk_v1.4_PRUNED_KIN_log_pvalue)
   
   ##############  Combine data frames and print file ################################################
   combinedDF <- merge(ALL, PRUNED, by = 'rs', all = T)
@@ -106,7 +112,7 @@ for (sim in start:end){
                                 simType, 
                                 "_hapflk_scores_sc.txt"), 
               row.names = FALSE)
-  print(paste(sep = "", "Created ",myDir, "/results",sim, "_", simType, "_hapflk_scores_sc.txt"))
+  print(paste(sep = "", "Created ",myDir, "/results/",sim, "_", simType, "_hapflk_scores_sc.txt"))
 }
 
 
