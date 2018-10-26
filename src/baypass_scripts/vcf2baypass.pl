@@ -6,6 +6,7 @@ use Scalar::Util qw(looks_like_number);
 use Getopt::Long;
 use Pod::Usage;
 use Data::Dumper qw(Dumper);
+use List::MoreUtils qw(first_index);
 
 ######################################################################################
 #
@@ -35,7 +36,7 @@ Options:
      -population	Corresponding population file (required)
      
      -colGroup		Specify the column of the population file that your 
-     			group data is in. 1st col is 0 (required)
+     			group data is in. 1st col is 0 (optional, will try to find the col by name if not specified)
      			
      -colEnv		Specify the column in the population file that your
      			environment data is in (optional)
@@ -43,7 +44,7 @@ Options:
      -colPheno		Specify the column in the population file that your
      			phenotype data is in (optional)
      -colInFinal	Specify the column in the population file that tells you whether
-     			an individual is in the final dataset, ie your VCF (optional)
+     			an individual is in the final dataset, ie your VCF (optional, will try to detect if not specified)
      			
      -outGeno		Output file prefix for genotype file (default: <name_of_vcf>)
      
@@ -71,9 +72,7 @@ unless ($vcf) {
 unless ($popFile) {
 	die "\n-pop not defined\n$usage";
 }
-unless ($colGroup) {
-	die "\n-col_group not defined\n$usage";
-}
+
 
 ############ Read pop file into a hash ################################################
 say STDERR "\nReading pop file.....";
@@ -89,16 +88,31 @@ my $individualNum = 0;				    # individualNum tells us what line we are on. 0 = 
 while(<$popFh>){
     chomp $_;
     my @line = split(" ",$_);
-    unless (looks_like_number $line[0]) { # make sure the program doesn't store the header
-    	next;
+    unless (looks_like_number $line[0]) { # if it doesn't look like a number, we assume it's the header
+	my @strippedLine = map { local $_ = $_; s/"//g; $_ } @line;
+	say @strippedLine;
+	if (not defined $inFinal){
+		$inFinal = first_index { $_ eq 'infinal' } @strippedLine;
+	}    
+	if (not defined $colGroup){
+	    	$colGroup = first_index { $_ eq 'group' } @strippedLine;
+		say $colGroup;
+		if ($colGroup == -1){
+			die "colGroup undefined and no column named 'group' was found $!";
+    		}
+	}		
+	next;
     }
     
     # if $inFinal was specified, check if the individual is in the final dataset. If not, skip
-    if (defined $inFinal){
+    if ($inFinal != -1 ){          # first_index returns -1 if it doesn't find the element
     	my $in = $line[$inFinal];
     	unless($in eq "TRUE"){
     		next;
     	}
+    }
+    else {
+	say STDERR "Warning : did not detect 'infinal' column, using all SNPs";
     }
     
     my $group = $line[$colGroup];
@@ -135,6 +149,12 @@ close $popFh;
 ############ Read VCF into an array ###################################################
 say STDERR "Reading VCF.....";
 
+if ($vcf =~ /\.gz$/) {
+	say STDERR "unzipping VCF...";
+	system("gunzip $vcf");
+	$vcf =~ s/\.gz//;
+}
+
 my $vcfFh;
 unless (open ($vcfFh, "<", $vcf) ){
     die "cant open '$vcf', $!";
@@ -152,6 +172,8 @@ while(<$vcfFh>){
 # counts for one snp
 
 close $vcfFh;
+
+system("gzip $vcf");
 
 ########### Put data into baypass format ###############################################
 
@@ -201,7 +223,7 @@ sub calcAlleles{
 	my $alleleString = "";
 	unless (scalar @snpValsArray == $individualNum){
 		die "VCF data does not match population data, different number of
-		individuals", $!;
+		individuals. This could be caused by file format, make sure your file is a vcf or a gzipped vcf", $!;
 	}
 	my @alleleArray;
 	
