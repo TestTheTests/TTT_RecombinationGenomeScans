@@ -314,6 +314,7 @@
   #plot_layers(y_head=6000, y_arrows = c(6000, 5000))
   head(final_df)
   dim(final_df)
+  
 ### PCA loadings and scores if all data is used ####
   gename <- paste0(seed, "_genotypes.lfmm")
   envname <- paste0( seed, "_gradients.env")
@@ -351,7 +352,7 @@
   gename2 <- paste0(seed, "_genotypes_pruned.lfmm")
   write.lfmm(t(training$G_pruned), gename2)
   pcafile2 <- read.pcadapt(gename2, type="lfmm")
-  pca_pruned <-pcadapt(pcafile2,K=3,data.type="genotype")
+  pca_pruned <- pcadapt(pcafile2,K=3,data.type="genotype")
   
   final_df$pca_PRUNED_PC1_loadings <- NA # prevents error in next 3 lines of code
   final_df$pca_PRUNED_PC2_loadings <- NA
@@ -384,7 +385,7 @@
     #plot(final_df$pos, final_df$pcadapt_3.0.4_ALL_chisq)
     #plot(final_df$pos, final_df$pcadapt_3.0.4_ALL_log10p)
 ### PCADAPT pruned data ####    
-    test <- snp_gc(snp_pcadapt(training$G_coded,U.row = newpc$u[,1]))
+    test <- snp_gc(snp_pcadapt(training$G_coded, U.row = newpc$u[,1]))
     final_df$pcadapt_3.0.4_PRUNED_log10p <- -predict(test,log10=T)
     #plot(final_df$pos, final_df$pcadapt_3.0.4_PRUNED_log10p )
     cor.test(final_df$pcadapt_3.0.4_ALL_log10p, final_df$pcadapt_3.0.4_PRUNED_log10p, method = "spearman")
