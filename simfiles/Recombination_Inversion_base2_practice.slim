@@ -8,9 +8,17 @@ initialize() {
 	//setSeed(1502104253870);
 	defineConstant("seed", getSeed()); 
 	defineConstant("mypath", "~/Desktop/Repos/"); 
+	defineConstant("migration", 0.004); 
 	
 	defineConstant("my_seed", seed); 
 	defineConstant("path", mypath);
+	defineConstant("mig", migration);
+	defineConstant("burnin", 10);
+	defineConstant("adapt", 300); // must be greater than full_sweep_time
+	defineConstant("full_sweep_time", 300);
+	defineConstant("partial_sweep_time", 60); // must be greater than 40 gen
+	defineConstant("end", burnin+adapt);
+	defineConstant("when_m4_fixed", 0);
 
 	
 	defineConstant("sigma_C", 0.07); // smaller is weaker competition
@@ -23,15 +31,13 @@ initialize() {
 	defineConstant("r_low", 1e-11);
 	defineConstant("r_med", 1e-08);
 	defineConstant("mu", 1e-06);
-	
-	defineConstant("burnin", 1000);
-	defineConstant("end", burnin+2000);
+
 	
 	initializeSLiMOptions(dimensionality="xyz");	initializeMutationRate(mu);	initializeMutationType("m1", 0.5, "f", 0.0);        // neutral	initializeMutationType("m2", 0.5, "n", 0.0, 0.7);   // QTL
 		// larger values if want fewer large effect mutations to arise, compare dnorm(0.0:2.0, 0, 0.4)
 		// smaller values for more mutations of smaller effect
-	initializeMutationType("m3", 1.0, "f", 1.0); // positive selection sweep - simulated to partial
-	initializeMutationType("m4", 1.0, "f", 1.0); // positive selection sweep - simulated to full sweep
+	initializeMutationType("m3", 1.0, "f", 0.5); // positive selection sweep - simulated to partial
+	initializeMutationType("m4", 1.0, "f", 0.5); // positive selection sweep - simulated to full sweep
 	initializeMutationType("m5", 0.05, "f", -0.05); // inversion indicator variable
 	//initializeMutationType("m3", 0.5, "n", 0.0, 1.5);   // QTL2	m2.convertToSubstitution = F;
 	m2.mutationStackPolicy = "l";
@@ -73,6 +79,10 @@ initialize() {
 	// start chromosome 9: recombination variation
 	initializeGenomicElement(g0,  400001, 450000);
 	r_var = 10^(-1*(rnorm(10, mean=5, sd=2)));
+		// sometimes this script produces unrealistically high recombination rates, quick fix:
+	if(sum(r_var > 0.001) >0){
+		r_var[r_var > 0.001] = 0.001;
+	}
 
 	
 	//initializeGenomicElement(g2, 50000+1, 1e5-1);	initializeRecombinationRate(c(r, 0.5, //chrom 1
@@ -99,9 +109,9 @@ initialize() {
 											//550000//, 550001,  // chrom 11
 									//		600000 // chrom 12
 											)
-											);		initializeInteractionType(1, "xyz", reciprocal=T, maxDistance=sigma_C*5);     // competition	i1.setInteractionFunction("n", 1.0, sigma_C);
+											);		initializeInteractionType(1, "xyz", reciprocal=T, maxDistance=sigma_C*3);     // competition	i1.setInteractionFunction("n", 1.0, sigma_C);
 		// if they are close in space and have similar phenotype, that is max interaction strength
-	initializeInteractionType(2, "xyz", reciprocal=T);     // mate choice	i2.setInteractionFunction("n", 1.0, sigma_M);
+	initializeInteractionType(2, "xyz", reciprocal=T, maxDistance=sigma_M*3);     // mate choice	i2.setInteractionFunction("n", 1.0, sigma_M);
 		// 
 }
 1 late() {	
@@ -132,18 +142,27 @@ initialize() {
 	head = "gen " + "segsites_m2 " + "mean_pheno " + "sd_pheno " +"corr_phen_env";
 	writeFile(paste(c(path, my_seed, "_Invers_outputPhenEnv.txt"), sep=""), head);
 
-	inverted = sample(p1.individuals, integerDiv(p1.individualCount, 2)); 
-	inverted.genomes.addNewDrawnMutation(m5, 320000);
+//	inverted = sample(p1.individuals, integerDiv(p1.individualCount, 2)); 
+//	inverted.genomes.addNewDrawnMutation(m5, 320000);
+
+	print(end);	
+	sim.rescheduleScriptBlock(s1, end-full_sweep_time, end-full_sweep_time+50);
+	sim.rescheduleScriptBlock(s2, end-partial_sweep_time, end-partial_sweep_time+40);
+	sim.rescheduleScriptBlock(s3, end-1, end-1);
+	sim.rescheduleScriptBlock(s4, end, end);
+	sim.rescheduleScriptBlock(s5, end + 1, end + 1);
+
 }
 
 modifyChild() {
 	// set offspring position based on parental position
 	do
-		pos = c(parent1.spatialPosition[0:1] + rnorm(2, 0, 0.004) , 0.0);//+ sample(c(0,2,-2), 2, replace=T, weights=c(0.8,0.5, 0.5)), 0.0);
+		pos = c(parent1.spatialPosition[0:1] + rnorm(2, 0, mig) , 0.0);//+ sample(c(0,2,-2), 2, replace=T, weights=c(0.8,0.5, 0.5)), 0.0);
 	while (!p1.pointInBounds(pos));
 	child.setSpatialPosition(pos);
 	
 	return T;
+
 }
 
 
@@ -170,16 +189,41 @@ modifyChild() {
 		writeFile(paste(c(path, my_seed, "_Invers_outputPhenEnv.txt"), sep=""), out, append=T);
 
    }
+   
+ 	ga0 = sim.subpopulations.genomes;
+	ma0 = sortBy(unique(c(ga0.mutationsOfType(m5))), "position"); 
+	ma0_freqs = sim.mutationFrequencies(p1, ma0);
+	//print(ma0_freqs);
+	fixed = ma0_freqs > 0;
+	if  (size(fixed)==0){ 
+		target = sample(p1.genomes, 1);
+		target.addNewDrawnMutation(m5, 320000);
+	}
+
+	if(when_m4_fixed ==0){
+		ma4_freq = sim.mutationFrequencies(p1,sortBy(unique(c(ga0.mutationsOfType(m4))), "position"));
+		//print(size(ma4_freq));
+		if(size(ma4_freq) > 0){
+			if (ma4_freq == 1){
+				print("m4 fixed at " + sim.generation);
+				rm("when_m4_fixed", T);
+				defineConstant("when_m4_fixed", sim.generation);
+					
+			}
+		}
+	}
+
+
 }
 
 fitness(m2) {      // make QTLs intrinsically neutral	return 1.0;}
 
 ////////////////////////////////////
-fitness(m5) {	// fitness of the inversion is frequency-dependent 
-	f = sim.mutationFrequencies(NULL, mut);	return 1.0 - (f - 0.5) * 0.2;
-	// the last number in this equation will control the strength of negative frequency dependence
-	// the smaller this number, the weaker the selection and the more drift the inversion will experience
-	// 0.2 seems to be a good number to maintain the inversion but also alow some drift among populations within the metapopulation}
+fitness(m5) {
+	f = sim.mutationFrequencies(NULL, mut);
+	return 1.0 - (f - 0.5) * 0.1;
+		// below if inversion is lost, it is re-introduced
+		// half as strong as original sim}
 ////////////////////////////////////
 fitness(NULL) {    // reward proximity to the optimum
 	location = individual.spatialPosition[0:1];
@@ -239,7 +283,8 @@ recombination() {	if (genome1.containsMarkerMutation(m5, 320000) ==		genome2.c
 // 100 generations before end of simulation
 ///////////////////////////////////
 
-2890:2910 late(){
+//2800:2850 late(){
+s1 10 late(){
 	my_gen = sim.generation;
 	ga = sim.subpopulations.genomes;
 	ma = sortBy(unique(c(ga.mutationsOfType(m4))), "position"); 
@@ -247,7 +292,7 @@ recombination() {	if (genome1.containsMarkerMutation(m5, 320000) ==		genome2.c
 	if  (size(fixed)==0){ 
 		target = sample(p1.genomes, 1);		target.addNewDrawnMutation(m4, 225000);
 	}
-	cat(my_seed + ": m4 " + ma_freqs + "\n");
+	cat(my_seed + my_gen + ": m4 " + ma_freqs + "\n");
 }
 
 //////////////////////////////////
@@ -258,7 +303,8 @@ recombination() {	if (genome1.containsMarkerMutation(m5, 320000) ==		genome2.c
 
 // 50 generations before end of simulation
 ///////////////////////////////////
-2960:2965 late(){
+//2940:2970 late(){
+s2 10 late(){
 	my_gen = sim.generation;
 	ga = sim.subpopulations.genomes;
 	ma2 = sortBy(unique(c(ga.mutationsOfType(m3))), "position"); 
@@ -273,7 +319,8 @@ recombination() {	if (genome1.containsMarkerMutation(m5, 320000) ==		genome2.c
 ///////////////////////////////////
 
 
-2999 late(){
+//2999 late(){
+s3 10 late(){
 		ga = sim.subpopulations.genomes;
 		ma = sortBy(unique(c(ga.mutationsOfType(m4))), "position"); 
 		ma_freqs = sim.mutationFrequencies(p1, ma);		fixed = ma_freqs > 0.90;		if (size(fixed)>0) {
@@ -293,12 +340,18 @@ recombination() {	if (genome1.containsMarkerMutation(m5, 320000) ==		genome2.c
 			cat(my_seed + ": m3 LOST \n");
 			sim.simulationFinished();
 			}
-		}
+			
+			
+
+	ma0 = sortBy(unique(c(ga.mutationsOfType(m5))), "position"); 
+	ma0_freqs = sim.mutationFrequencies(p1, ma0);
+	cat(my_seed + ": m5_inversion " + ma0_freqs + "\n");
+	}
 
 
 ////////////////////////////////////////
-////////////////////////////////////////3000 late() {
-
+//////////////////////////////////////////3000 late() {
+s4 10 late() {
 pop_id = c();
 env_ind = c();
 
@@ -346,23 +399,40 @@ writeFile(paste(c(path, my_seed, "_Invers_outputIndAll.txt"), sep=""), output_in
 g = sim.subpopulations.genomes;
 		// get the unique mutations in the sample, sorted by positionm = sortBy(unique(c(g.mutationsOfType(m2))), "position"); 
 m_freqs = sim.mutationFrequencies(p1, m);
-
-out_m = "position " + "selCoef " + "originGen " + "type " + "freq" + "\n";
+out_m = "position " + "selCoef " + "originGen " + "type " + "freq " + "descrip" + "when_fixed" + "\n";
 
 for(i in 0:(size(m)-1)){
-	out_m = out_m + m.position[i] +" "+ m.selectionCoeff[i]+" " + m.originGeneration[i]+" " + "m2 " + m_freqs[i] + "\n";
+	out_m = out_m + m.position[i] +" "+ m.selectionCoeff[i]+" " + m.originGeneration[i]+" " + "m2 " + m_freqs[i] + " QTL " + "NA" + "\n";
+}
+
+m3_muts = sortBy(unique(c(g.mutationsOfType(m3))), "position"); 
+if (size(m3_muts)>0){
+	m3_freqs = sim.mutationFrequencies(p1, m3_muts);
+	for(i in 0:(size(m3_muts)-1)){
+		out_m = out_m + m3_muts.position[i] +" "+ m3_muts.selectionCoeff[i]+" " + m3_muts.originGeneration[i]+" " + "m3 " + m3_freqs[i] + " partial_sweep " + "NA" + "\n";
+	}
 }
 
 m4_muts = sortBy(unique(c(g.mutationsOfType(m4))), "position"); 
 if (size(m4_muts)>0){
 	m4_freqs = sim.mutationFrequencies(p1, m4_muts);
 	for(i in 0:(size(m4_muts)-1)){
-		out_m = out_m + m4_muts.position[i] +" "+ m4_muts.selectionCoeff[i]+" " + m4_muts.originGeneration[i]+" " + "m4 " + m4_freqs[i] + "\n";
+		out_m = out_m + m4_muts.position[i] +" "+ m4_muts.selectionCoeff[i]+" " + m4_muts.originGeneration[i]+" " + "m4 " + m4_freqs[i] + " full_sweep " + when_m4_fixed + "\n";
 	}
 }
+
+m5_muts = sortBy(unique(c(g.mutationsOfType(m5))), "position"); 
+if (size(m5_muts)>0){
+	m5_freqs = sim.mutationFrequencies(p1, m5_muts);
+	for(i in 0:(size(m5_muts)-1)){
+		out_m = out_m + m5_muts.position[i] +" "+ m5_muts.selectionCoeff[i]+" " + m5_muts.originGeneration[i]+" " + "m5 " + m5_freqs[i] + " Inversion " + "NA" + "\n";
+	}
+}
+
 writeFile(paste(c(path, my_seed, "_Invers_outputMuts.txt"), sep=""), out_m);
 
 //p1.outputMSSample(1000, replace=F, filePath = paste(c(path, my_seed, "_Invers_outputMS.txt"), sep=""));}
-3001 late() {
+//3001 late() {
+s5 10 late() {
 	sim.simulationFinished();
 }
