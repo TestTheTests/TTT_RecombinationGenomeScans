@@ -211,7 +211,11 @@ if __name__ == '__main__':
     fileList =  subprocess.run(cmd, shell = True, stdout=subprocess.PIPE).stdout.decode('utf-8')
     fileList = fileList.split("\n")
     fileList = list(filter(None, fileList))            # remove blank entries
-    
+   
+    if (len(fileList) < 1):
+        eprint("No gzipped vcf files found in directory: " + datadir + " aborting")
+        sys.exit()if (len(fileList) < 1):
+       
     ####  analyze vcfs in fileList in parallel ###########
     with Pool(processes = nproc) as pool:             # launch parallel processes
          pool.map(processFile, fileList)
