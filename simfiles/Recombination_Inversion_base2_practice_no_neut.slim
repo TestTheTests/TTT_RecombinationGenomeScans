@@ -19,6 +19,11 @@ initialize() {
 	defineConstant("partial_sweep_time", 60); // must be greater than 40 gen
 	defineConstant("end", burnin+adapt);
 	defineConstant("when_m4_fixed", 0);
+	defineConstant("mu_base", 1e-06);
+	defineConstant("mu", mu_base*0.02);
+		// without neutral mutations, the mutation rate is scaled
+		// to make it the right rate for the QTL to mutate at 2% of their
+		// genomic element
 
 	
 	defineConstant("sigma_C", 0.07); // smaller is weaker competition
@@ -30,10 +35,9 @@ initialize() {
 	defineConstant("r", 1e-05);
 	defineConstant("r_low", 1e-11);
 	defineConstant("r_med", 1e-08);
-	defineConstant("mu", 1e-06);
 
 	
-	initializeSLiMOptions(dimensionality="xyz");	initializeMutationRate(mu);	initializeMutationType("m1", 0.5, "f", 0.0);        // neutral	initializeMutationType("m2", 0.5, "n", 0.0, 0.7);   // QTL
+	initializeSLiMOptions(dimensionality="xyz");	initializeMutationRate(mu);	//initializeMutationType("m1", 0.5, "f", 0.0);        // neutral	initializeMutationType("m2", 0.5, "n", 0.0, 0.7);   // QTL
 		// larger values if want fewer large effect mutations to arise, compare dnorm(0.0:2.0, 0, 0.4)
 		// smaller values for more mutations of smaller effect
 	initializeMutationType("m3", 1.0, "f", 0.5); // positive selection sweep - simulated to partial
@@ -43,7 +47,7 @@ initialize() {
 	m2.mutationStackPolicy = "l";
 	m4.convertToSubstitution = F;
 	m3.convertToSubstitution = F;	
-	initializeGenomicElementType("g0", c(m1), c(1));	initializeGenomicElementType("g1", c(m1, m2), c(0.98, 0.02)); //QTL
+	//initializeGenomicElementType("g0", c(m1), c(1));	initializeGenomicElementType("g1",  m2, 1.0); //QTL
 	//initializeGenomicElementType("g3", c(m1, m4), c(0.99, 0.01)); //positive sweep	
 	//initializeGenomicElementType("g2", c(m1, m3), c(0.8, 0.2));
 	
@@ -51,33 +55,33 @@ initialize() {
 	// note that code is redundant for all the neutral regions, but it is just helpful to think about
 	// where recombination breakpoints are
 	
-	// start chromosome 1: neutral	initializeGenomicElement(g0, 0, 50000); // neutral
+	// start chromosome 1: neutral	//initializeGenomicElement(g0, 0, 50000); // neutral
 	
 		
 	// start chromosome 2; neutral
-	initializeGenomicElement(g0,  50001, 100000);
+	//initializeGenomicElement(g0,  50001, 100000);
 	
 		
 	// start chromosome 3: QTL	initializeGenomicElement(g1,  100001, 150000); // QTL mutations
 	
 	// start chromosome 4: QTL	initializeGenomicElement(g1,  150001, 200000); // QTL mutations
 	
-	// start chromosome 5: Selective sweep (near or at fixation at end)	initializeGenomicElement(g0,  200001, 250000);
+	// start chromosome 5: Selective sweep (near or at fixation at end)	//initializeGenomicElement(g0,  200001, 250000);
 	//initializeGenomicElement(g3,  170001, 180000); // sweep region
 	//initializeGenomicElement(g0,  180001, 200000); 
 	
 	// start chromosome 6: Selective sweep (partial sweep at end)
-	initializeGenomicElement(g0,  250001, 300000);
+	//initializeGenomicElement(g0,  250001, 300000);
 	
 	
 	// start chromosome 7: in center 10000 bp low recombination only (inversion)
-	initializeGenomicElement(g0,  300001, 350000);
+	//initializeGenomicElement(g0,  300001, 350000);
 	
 	// start chromosome 8: in center 10000 bp med recombination only
-	initializeGenomicElement(g0,  350001, 400000);
-		
+	//initializeGenomicElement(g0,  350001, 400000);
+	//	
 	// start chromosome 9: recombination variation
-	initializeGenomicElement(g0,  400001, 450000);
+	//initializeGenomicElement(g0,  400001, 450000);
 	r_var = 10^(-1*(rnorm(10, mean=5, sd=2)));
 		// sometimes this script produces unrealistically high recombination rates, quick fix:
 	if(sum(r_var > 0.001) >0){
@@ -376,7 +380,8 @@ output_sim = "seed "+ getSeed()+ "\n"+
 	//"corr_phen_env_samp " + cor_samp + "\n" +
 	"recomb_rates " + paste(sim.chromosome.recombinationRates, sep=" ") + "\n" +
 	"recomb_rates_end " + paste(sim.chromosome.recombinationEndPositions, sep= " ") + "\n" +
-	"mutation_rate " + mu + "\n" +
+	"mutation_rate " + mu_base + "\n" +
+	"mutation_rate_QTL_scaled " + mu +  "\n" +
 	"N " + p1.individualCount + "\n"  
 	;
 
@@ -397,8 +402,7 @@ writeFile(paste(c(path, my_seed, "_Invers_outputIndAll.txt"), sep=""), output_in
 
 // output mutations
 g = sim.subpopulations.genomes;
-		// get the unique mutations in the sample, sorted by position
-m = sortBy(unique(c(g.mutationsOfType(m2))), "position"); 
+		// get the unique mutations in the sample, sorted by positionm = sortBy(unique(c(g.mutationsOfType(m2))), "position"); 
 m_freqs = sim.mutationFrequencies(p1, m);
 out_m = "position " + "selCoef " + "originGen " + "type " + "freq " + "descrip" + " fixed_since" + "\n";
 
@@ -439,10 +443,7 @@ if (size(m5_muts)>0){
 
 writeFile(paste(c(path, my_seed, "_Invers_outputMuts.txt"), sep=""), out_m);
 
-//p1.outputMSSample(1000, replace=F, filePath = paste(c(path, my_seed, "_Invers_outputMS.txt"), sep=""));
-
-}
-
+//p1.outputMSSample(1000, replace=F, filePath = paste(c(path, my_seed, "_Invers_outputMS.txt"), sep=""));}
 //3001 late() {
 s5 10 late() {
 	sim.simulationFinished();
