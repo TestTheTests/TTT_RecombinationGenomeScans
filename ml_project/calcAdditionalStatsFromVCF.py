@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[79]:
+# In[1]:
 
 
 #!/usr/bin/python
@@ -11,6 +11,9 @@ import allel
 from allel.model.ndarray import SortedIndex
 from allel.util import asarray_ndim
 from multiprocessing import Pool, cpu_count
+import warnings
+# filter out the future warning from standardize_by_allele_count
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 #############################################################################################
 # File    : calcAdditionalStatsFromVCF.py
@@ -37,7 +40,61 @@ def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 
-# In[65]:
+# In[ ]:
+
+
+## taken from skl source code (sit-packages/allel/stats/selection.py) and modified to avoid bins with
+## 0 stdev
+def make_similar_sized_bins(x, n):
+    """Utility function to create a set of bins over the range of values in `x`
+    such that each bin contains roughly the same number of values.
+
+    Parameters
+    ----------
+    x : array_like
+        The values to be binned.
+    n : int
+        The number of bins to create.
+
+    Returns
+    -------
+    bins : ndarray
+        An array of bin edges.
+
+    Notes
+    -----
+    The actual number of bins returned may be less than `n` if `x` contains
+    integer values and any single value is represented more than len(x)//n
+    times.
+
+    """
+    # copy and sort the array
+    y = np.array(x).flatten()
+    y.sort()
+
+    # setup bins
+    bins = [y[0]]
+
+    # determine step size
+    step = len(y) // n
+
+    # add bin edges
+    for i in range(step, len(y), step):
+
+        # get value at this index
+        v = y[i]
+
+        # only add bin edge if larger than previous
+        if v > bins[-1]:
+            bins.append(v)
+
+    # fix last bin edge
+    bins[-1] = y[-1]
+
+    return np.array(bins)
+
+
+# In[2]:
 
 
 #-----------------------------------------------------------------------------------------
@@ -58,7 +115,8 @@ def eprint(*args, **kwargs):
 #----------------------------------------------------------------------------------------
 
 def calcAndAppendStatValForScan(snpLocs, statName, hapsInSubWin, statVals,
-                                subWinStart = None, subWinEnd = None, alleleCounts = None):
+                                subWinStart = None, subWinEnd = None, alleleCounts = None,
+                               altAlleleCounts = None, bins = None):
 # modified code from https://github.com/kern-lab/diploSHIC/blob/master/fvTools.py
     if statName == "tajD":
         statVals[statName].append(allel.stats.diversity.tajima_d(
@@ -76,15 +134,20 @@ def calcAndAppendStatValForScan(snpLocs, statName, hapsInSubWin, statVals,
         else:
             statVals[statName].append(h12)
     elif statName == 'ihs':
-        try:
-            statVals[statName].extend(allel.ihs(hapsInSubWin, snpLocs, map_pos = None, use_threads = False))
-        except: 
-            print("hapsInSubWin: " + str(len(hapsInSubWin)) + "  snpLocs: " + str(len(snpLocs)))
+        unstd_ihs = allel.ihs(hapsInSubWin, snpLocs, map_pos = None, use_threads = False)
+        statVals[statName].extend(allel.stats.selection.standardize_by_allele_count(unstd_ihs, 
+                                                                                   altAlleleCounts,
+                                                                                   bins = bins)[0])            
+    elif statName == 'nsl':
+        unstd_nsl = allel.nsl(hapsInSubWin, use_threads = False)
+        statVals[statName].extend(allel.stats.selection.standardize_by_allele_count(unstd_nsl, 
+                                                                                   altAlleleCounts,
+                                                                                   bins = bins)[0]) 
     else:
-        print(statName + " not found")
+        eprint("Unable to calculate " + statName)
 
 
-# In[66]:
+# In[3]:
 
 
 #------------------------------------------------------------------------------------------------------
@@ -102,12 +165,14 @@ def calcAndAppendStatValForScan(snpLocs, statName, hapsInSubWin, statVals,
 
 def processFile(f):
     eprint("Processing " + f)
+    
     vcf     = allel.read_vcf(f, fields = ["CHROM", "POS", "GT"])
     m       = re.search('[0-9]{5}', f)      # m is a regex match object
     simNum  = m.group(0)                    # sim number is the first set of 5 numbers in the vcf name
     
     g           = allel.GenotypeArray(vcf["calldata/GT"])
     ac          = g.count_alleles()
+    aac         = ac[:,1]
     haps        = g.to_haplotypes()
     posSeries   = pd.Series(vcf['variants/CHROM'], index = vcf['variants/POS'])
     # cast chroms to int so we get numeric sort instead of alphabetic sort in groupby
@@ -118,17 +183,25 @@ def processFile(f):
                  "thetaW" : [],
                  "H12"    : [],
                  "H2/H1"  : [],
-                 "ihs"    : [] }
+                 "ihs"    : [],
+                 "nsl"    : [] }
     
     for chrom, group in groupedPos:             # only consider 1 chrom at a time to preserve breaks
         pos = list(group.index)
         chromStart = np.searchsorted(vcf['variants/POS'], pos[0])
-        chromEnd   = np.searchsorted(vcf['variants/POS'], pos[-1], side = 'right')
+        chromEnd   = np.searchsorted(vcf['variants/POS'], pos[-1], side = "right")
         chromHap   = haps.subset(list(range(chromStart, chromEnd)))
         
-        # now calc ihs, it can just take the whole chromosome without need for a sliding window
-        calcAndAppendStatValForScan(snpLocs = list(pos), statName = 'ihs', statVals = statvals,
-                                    hapsInSubWin = chromHap)
+        # now calc ihs and nsl, they can just take the whole chromosome without need for a sliding window
+        chromAac  = aac[chromStart:chromEnd]
+        bins = make_similar_sized_bins(chromAac, 10)
+        if "ihs" in statvals.keys():
+            calcAndAppendStatValForScan(snpLocs = list(pos), statName = 'ihs', statVals = statvals,
+                                        hapsInSubWin = chromHap, altAlleleCounts = chromAac, bins = bins)
+        if "nsl" in statvals.keys():
+            calcAndAppendStatValForScan(snpLocs = list(pos), statName = 'nsl', statVals = statvals,
+                                        hapsInSubWin = chromHap, altAlleleCounts = aac[chromStart:chromEnd],
+                                        bins = bins)
         # calc the rest of the stats over a 1000bp sliding window
         for SNP in pos:
             winStart = SNP - int(winsize/2)
@@ -147,17 +220,17 @@ def processFile(f):
             hapsInSubWin = chromHap.subset(list(range(startInd, endInd + 1)))
     
             
-            for statName in [key for key in statvals.keys() if key !='ihs']:
+            for statName in [key for key in statvals.keys() if key !='ihs' and key != 'nsl']:
                 calcAndAppendStatValForScan(list(pos), statName, hapsInSubWin, statvals, winStart, winEnd, ac)
         
     
     scanResultsFile = datadir + simNum + "_Invers_ScanResults.txt"
     outfile         = datadir + simNum + "_Invers_ScanResults_with_sk-allel.txt"
-
+    
     try:
-        newStatDf         = pd.DataFrame.from_dict(statvals)
+        newStatDf = pd.DataFrame.from_dict(statvals)
     except:
-        eprint(["length of stat: " + stat + " = " + len(statvals[stat]) for stat in list(statvals.keys())])
+        eprint(["length of stat: " + stat + " = " + str(len(statvals[stat])) for stat in list(statvals.keys())])
         sys.exit()
     # add version to stat column names
     newStatDf.columns = [stat + "_sk-allel_v" + skVersion for stat in list(statvals.keys())] 
@@ -180,7 +253,7 @@ def processFile(f):
     featDf.to_csv(outfile, sep = " ", index = False)
 
 
-# In[67]:
+# In[4]:
 
 
 ############## Main ############################################################
@@ -204,18 +277,27 @@ if __name__ == '__main__':
     datadir  = args['datadir'] 
     nproc    = args['ncpus']
     winsize  = args['window']
-
+        
     #### generate file list, find sk-a version ################
     skVersion = pkg_resources.get_distribution("scikit-allel").version # for labeling output
-    cmd      = 'ls ' + datadir + '*.vcf.gz'
+    if os.path.isdir(datadir):
+        if not re.search('/$', datadir):
+            datadir = datadir + "/"
+        cmd     = 'ls ' + datadir + '*.vcf.gz'
+    elif os.path.isfile(datadir):
+        cmd     = 'echo ' + datadir
+    else:
+        eprint("No file or directory found matching: " + datadir)
+        sys.exit()
     fileList =  subprocess.run(cmd, shell = True, stdout=subprocess.PIPE).stdout.decode('utf-8')
     fileList = fileList.split("\n")
     fileList = list(filter(None, fileList))            # remove blank entries
-   
+    
     if (len(fileList) < 1):
+        print(fileList)
         eprint("No gzipped vcf files found in directory: " + datadir + " aborting")
-        sys.exit()if (len(fileList) < 1):
-       
+        sys.exit()
+    
     ####  analyze vcfs in fileList in parallel ###########
     with Pool(processes = nproc) as pool:             # launch parallel processes
          pool.map(processFile, fileList)
