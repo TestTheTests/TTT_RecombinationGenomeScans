@@ -43,8 +43,7 @@ def eprint(*args, **kwargs):
 # In[ ]:
 
 
-## taken from skl source code (sit-packages/allel/stats/selection.py) and modified to avoid bins with
-## 0 stdev
+## taken from skl source code (sit-packages/allel/stats/selection.py) 
 def make_similar_sized_bins(x, n):
     """Utility function to create a set of bins over the range of values in `x`
     such that each bin contains roughly the same number of values.
@@ -172,7 +171,7 @@ def processFile(f):
     
     g           = allel.GenotypeArray(vcf["calldata/GT"])
     ac          = g.count_alleles()
-    aac         = ac[:,1]
+    aac         = ac[:,1]                 # [:,1] is all the alternate allele counts, [:,0] is ref
     haps        = g.to_haplotypes()
     posSeries   = pd.Series(vcf['variants/CHROM'], index = vcf['variants/POS'])
     # cast chroms to int so we get numeric sort instead of alphabetic sort in groupby
