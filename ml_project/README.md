@@ -6,7 +6,7 @@
 
 # Motivation and General Overview
 
-Recent papers<sup>12</sup> by Kern and Shrider have applied supervised machine learning techniques to the problem of detecting soft and hard selective sweeps and shown that these techniques are more effective and robust than traditional methods. This led us to investigate whether such techniques could detect patterns in our TTT (Test the Tests) Recombination Genome Scans simualation data that none of the individual statistics we calculated can and whether it can discriminate between patterns of recombination and selection.
+Recent papers<sup>12</sup> by Kern and Shrider have applied supervised machine learning techniques to the problem of detecting soft and hard selective sweeps and shown that these techniques are more effective and robust than traditional methods. This led us to investigate whether such techniques could detect patterns in our TTT (Test the Tests) Recombination Genome Scans simulation data that none of the individual statistics we calculated can and whether they can discriminate between patterns of recombination and selection.
 
 I took the existing summary statistic data, added a few more statistics used by Kern and Shrider, divided it into feature vectors, and trained an Extremely Randomized Trees classifier on the data. I calculated the effectiveness of the classifier by having it classify a previously unseen set of test data from the same simulations. The classifier was remarkably accurate, and we were particularly interested in its ability to detect QTLs (quantitative trait loci) of small effect better than the best model-based method we tested, LFMM ridge. Small QTLs can be very hard to detect using traditional methods, but many small QTLs together can have large effects on phenotype. An effective way to detect these small QTLs could reveal a lot about the underlying architecture of adaptive traits and this is the direction we plan to take the project in.
 
@@ -48,7 +48,7 @@ uses a grid search to find the best paramteters for the extra random forest clas
 
 ## Run the pipleline yourself
 
-Start by cloning this repository so you have all the scripts and all the input contained in the "results_final" folder. Then run calcAdditionalStatsFromVCF.py. I provided 2 ways to doe this:
+Start by cloning this repository so you have all the scripts and all the input contained in the "results_final" folder. Then run calcAdditionalStatsFromVCF.py. I provided 2 ways to do this:
 
 1) Run the script directly. It will process the inputs in parallel using the python multiprocessing module.
 
@@ -62,7 +62,7 @@ Start by cloning this repository so you have all the scripts and all the input c
 
 This will analyze results_final/10900_Invers_VCFallFILT.vcf.gz only
 
-<br><br>
+---
 
 Next, use makeFeatureVecsIndivSNPs.ipynb to divide the data into labeled feature vectors.
 
@@ -83,9 +83,9 @@ cmd      = 'ls ' + fileDir + '*ScanResults_with_sk-allel.txt'
 
 This is the beginning of the first cell in the notebook. You will have to change the path for the file directory to where you stored the results_final and the name of the outDir to where you want the feature vecs to be stored. After this you should be able to run the notebook, just make sure you run the cells that define functions first.
 
-<br>
+---
 
-Next, train the classifier. You can use the jupyter notebook or script version of classify SNPs. The script was created for trying out training the classifier without undersampling, since the dataset becomes so much larger I needed something that could be run on the cluster. 
+Next, train the classifier. You can use the jupyter notebook or script version of classifySNPs. The script was created for trying out training the classifier without undersampling, since the dataset becomes so much larger I needed something that could be run on the cluster. 
 
 ```python
 trainingSetDir = "/media/kevin/TOSHIBA_EXT/TTT_RecombinationGenomeScans/ml_project/feature_vecs_all_SK-A"
@@ -96,7 +96,7 @@ print(os.listdir(trainingSetDir))
 
 In the second cell you will again have to edit the path. You also may want to change the name for the classfierPickle. After this the notebook should run. If you'd like, you can experiment with how much of the data is used (undersampling/oversampling), creating synthetic data using SMOTE, and with changing the range of parameters the grid search considers.
 
-<br>
+---
 
 Finally, evaluate your classifier by loading it from the pickle into test_classifier.ipynb. Run the first couple cells to define the required functions, then create a new cell and run:
 
@@ -118,7 +118,7 @@ The full results and analysis for every iteration of the classifier are stored a
 
 ![confusion matrix](./pics/latest_clf_results.png "Confusion matrix")
 
-This is the confusion matrix for the lastest version of the classifier. It clearly does very well at identifying the inversion and the region of low recombination (lower right corner). It can identify the sweep region well also, as could be expected from Kern and Shrider's result. The results for small and large QTNs look less impressive, but note that the classifier is attempting to separate qtls and the SNPs very close to them (linked SNPs) into different categories. Since these loci are tightly linked the signal should be expected to be very similar, and if you consider a small QTN being classified as a locus linked to a small QTN as as true positive then the results start to look a lot better. 
+This is the confusion matrix for the latest version of the classifier. It clearly does very well at identifying the inversion and the region of low recombination (lower right corner). It can identify the sweep region well also, as could be expected from Kern and Shrider's result. The results for small and large QTNs look less impressive, but note that the classifier is attempting to separate qtls and the SNPs very close to them (linked SNPs) into different categories. Since these loci are tightly linked the signal should be expected to be very similar, and if you consider a small QTN being classified as a locus linked to a small QTN as a true positive then the results start to look a lot better. 
 
 | precision |   recall |  f1-score |  support |
 |:--------- | ------:  |---------: | --------:|
@@ -141,7 +141,7 @@ Numerical breakdown of how well the classifier does for each class. Note that th
 
 ### Comparison to LFMM Ridge
 
-Out of the methods we investigated, the one that showed the most signal at the small QTLs was [LFMM ridge](https://bcm-uga.github.io/lfmm/articles/lfmm), a latent factor mixed model (LFMM) implemented in the lfmmm package in R. Here are some preliminary comparsions.
+Out of the methods we investigated, the one that showed the most signal at the small QTLs was [LFMM ridge](https://bcm-uga.github.io/lfmm/articles/lfmm), a latent factor mixed model (LFMM) implemented in the lfmm package in R. Here is a preliminary comparsions
 
 | Method        | True Positives | False Positives | True Negatives | False Negatives | Precsion | Recall | F1-Score |
 | -----------   | -------------- | --------------  | -------------  | --------------- | -------- | -----  | -------  |
