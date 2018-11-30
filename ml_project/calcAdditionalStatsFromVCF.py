@@ -40,59 +40,6 @@ def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 
-# In[ ]:
-
-
-## taken from skl source code (sit-packages/allel/stats/selection.py) 
-def make_similar_sized_bins(x, n):
-    """Utility function to create a set of bins over the range of values in `x`
-    such that each bin contains roughly the same number of values.
-
-    Parameters
-    ----------
-    x : array_like
-        The values to be binned.
-    n : int
-        The number of bins to create.
-
-    Returns
-    -------
-    bins : ndarray
-        An array of bin edges.
-
-    Notes
-    -----
-    The actual number of bins returned may be less than `n` if `x` contains
-    integer values and any single value is represented more than len(x)//n
-    times.
-
-    """
-    # copy and sort the array
-    y = np.array(x).flatten()
-    y.sort()
-
-    # setup bins
-    bins = [y[0]]
-
-    # determine step size
-    step = len(y) // n
-
-    # add bin edges
-    for i in range(step, len(y), step):
-
-        # get value at this index
-        v = y[i]
-
-        # only add bin edge if larger than previous
-        if v > bins[-1]:
-            bins.append(v)
-
-    # fix last bin edge
-    bins[-1] = y[-1]
-
-    return np.array(bins)
-
-
 # In[2]:
 
 
@@ -115,7 +62,7 @@ def make_similar_sized_bins(x, n):
 
 def calcAndAppendStatValForScan(snpLocs, statName, hapsInSubWin, statVals,
                                 subWinStart = None, subWinEnd = None, alleleCounts = None,
-                               altAlleleCounts = None, bins = None):
+                               altAlleleCounts = None):
 # modified code from https://github.com/kern-lab/diploSHIC/blob/master/fvTools.py
     if statName == "tajD":
         statVals[statName].append(allel.stats.diversity.tajima_d(
@@ -136,12 +83,12 @@ def calcAndAppendStatValForScan(snpLocs, statName, hapsInSubWin, statVals,
         unstd_ihs = allel.ihs(hapsInSubWin, snpLocs, map_pos = None, use_threads = False)
         statVals[statName].extend(allel.stats.selection.standardize_by_allele_count(unstd_ihs, 
                                                                                    altAlleleCounts,
-                                                                                   bins = bins)[0])            
+                                                                                   n_bins=20)[0])            
     elif statName == 'nsl':
         unstd_nsl = allel.nsl(hapsInSubWin, use_threads = False)
         statVals[statName].extend(allel.stats.selection.standardize_by_allele_count(unstd_nsl, 
                                                                                    altAlleleCounts,
-                                                                                   bins = bins)[0]) 
+                                                                                   n_bins=20)[0]) 
     else:
         eprint("Unable to calculate " + statName)
 
@@ -165,6 +112,7 @@ def calcAndAppendStatValForScan(snpLocs, statName, hapsInSubWin, statVals,
 def processFile(f):
     eprint("Processing " + f)
     
+    direc   = os.path.split(f)[0]
     vcf     = allel.read_vcf(f, fields = ["CHROM", "POS", "GT"])
     m       = re.search('[0-9]{5}', f)      # m is a regex match object
     simNum  = m.group(0)                    # sim number is the first set of 5 numbers in the vcf name
@@ -193,14 +141,12 @@ def processFile(f):
         
         # now calc ihs and nsl, they can just take the whole chromosome without need for a sliding window
         chromAac  = aac[chromStart:chromEnd]
-        bins = make_similar_sized_bins(chromAac, 10)
         if "ihs" in statvals.keys():
             calcAndAppendStatValForScan(snpLocs = list(pos), statName = 'ihs', statVals = statvals,
-                                        hapsInSubWin = chromHap, altAlleleCounts = chromAac, bins = bins)
+                                        hapsInSubWin = chromHap, altAlleleCounts = chromAac)
         if "nsl" in statvals.keys():
             calcAndAppendStatValForScan(snpLocs = list(pos), statName = 'nsl', statVals = statvals,
-                                        hapsInSubWin = chromHap, altAlleleCounts = aac[chromStart:chromEnd],
-                                        bins = bins)
+                                        hapsInSubWin = chromHap, altAlleleCounts = aac[chromStart:chromEnd])
         # calc the rest of the stats over a 1000bp sliding window
         for SNP in pos:
             winStart = SNP - int(winsize/2)
@@ -223,11 +169,12 @@ def processFile(f):
                 calcAndAppendStatValForScan(list(pos), statName, hapsInSubWin, statvals, winStart, winEnd, ac)
         
     
-    scanResultsFile = datadir + simNum + "_Invers_ScanResults.txt"
-    outfile         = datadir + simNum + "_Invers_ScanResults_with_sk-allel.txt"
+    scanResultsFile = direc + "/" + simNum + "_Invers_ScanResults.txt"
+    outfile         = direc + "/" + simNum + "_Invers_ScanResults_with_sk-allel.txt"
     
     try:
         newStatDf = pd.DataFrame.from_dict(statvals)
+        newStatDf = newStatDf.fillna("NA")
     except:
         eprint(["length of stat: " + stat + " = " + str(len(statvals[stat])) for stat in list(statvals.keys())])
         sys.exit()
@@ -244,12 +191,12 @@ def processFile(f):
             stats  = allFeatures[1:]
             header = allFeatures[0]
             featDf =  pd.DataFrame(stats, columns = header)
-            featDf = featDf[featDf.keep_loci == "TRUE"].reset_index(drop = True)
         featDf = featDf.join(newStatDf)
     except: 
         featDf = newStatDf
         
     featDf.to_csv(outfile, sep = " ", index = False)
+    eprint("Created " + outfile)
 
 
 # In[4]:
