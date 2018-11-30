@@ -6,9 +6,15 @@
 
 # Motivation and General Overview
 
-Recent papers by Kern and Shrider have applied supervised machine learning techniques to the problem of detecting soft and hard selective sweeps and shown that these techniques are more effective and robust than traditional methods. This led us to investigate whether such techniques could detect patterns in our TTT (Test the Tests) Recombination Genome Scans simualation data that none of the individual statistics we calculated can and whether it can discriminate between patterns of recombination and selection.
+Recent papers<sup>12</sup> by Kern and Shrider have applied supervised machine learning techniques to the problem of detecting soft and hard selective sweeps and shown that these techniques are more effective and robust than traditional methods. This led us to investigate whether such techniques could detect patterns in our TTT (Test the Tests) Recombination Genome Scans simualation data that none of the individual statistics we calculated can and whether it can discriminate between patterns of recombination and selection.
 
 I took the existing summary statistic data, added a few more statistics used by Kern and Shrider, divided it into feature vectors, and trained an Extremely Randomized Trees classifier on the data. I calculated the effectiveness of the classifier by having it classify a previously unseen set of test data from the same simulations. The classifier was remarkably accurate, and we were particularly interested in its ability to detect QTLs (quantitative trait loci) of small effect better than the best model-based method we tested, LFMM ridge. Small QTLs can be very hard to detect using traditional methods, but many small QTLs together can have large effects on phenotype. An effective way to detect these small QTLs could reveal a lot about the underlying architecture of adaptive traits and this is the direction we plan to take the project in.
+
+---
+
+1) Schrider, D. R., & Kern, A. D. (2016). S/HIC: Robust identification of soft and hard sweeps using machine learning. PLOS Genetics. doi:10.1101/024547
+
+2) Kern, A. D., & Schrider, D. R. (2018). DiploS/HIC: An updated approach to classifying selective sweeps. G3: Genes|Genomes|Genetics. doi:10.1101/267229
 
 ---
 
