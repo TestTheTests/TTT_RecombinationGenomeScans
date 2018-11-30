@@ -10,7 +10,7 @@
 # QTLs. It corrects the p values using the benjamini-hotchberg
 # method and then calculates precision, recall, and F1
 # for the corrected values, considering a positive to be 
-# q < 0.05 and a negative to be q >= 0.01
+# q < 0.05 and a negative to be q >= 0.05
 #
 ###############################################################
 
@@ -134,3 +134,6 @@ calcPrecRecallF1(lgQTLs, "muttype")
 
 print("for all QTLs and linked mutations: ")
 calcPrecRecallF1(allResults, "linkedLabel")
+
+calcPrecRecallF1(smallQTLs, "linkedLabel")
+calcPrecRecallF1(lgQTLs, "linkedLabel")
