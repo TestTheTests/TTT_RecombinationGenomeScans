@@ -582,6 +582,7 @@ print(c("dim muts", dim(muts)))
 
 final_df$simID <- seed
 
+muts <- muts[,-which(colnames(muts) %in% c("freq", "freq_old", "freq_final"))]
 
 write.vcf(vcf_filt, file = paste("../results_final/", seed, "_", type, "_VCFallFILT.vcf.gz", sep=""))
 write.table(ind, file = paste("../results_final/", seed, "_", type, "_indFILT.txt", sep=""), row.names=FALSE)
