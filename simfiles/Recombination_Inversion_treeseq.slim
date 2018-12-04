@@ -273,7 +273,7 @@ fitness(m5) {
 			// dnorm(0.0:5.0, 0, 1.5)/dnorm(0.0,0,1.5)
 	}
 	if (sim.generation >= burnin & sim.generation < (burnin + 100)){
-		change = abs(optimum2-optimum1)/100
+		optimum3 = optimum1 + (optimum1-optimum2)/100;
 		return 1.0 + dnorm(optimum3 - individual.z, mean=0.0, sd=sigma_K);
 	}
 	if (sim.generation >= (burnin + 100)){
@@ -419,7 +419,7 @@ output_sim = "seed "+ getSeed()+ "\n"+
 writeFile(paste(c(path, my_seed,"_Invers_outputSim.txt"), sep=""), output_sim);
 
 
-sim.treeSeqOutput(paste(c(path,my_seed,".trees"), sep=""));
+sim.treeSeqOutput(paste(c(path,my_seed,"_Invers.trees"), sep=""));
 
 //output all
 //p1.individuals.genomes.outputVCF(paste(c(path,my_seed,  "_Invers_VCFallsim1.vcf"), sep=""));
