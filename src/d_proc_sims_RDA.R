@@ -23,7 +23,7 @@ sessionInfo()
 args   <- commandArgs(TRUE)
 seed   <- args[1]             ### Number corresponding to the name of the sim to be analyzed
 type   <- args[2]             ### Type of sim, ex: "Invers". Used to identify the file to be read
-myDir  <- args[3]             ### Directory that the files to be analyzed are contained in 
+myDir  <- "results_final/"            ### Directory that the files to be analyzed are contained in 
 pruned <- args[4]             ### Have non-quasi-indep alleles been removed? if so, pruned <- "_PRUNED". If not, 
                                 # pruned must be set to "" (not NA, not UNDEF, not 0....)
 date()
