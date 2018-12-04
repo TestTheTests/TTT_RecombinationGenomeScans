@@ -23,9 +23,7 @@ sessionInfo()
 args   <- commandArgs(TRUE)
 seed   <- args[1]             ### Number corresponding to the name of the sim to be analyzed
 type   <- args[2]             ### Type of sim, ex: "Invers". Used to identify the file to be read
-myDir  <- "results_final/"            ### Directory that the files to be analyzed are contained in 
-pruned <- args[4]             ### Have non-quasi-indep alleles been removed? if so, pruned <- "_PRUNED". If not, 
-                                # pruned must be set to "" (not NA, not UNDEF, not 0....)
+myDir  <- "../results_final/"            ### Directory that the files to be analyzed are contained in 
 date()
 
 ### function to convert 0 based to 1 based numbering ###
@@ -36,8 +34,7 @@ add1 <- function(x){
 
 ### read files ####
 
-vcf <- read.vcfR(paste(myDir,"/", seed, "_",
-                        pruned, type, "_VCFallFILT.vcf.gz", sep=""))
+vcf <- read.vcfR(paste(myDir, seed, "_", type, "_VCFallFILT.vcf.gz", sep=""))
 env <- read.table(paste(myDir,"/", seed, "_", type, "_indFILT.txt", sep = ""), header = TRUE)
 
 ### Convert VCF to 012 format ####

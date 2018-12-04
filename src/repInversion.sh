@@ -61,7 +61,7 @@ echo -e "\n\nDone with processing tree sequences. Analysis took $(($SECONDS / 36
 cd results
 gzip -f *.vcf
 
-
+src/c_Proc_Sims_LEA.R
 ##############
 #### run R script
 #############
