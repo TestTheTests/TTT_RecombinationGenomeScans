@@ -9,11 +9,10 @@ mypath="/home/k.lotterhos/k_store/TestTheTests/TTT_RecombinationGenomeScans"
 #mypath="/Users/katie/Desktop/TestTheTests/TTT_RecombinationGenomeScans"
 cd $mypath
 ncpus=50
-start=10900 #10950
+start=2388682558411 #10950
 finish=$(($start + $ncpus-1))
 echo $start $finish
 simType="Invers"
-
 
 # make a list of numbers to seed the sims 
 
@@ -124,10 +123,23 @@ done
 wait ${!} #wait until the last background process is finished
 echo -e "\n\nDone with processing R script RDA. Analysis took $(($SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min"
 
-
 ##############
 #### run scikit-allel
 #############
+echo "Running scikit-allel"
+pwd
+for i in $(seq $start $finish)
+do
+	echo $i
+	datapath="../results_final/${i}_${simType}_VCFallFILT.vcf.gz"
+	cmd="python3 ../src/calc_sk-allel_stats.py -d $datapath --ncpus 1"
+
+	echo -e "\nRunning command: $cmd\n" > ${i}"_${simType}_sk-allel.out"
+	$cmd > ${i}"_${simType}_sk-allel.out" 2> ${i}"_${simType}_sk-allel.error" & echo $!
+done
+
+wait ${!}  # wait until the last background process is finished
+echo -e "\n\nDone with processing scikit-allel. Analysis took $((SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min" 
 
 ##############
 #### run baypass
