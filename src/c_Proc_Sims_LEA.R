@@ -5,16 +5,17 @@
 #plot(pc$sdev[1:10]^2, pch = 19)
 library(LEA)
 
+#setwd("/Users/katie/Desktop/Repos/TestTheTests/TTT_RecombinationGenomeScans/results")
+
 ### input arguments ####
 args <- commandArgs(TRUE)
 seed <- args[1]
-type <- args[2] #"RecomLowReg" or "Invers"
+type <- args[2] # "Invers"
 date()
 
 final_df <- read.table(paste("../results_final/", seed, "_", 
                              type, "_ScanResults.txt", sep=""),
-                       header=TRUE
-                      )
+                       header=TRUE)
 
 gename <- paste0(seed, "_genotypes.lfmm")
 envname <- paste0(seed, "_gradients.env")

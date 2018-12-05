@@ -72,8 +72,17 @@ for (i in 1:(length(ends)-1)){
 my_ord <- order(as.numeric(vcf@fix[,"POS"]))
 vcf2 <- vcf
 vcf2 <- vcf[my_ord,]
+
+
+# The inversion tracking mutation had these weird genotypes
+invloc <- which(vcf2@fix[,"POS"]==320000)
+vcf2@gt[invloc ,]
+vcf2@gt[invloc ,] <- sub("2|2", "0|0", vcf2@gt[invloc ,], fixed=TRUE)
+vcf2@gt[invloc ,] <- sub("3|3", "1|1", vcf2@gt[invloc ,], fixed=TRUE)
+vcf2@gt[invloc ,] <- sub("2|3", "0|1", vcf2@gt[invloc ,], fixed=TRUE)
+vcf2@gt[invloc ,] <- sub("3|2", "1|0", vcf2@gt[invloc ,], fixed=TRUE)
 vcf <- vcf2
-rm(vcf2)
+vcf@gt[invloc ,]
 
 
 ### Assign individuals to populations ####
@@ -107,10 +116,7 @@ G[geno %in% c("0/0", "0|0")] <- 0
 G[geno  %in% c("0/1", "1/0", "1|0", "0|1")] <- 1
 G[geno %in% c("1/1", "1|1")] <- 2
 
-# The inversion tracking mutation had these weird genotypes
-G[geno %in% c("2|2")] <- 0
-G[geno %in% c("3|3")] <- 2
-G[geno %in% c("3|2", "2|3")] <- 1
+
 
 
 a_freq <- rowSums(G)/(2*ncol(G))
