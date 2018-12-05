@@ -1,4 +1,4 @@
-#!/usr/local/bash
+#!/usr/local/sh
 ######################################################################################
 #
 # File	  : run_baypass.pl
@@ -49,9 +49,9 @@
 #######################################################################################
 SECONDS=0
 
-mypath="/Users/Shared/TestTheTests/TTT_RecombinationGenomeScans/run_baypass"
-ncpus=61
-start=10901
+mypath="/media/kevin/TOSHIBA_EXT/TTT_RecombinationGenomeScans/src/baypass_scripts"
+ncpus=1
+start=2388682558411
 finish=$(($start + $ncpus-1))
 echo $start $finish
 declare -A npopHash    # declare an associative array to store # of populations for each file
@@ -103,7 +103,7 @@ do
     	echo "Scan results for ${i} not found"
     	continue
     fi 
-	perl ./pruneSNPs.pl -scan ./${i}_Invers_ScanResults.txt \
+	perl ${mypath}/pruneSNPs.pl -scan ./${i}_Invers_ScanResults.txt \
 	 -vcf ./${i}_Invers_VCFallFILT.vcf
 	call_baypass_no_mat "_Invers_VCFallFILT.pruned.vcf" "_PRUNED" "${i}"
 

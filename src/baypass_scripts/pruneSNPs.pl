@@ -61,7 +61,7 @@ while (<$scanFh>){
 	chomp $_;
 	my @line = split(/\s/, $_); #split on whitespace
 	if ($first){    # process header line
-		($posCol) = grep { $line[$_] eq "\"pos\"" } 0..$#line;
+		($posCol) = grep { $line[$_] eq "\"position\"" } 0..$#line;
 		($chrCol) = grep { $line[$_] eq "\"chrom\"" } 0..$#line;
 		($indCol) = grep { $line[$_] eq "\"quasi_indep\"" } 0..$#line;
 		$first = 0;
