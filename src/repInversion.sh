@@ -61,7 +61,6 @@ echo -e "\n\nDone with processing tree sequences. Analysis took $(($SECONDS / 36
 cd results
 gzip -f *.vcf
 
-src/c_Proc_Sims_LEA.R
 ##############
 #### run R script
 #############
@@ -103,6 +102,7 @@ echo -e "\n\nDone with processing R script LEA. Analysis took $(($SECONDS / 3600
 ##############
 #### run R script RDA
 #############
+SECONDS = 0 # used to time analyses
 echo "Running R RDA"
 for i in $(seq $start $finish)
 do
@@ -115,10 +115,6 @@ do
 
     Rscript --vanilla ../src/d_proc_sims_RDA.R ${i} 'Invers' > ${i}"_Invers_R_RDA.out" 2> ${i}"_Invers_R_RDA.error" & echo $!
     sleep 10s
-    # process and analyze the pruned and unpruned files simultaneously
-    Rscript proc_sims_RDA.R $i $simType $myDir "" >${myDir}"/log_files/${i}.log" &
-    Rscript proc_sims_RDA.R $i $simType $myDir "PRUNED_" >${myDir}"/log_files/${i}_pruned.log" &
-    wait # make sure processors don't get overloaded, could change this based on computer
 done
 
 wait ${!} #wait until the last background process is finished
