@@ -123,6 +123,7 @@ echo -e "\n\nDone with processing R script RDA. Analysis took $(($SECONDS / 3600
 #### run scikit-allel
 #############
 echo "Running scikit-allel"
+SECONDS=0
 pwd
 for i in $(seq $start $finish)
 do
