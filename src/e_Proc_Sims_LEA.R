@@ -73,7 +73,7 @@ final_df_LEA <- data.frame(final_df,
 
 
 write.table(final_df_LEA, file = paste("../results_final/", seed, "_", 
-                                       type, "_ScanResults2.txt", sep=""), 
+                                       type, "_ScanResults.txt", sep=""), 
             row.names = FALSE)
-system(paste("rm", paste("../results_final/", seed, "_", 
-                         type, "_ScanResults.txt", sep="")))
+#system(paste("rm", paste("../results_final/", seed, "_", 
+#                         type, "_ScanResults.txt", sep="")))
