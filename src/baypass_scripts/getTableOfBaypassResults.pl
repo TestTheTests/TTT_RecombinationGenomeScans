@@ -19,8 +19,7 @@ use Data::Dumper;
 #
 #######################################################################################
 
-my $start;
-my $finish;
+my ($start, $finish, $indir, $outdir);
 
 ########### Command line options ######################################################
 
@@ -28,6 +27,8 @@ my $usage = "\nUsage: $0 [options]\n
 Options:
      -start		Number of first VCF in batch (ex 10900)
      -finish		Number of final VCF in batch (ex 10960)
+     -in                Where the vcf is stored     (default: ../../../results_final)
+     -out               Where to write the results  (default: ../../../results)
      -help		Show this message
 
 ";
@@ -35,6 +36,8 @@ Options:
 GetOptions(
    'start=i' 		=> \$start,
    'finish=i' 		=> \$finish,
+   'in=s'		=> \$indir,
+   'out=s'		=> \$outdir,
     help => sub { pod2usage($usage); },
 ) or pod2usage(2);
 
@@ -44,25 +47,30 @@ unless ($start) {
 unless ($finish) {
 	die "\n-end not defined\n$usage";
 }
-my $outdir = "../../results_final/";
+unless ($outdir) {
+	$outdir = "../../../results/";
+}
+unless ($indir) {
+	$indir  = "../../../results_final/"; 
+}
 `mkdir -p $outdir`;
 
 ########## Loop through all results #######################################################
 for (my $i = $start; $i <= $finish; $start++){
 	say "\n$i\n";
-	my $vcfFile = $outdir.$i."_Invers_VCFallFILT.vcf";
+	my $vcfFile = $indir."/".$i."_Invers_VCFallFILT.vcf";
 	`gunzip $vcfFile.gz`; 
 	unless (-e $vcfFile){ # make sure file exists
 		say $i."_Invers_VCFallFILT.vcf not found, skipping";
 		$i++;
 		next;
 	}
-	open(my $outFh, '>', $outdir.$i."_baypass_results.txt")
+	open(my $outFh, '>', $outdir."/".$i."_baypass_results.txt")
 		or die "Could not open outfile for $i";
 	my $columnsHashRef = getColumns($i);
 	printResults($columnsHashRef, $outFh);
 	close $outFh;
-	say "Created ".$i."_baypass_results.txt";	
+	say "Created ".$outdir."/".$i."_baypass_results.txt";	
 	`gzip $vcfFile`;    # recompress vcf for space 
 	$i++;
 }
@@ -82,7 +90,7 @@ sub getColumns{
 	my ($number) = @_;
 	## find position
 	my @posCol;
-	my $vcfFile = "../../results_final/".$number."_Invers_VCFallFILT.vcf";
+	my $vcfFile = $indir."/".$number."_Invers_VCFallFILT.vcf";
 	if (open(my $vcfFh, '<', $vcfFile)){
 		while (<$vcfFh>){
 			my $line = $_;
@@ -149,7 +157,6 @@ sub _readBFfile{
 	else {
 		warn "Could not read BF from $bfFile";
 	}
-	say @PhenoCol;
 	return (\@EnvCol, \@PhenoCol);
 }
 
@@ -188,7 +195,7 @@ sub _readXtXfile {
 #-----------------------------------------------------------------------
 sub printResults{
 	my ($resultsHashRef, $outFh) = @_;
-	say $outFh join("\t", "pos","baypass_2.1_ALL_BF_pheno","baypass_2.1_ALL_BF_env",
+	say $outFh join("\t", "position","baypass_2.1_ALL_BF_pheno","baypass_2.1_ALL_BF_env",
 					"baypass_2.1_ALL_XTX", "baypass_2.1_PRUNED_BF_pheno",
 					"baypass_2.1_PRUNED_BF_env", "baypass_2.1_PRUNED_XTX");
 	my $posRef         = $resultsHashRef -> {pos};
