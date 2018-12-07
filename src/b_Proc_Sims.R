@@ -42,7 +42,7 @@ date()
 ### read files ####
 folder <- "results/"
 # this script will be called from working directory in this folder
-vcf <- read.vcfR(paste( seed, "_", type, ".vcf", sep=""))
+vcf <- read.vcfR(paste( seed, "_", type, ".vcf.gz", sep=""))
 ind0 <- read.table(paste( seed,  "_", type,"_outputIndAll.txt", sep=""), header=TRUE)
 muts <- read.table(paste(seed, "_", type,"_outputMuts.txt", sep=""), header=TRUE)
 phen_env <-  read.table(paste( seed, "_", type,"_outputPhenEnv.txt", sep=""), header=TRUE)

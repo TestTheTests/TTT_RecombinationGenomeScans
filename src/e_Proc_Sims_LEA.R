@@ -23,15 +23,15 @@ envname <- paste0(seed, "_gradients.env")
 ################
 # running lfmm #
 ################
-project1 = snmf(gename,
-               K = 1:10, 
-               entropy = TRUE, 
-               repetitions = 3,
-               project = "new")
+#project1 = snmf(gename,
+#               K = 1:10, 
+#               entropy = TRUE, 
+#               repetitions = 3,
+#               project = "new")
 
 # plot cross-entropy criterion of all runs of the project
-plot(project1, cex = 1.2, col = "lightblue", pch = 19)
-
+#plot(project1, cex = 1.2, col = "lightblue", pch = 19)
+print("starting project")
 project = lfmm(gename, 
                envname, 
                K = 3, 
@@ -63,7 +63,8 @@ z_ave3 <- rowMeans(z.scores(project, K = 3))
 #plot(training$position, abs(z_ave2), cex = .5, pch = 19, col = rgb(0,0,0,0.2), main="LFMM GEA", xaxs="i")
 #plot(training$position, abs(z_ave3), cex = .5, pch = 19, col = rgb(0,0,0,0.2), main="LFMM GEA", xaxs="i")
 
-final_df_LEA <- data.frame(#LEA_1.2.0_ALL_K1_log10p =  -log10(pv1),
+final_df_LEA <- data.frame(final_df,
+                           #LEA_1.2.0_ALL_K1_log10p =  -log10(pv1),
                        #LEA_1.2.0_ALL_K2_log10p =  -log10(pv2),
                        LEA_1.2.0_ALL_K3_log10p =  -log10(pv3),
                        #LEA_1.2.0_ALL_K1_z = z_ave1,
@@ -71,4 +72,8 @@ final_df_LEA <- data.frame(#LEA_1.2.0_ALL_K1_log10p =  -log10(pv1),
                        LEA_1.2.0_ALL_K3_z = z_ave3)
 
 
-write.table(final_df_LEA, file = paste("../results_final/", seed, "_", type, "_Results_LEA.txt", sep=""), row.names = FALSE)
+write.table(final_df_LEA, file = paste("../results_final/", seed, "_", 
+                                       type, "_ScanResults2.txt", sep=""), 
+            row.names = FALSE)
+system(paste("rm", paste("../results_final/", seed, "_", 
+                         type, "_ScanResults.txt", sep="")))
