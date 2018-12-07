@@ -11,7 +11,7 @@ args = vars(parser.parse_args())
 seed = args['seed']
 
 # Load the .trees file
-ts = pyslim.load("results/" + seed + "_Invers.trees")
+ts = pyslim.load(seed + "_Invers.trees")
 
 # Calculate tree heights, giving uncoalesced sites the maximum time
 def tree_heights(ts):
@@ -44,5 +44,5 @@ mutated = msprime.mutate(recap, rate=1e-6, random_seed=1, keep=True)
 # plt.step(breakpoints1, heights1, where='post')
 # plt.show()
 
-with open("results/" + seed + "_Invers.vcf", "w") as vcf_file:
+with open(seed + "_Invers.vcf", "w") as vcf_file:
     mutated.write_vcf(vcf_file, 2)
