@@ -201,11 +201,12 @@ def processFile(f):
             header = allFeatures[0]
             featDf =  pd.DataFrame(stats, columns = header)
         featDf = featDf.join(newStatDf)
-    except: 
-        featDf = newStatDf
-        
-    featDf.to_csv(scanResultsFile, sep = " ", index = False)
-    eprint("Created " + scanResultsFile)
+        featDf.to_csv(scanResultsFile, sep = " ", index = False)
+        eprint("Created " + scanResultsFile)
+    except FileNotFoundError: 
+        skaScanResultsFile = direc + "/" + simNum + "_Invers_ScanResults_ska.txt"
+        newStatDf.to_csv(skaScanResultsFile, sep = " ", index = False)
+        eprint("Created " + skaScanResultsFile)
 
 
 
