@@ -90,13 +90,11 @@ while(<$popFh>){
     my @line = split(" ",$_);
     unless (looks_like_number $line[0]) { # if it doesn't look like a number, we assume it's the header
 	my @strippedLine = map { local $_ = $_; s/"//g; $_ } @line;
-	say @strippedLine;
 	if (not defined $inFinal){
 		$inFinal = first_index { $_ eq 'infinal' } @strippedLine;
 	}    
 	if (not defined $colGroup){
 	    	$colGroup = first_index { $_ eq 'group' } @strippedLine;
-		say $colGroup;
 		if ($colGroup == -1){
 			die "colGroup undefined and no column named 'group' was found $!";
     		}
