@@ -16,9 +16,9 @@ initialize() {
 	defineConstant("path", mypath);
 	defineConstant("mig", migration);
 	defineConstant("N", 1000);
-	//defineConstant("burnin", 10*N);
-	defineConstant("burnin", 100);
-	defineConstant("adapt", 2000); // must be greater than full_sweep_time
+	defineConstant("burnin", 10*N);
+	//defineConstant("burnin", 100);
+	defineConstant("adapt", 1000); // must be greater than full_sweep_time
 	defineConstant("full_sweep_time", 300);
 	defineConstant("partial_sweep_time", 60); // must be greater than 40 gen
 	defineConstant("end", burnin+adapt);
