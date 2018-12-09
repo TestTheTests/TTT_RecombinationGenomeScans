@@ -2,6 +2,7 @@
 use warnings;
 use strict;
 use feature qw(say);
+use List::MoreUtils 'first_index';
 use Getopt::Long;
 use Pod::Usage;
 use Data::Dumper;
@@ -10,13 +11,13 @@ use Data::Dumper;
 #
 # File	  : pruneSnps.pl
 # History : 4/6/2018  Created by Kevin Freeman(KF)
-#		  : 4/11/2018 KF changed logic to parse header instead of using user input
-#
+#	  : 4/11/2018 KF changed logic to parse header instead of using user input
+#	  : 11/5/2018 no longer relies on position column, but now requires both vcf
+#	              and scan_results to be in the same order
 #######################################################################################
 #
 # This script takes a vcf file and a file containing scan results and returns a vcf
-# with only the quasi-independent alleles. It also generates a tab-delimited file 
-# giving the indexes of the quasi-independent alleles
+# with only the quasi-independent alleles. 
 #
 #######################################################################################
 
@@ -55,49 +56,44 @@ unless (open($scanFh, '<', $scanResults)){
 	die "Could not open $scanResults for reading $!";
 }
 my $first = 1;
-my %posHash;
-my ($posCol, $chrCol, $indCol);
+my @indArray = [];
+my $indCol;
 while (<$scanFh>){
 	chomp $_;
 	my @line = split(/\s/, $_); #split on whitespace
 	if ($first){    # process header line
-		($posCol) = grep { $line[$_] eq "\"position\"" } 0..$#line;
-		($chrCol) = grep { $line[$_] eq "\"chrom\"" } 0..$#line;
-		($indCol) = grep { $line[$_] eq "\"quasi_indep\"" } 0..$#line;
+		$indCol = first_index { /quasi_indep/ } @line; 
 		$first = 0;
 	}
 	else {
-		my ($chr,$pos,$ind) = @line[$chrCol, $posCol, $indCol];
-		# combine chr and pos into one key for the hash that maps to the 
-		# independence 
-		# ex : 1.37685 => "TRUE"
-		#     chr pos       ind
-		$chr =~ s/"//g;		# remove quotation marks around chr
-		my $key = join(".", $chr,$pos); 
-		$posHash{$key} = $ind;
+		my $ind = $line[$indCol];
+		push @indArray, $ind;
 	}
 }
 
 ###### Read in VCF, check lines, print ###########################################
 
+my $noExt = $vcf;
+$noExt =~ s/\.vcf(\.gz|)//;    
+
+say $noExt;
 unless (defined $outFile){
-	my $noExt = $vcf;
-	$noExt =~ s/\.vcf$//;    # remove .vcf from the end of the vcf file name
 	$outFile = join(".", $noExt, "pruned", "vcf");
 }
 
+# check if vcf is gzipped, if it is unzip it
 my $inVCFfh;
+if ($vcf =~/\.gz$/ ){
+	`gunzip $vcf`;
+	$vcf = join(".", $noExt, "vcf");
+}
+# open the files
 unless (open($inVCFfh, '<', $vcf)){
 	die "Can't open $vcf file for reading $!";
 }
 my $outFh;
 unless (open($outFh, '>', $outFile)){
 	die "Can't open $outFile for writing $!";
-}
-my $indexesOutFh;
-my $indexFile = "indexes_remaining.txt";
-unless (open ($indexesOutFh, '>', $indexFile)){
-	die "Can't open indexes outfile for writing $!";
 }
 
 my $i = 0;
@@ -109,18 +105,22 @@ while (<$inVCFfh>){
 	} 
 	my @line = split("\t", $_);
 	
-	my ($chr, $pos) = @line[0,1];
-	my $key = join(".", $chr, $pos);
-	
-	if (defined $posHash{$key} and $posHash{$key} eq "TRUE"){
+	if ($indArray[$i] eq "TRUE"){
 		say $outFh $_;
-		print $indexesOutFh $i."\t"; 
 	}
 	$i++;
 }
 
 close $outFh;
 close $inVCFfh;
+`gzip $vcf`;
+`gzip $outFile`;
+my $nlines = $i + 1;
 
-say "\nCreated $outFile";
-say "Created $indexFile\n";
+# if the vcf and scan results are not the same the pruned file is totally invalid. check lengths and delete the file if necessary
+unless($nlines == scalar @indArray){
+	`rm $outFile`;
+	die join(" ", "Length of scan results (", scalar @indArray, ") does not match length of vcf (", $nlines , "), $!"); 
+}
+
+say "\nCreated $outFile.gz";
