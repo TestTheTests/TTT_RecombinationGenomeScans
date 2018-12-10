@@ -1,0 +1,6 @@
+Processing ../results_final/10935_Invers_VCFallFILT.vcf.gz
+/anaconda3/envs/msprime-env/lib/python3.6/site-packages/allel/stats/selection.py:1251: RuntimeWarning: invalid value encountered in true_divide
+  score_standardized[loc] = (score[loc] - m) / s
+Created ../results_final/10935_Invers_ScanResults.txt
+
+It took 0.0 hrs 3.0 minutes 4.07 seconds to process 1 simulation files

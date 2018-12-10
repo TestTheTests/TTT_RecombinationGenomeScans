@@ -9,9 +9,8 @@ conda list
 
 #mypath="/home/k.lotterhos/k_store/TestTheTests/TTT_RecombinationGenomeScans"
 mypath="/Users/katie/Desktop/Repos/TestTheTests/TTT_RecombinationGenomeScans"
-cd $mypath
 nreps=210 #number of reps
-start=10900  #10900 10950
+start=10927  #10900 10950
 finish=$(($start + $nreps-1))
 echo -e $start $finish
 simType="Invers"
@@ -20,7 +19,8 @@ simType="Invers"
 
 
 for i in $(seq $start $finish)
-do	
+do
+    cd $mypath
     echo -e "\n\n"
     echo $i
 	outfile=${i}"_Invers_out.txt"
