@@ -41,31 +41,579 @@ scikit-allel              1.1.10                    <pip>
 setuptools                40.6.2                   py36_0    conda-forge
 six                       1.11.0                py36_1001    conda-forge
 sqlite                    3.25.3               hb1c47c0_0    conda-forge
-svgwrite                  1.2.1                     <pip>
 svgwrite                  1.2.1                      py_0    conda-forge
+svgwrite                  1.2.1                     <pip>
 tk                        8.6.9                ha92aebf_0    conda-forge
 wheel                     0.32.2                   py36_0    conda-forge
 xz                        5.2.4                h470a237_1    conda-forge
 zlib                      1.2.11               h470a237_3    conda-forge
-10927 11136
+10900 11109
+
+
+
+10900
+running SLiM
+48868
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+49030
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+49036
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+49140
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+49166
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10900
+
+
+
+10901
+running SLiM
+49269
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+49504
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+49511
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+49603
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+49629
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10901
+
+
+
+10902
+running SLiM
+49733
+Done with SLiM sims. Analysis took 0hrs 12min
+processing tree sequences in python
+49997
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+50002
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+50075
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+50109
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10902
+
+
+
+10903
+running SLiM
+50205
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+50357
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+50361
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+50428
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+50451
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10903
+
+
+
+10904
+running SLiM
+50550
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+50762
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+50768
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+50857
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+50887
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10904
+
+
+
+10905
+running SLiM
+50992
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+51181
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+51188
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+51276
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+51303
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10905
+
+
+
+10906
+running SLiM
+51403
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+51592
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+51599
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+51688
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+51714
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10906
+
+
+
+10907
+running SLiM
+51950
+Done with SLiM sims. Analysis took 0hrs 13min
+processing tree sequences in python
+52221
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+52228
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+52328
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+52356
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10907
+
+
+
+10908
+running SLiM
+52462
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+52714
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+52719
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+52820
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+52841
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10908
+
+
+
+10909
+running SLiM
+52935
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+53193
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+53205
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+53308
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+53339
+Done with processing scikit-allel. Analysis took 13hrs 51min
+cleaning up files
+10909
+
+
+
+10910
+running SLiM
+53567
+Done with SLiM sims. Analysis took 0hrs 16min
+trees file for 10910 not found, skipping
+
+
+
+10911
+running SLiM
+57579
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+57760
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+57770
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+57929
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+57966
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10911
+
+
+
+10912
+running SLiM
+58104
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+58357
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+58364
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+58450
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+58478
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10912
+
+
+
+10913
+running SLiM
+58569
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+58730
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+58734
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+58827
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+58851
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10913
+
+
+
+10914
+running SLiM
+58983
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+59150
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+59155
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+59228
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+59249
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10914
+
+
+
+10915
+running SLiM
+59335
+Done with SLiM sims. Analysis took 0hrs 13min
+processing tree sequences in python
+59595
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+59599
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+59707
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+59730
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10915
+
+
+
+10916
+running SLiM
+59824
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+60051
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+60055
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+60122
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+60143
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10916
+
+
+
+10917
+running SLiM
+60231
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+60386
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+60394
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+60466
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+60488
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10917
+
+
+
+10918
+running SLiM
+60588
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+60757
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+60761
+Done with processing first R script. Analysis took 0hrs 18min
+Running R RDA
+60853
+Done with processing R script RDA. Analysis took 0hrs 6min
+Running scikit-allel
+60893
+Done with processing scikit-allel. Analysis took 0hrs 5min
+cleaning up files
+10918
+
+
+
+10919
+running SLiM
+61031
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+61279
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+61285
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+61359
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+61384
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10919
+
+
+
+10920
+running SLiM
+61494
+Done with SLiM sims. Analysis took 0hrs 13min
+processing tree sequences in python
+61808
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+61815
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+61882
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+61911
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10920
+
+
+
+10921
+running SLiM
+62011
+Done with SLiM sims. Analysis took 0hrs 15min
+processing tree sequences in python
+62309
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+62317
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+62410
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+62434
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10921
+
+
+
+10922
+running SLiM
+62526
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+62723
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+62730
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+62848
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+63183
+Done with processing scikit-allel. Analysis took 0hrs 4min
+cleaning up files
+10922
+
+
+
+10923
+running SLiM
+63475
+Done with SLiM sims. Analysis took 0hrs 15min
+processing tree sequences in python
+63796
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+63803
+Done with processing first R script. Analysis took 0hrs 5min
+Running R RDA
+63949
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+63980
+Done with processing scikit-allel. Analysis took 0hrs 4min
+cleaning up files
+10923
+
+
+
+10924
+running SLiM
+64110
+Done with SLiM sims. Analysis took 0hrs 15min
+processing tree sequences in python
+64415
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+64422
+Done with processing first R script. Analysis took 0hrs 5min
+Running R RDA
+64537
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+64567
+Done with processing scikit-allel. Analysis took 0hrs 4min
+cleaning up files
+10924
+
+
+
+10925
+running SLiM
+64693
+Done with SLiM sims. Analysis took 0hrs 26min
+processing tree sequences in python
+65268
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+65279
+Done with processing first R script. Analysis took 0hrs 7min
+Running R RDA
+65477
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+65506
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10925
+
+
+
+10926
+running SLiM
+65613
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+65806
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+65811
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+VCF for 10926 not found, skipping
 
 
 
 10927
 running SLiM
-10098
-Done with SLiM sims. Analysis took 0hrs 9min
+65880
+Done with SLiM sims. Analysis took 0hrs 11min
 processing tree sequences in python
-10310
+66153
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-10317
-Done with processing first R script. Analysis took 0hrs 2min
+66159
+Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-10393
-Done with processing R script RDA. Analysis took 0hrs 1min
+66274
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-10423
+66310
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10927
@@ -74,19 +622,19 @@ cleaning up files
 
 10928
 running SLiM
-10522
-Done with SLiM sims. Analysis took 0hrs 8min
+66413
+Done with SLiM sims. Analysis took 0hrs 9min
 processing tree sequences in python
-10682
+66640
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-10686
+66644
 Done with processing first R script. Analysis took 0hrs 2min
 Running R RDA
-10760
-Done with processing R script RDA. Analysis took 0hrs 1min
+66720
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-10806
+66748
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10928
@@ -95,19 +643,19 @@ cleaning up files
 
 10929
 running SLiM
-10902
-Done with SLiM sims. Analysis took 0hrs 7min
+66848
+Done with SLiM sims. Analysis took 0hrs 8min
 processing tree sequences in python
-11046
+67029
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-11055
-Done with processing first R script. Analysis took 0hrs 3min
+67038
+Done with processing first R script. Analysis took 0hrs 4min
 Running R RDA
-11152
-Done with processing R script RDA. Analysis took 0hrs 1min
+67151
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-11180
+67177
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10929
@@ -116,19 +664,19 @@ cleaning up files
 
 10930
 running SLiM
-11276
-Done with SLiM sims. Analysis took 0hrs 10min
+67268
+Done with SLiM sims. Analysis took 0hrs 11min
 processing tree sequences in python
-11517
+67484
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-11524
+67492
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-11694
-Done with processing R script RDA. Analysis took 0hrs 1min
+67574
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-11727
+67599
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10930
@@ -137,20 +685,20 @@ cleaning up files
 
 10931
 running SLiM
-11827
-Done with SLiM sims. Analysis took 0hrs 8min
+67690
+Done with SLiM sims. Analysis took 0hrs 9min
 processing tree sequences in python
-12003
+67906
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-12009
-Done with processing first R script. Analysis took 0hrs 3min
+67914
+Done with processing first R script. Analysis took 0hrs 4min
 Running R RDA
-12097
-Done with processing R script RDA. Analysis took 0hrs 1min
+68042
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-12126
-Done with processing scikit-allel. Analysis took 0hrs 2min
+68070
+Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10931
 
@@ -158,20 +706,20 @@ cleaning up files
 
 10932
 running SLiM
-12220
-Done with SLiM sims. Analysis took 0hrs 10min
+68172
+Done with SLiM sims. Analysis took 0hrs 12min
 processing tree sequences in python
-12419
+68428
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-12426
-Done with processing first R script. Analysis took 0hrs 3min
+68433
+Done with processing first R script. Analysis took 0hrs 5min
 Running R RDA
-12530
+68556
 Done with processing R script RDA. Analysis took 0hrs 1min
 Running scikit-allel
-12559
-Done with processing scikit-allel. Analysis took 0hrs 3min
+68584
+Done with processing scikit-allel. Analysis took 0hrs 4min
 cleaning up files
 10932
 
@@ -179,20 +727,20 @@ cleaning up files
 
 10933
 running SLiM
-12658
-Done with SLiM sims. Analysis took 0hrs 11min
+68700
+Done with SLiM sims. Analysis took 0hrs 17min
 processing tree sequences in python
-12893
+69072
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-12900
-Done with processing first R script. Analysis took 0hrs 3min
+69082
+Done with processing first R script. Analysis took 0hrs 5min
 Running R RDA
-12984
+69209
 Done with processing R script RDA. Analysis took 0hrs 1min
 Running scikit-allel
-13020
-Done with processing scikit-allel. Analysis took 0hrs 3min
+69266
+Done with processing scikit-allel. Analysis took 0hrs 4min
 cleaning up files
 10933
 
@@ -200,19 +748,19 @@ cleaning up files
 
 10934
 running SLiM
-13114
-Done with SLiM sims. Analysis took 0hrs 14min
+69400
+Done with SLiM sims. Analysis took 0hrs 20min
 processing tree sequences in python
-13416
+69778
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-13423
+69783
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-13502
-Done with processing R script RDA. Analysis took 0hrs 1min
+69864
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-13531
+69885
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10934
@@ -221,20 +769,20 @@ cleaning up files
 
 10935
 running SLiM
-13626
-Done with SLiM sims. Analysis took 0hrs 7min
+69974
+Done with SLiM sims. Analysis took 1hrs 23min
 processing tree sequences in python
-13764
+70122
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-13770
-Done with processing first R script. Analysis took 0hrs 3min
+70131
+Done with processing first R script. Analysis took 2hrs 9min
 Running R RDA
-13856
+70304
 Done with processing R script RDA. Analysis took 0hrs 1min
 Running scikit-allel
-13886
-Done with processing scikit-allel. Analysis took 0hrs 3min
+70344
+Done with processing scikit-allel. Analysis took 0hrs 4min
 cleaning up files
 10935
 
@@ -242,20 +790,20 @@ cleaning up files
 
 10936
 running SLiM
-13982
-Done with SLiM sims. Analysis took 0hrs 9min
+70484
+Done with SLiM sims. Analysis took 0hrs 10min
 processing tree sequences in python
-14191
+70693
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-14196
-Done with processing first R script. Analysis took 0hrs 2min
+70704
+Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-14266
-Done with processing R script RDA. Analysis took 0hrs 1min
+70780
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-14294
-Done with processing scikit-allel. Analysis took 0hrs 3min
+70806
+Done with processing scikit-allel. Analysis took 0hrs 41min
 cleaning up files
 10936
 
@@ -263,19 +811,19 @@ cleaning up files
 
 10937
 running SLiM
-14391
-Done with SLiM sims. Analysis took 0hrs 11min
+70921
+Done with SLiM sims. Analysis took 0hrs 12min
 processing tree sequences in python
-14624
+71196
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-14632
+71204
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-14708
-Done with processing R script RDA. Analysis took 0hrs 1min
+71285
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-14738
+71308
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10937
@@ -284,19 +832,19 @@ cleaning up files
 
 10938
 running SLiM
-14840
-Done with SLiM sims. Analysis took 0hrs 7min
+71409
+Done with SLiM sims. Analysis took 0hrs 8min
 processing tree sequences in python
-15003
+71571
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-15009
+71576
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-15095
-Done with processing R script RDA. Analysis took 0hrs 1min
+71670
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-15124
+71704
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10938
@@ -305,19 +853,19 @@ cleaning up files
 
 10939
 running SLiM
-15223
-Done with SLiM sims. Analysis took 0hrs 11min
+71815
+Done with SLiM sims. Analysis took 0hrs 12min
 processing tree sequences in python
-15450
+72073
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-15456
+72080
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-15539
-Done with processing R script RDA. Analysis took 0hrs 1min
+72165
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-15569
+72188
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10939
@@ -326,19 +874,19 @@ cleaning up files
 
 10940
 running SLiM
-15681
-Done with SLiM sims. Analysis took 0hrs 10min
+72284
+Done with SLiM sims. Analysis took 0hrs 11min
 processing tree sequences in python
-15890
+72509
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-15895
+72516
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-15973
-Done with processing R script RDA. Analysis took 0hrs 1min
+72609
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-16007
+72634
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10940
@@ -347,19 +895,19 @@ cleaning up files
 
 10941
 running SLiM
-16106
+72728
 Done with SLiM sims. Analysis took 0hrs 14min
 processing tree sequences in python
-16395
+73022
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-16402
+73028
 Done with processing first R script. Analysis took 0hrs 2min
 Running R RDA
-16489
-Done with processing R script RDA. Analysis took 0hrs 1min
+73096
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-16520
+73120
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10941
@@ -368,19 +916,19 @@ cleaning up files
 
 10942
 running SLiM
-16620
-Done with SLiM sims. Analysis took 0hrs 12min
+73215
+Done with SLiM sims. Analysis took 0hrs 13min
 processing tree sequences in python
-16879
+73511
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-16885
+73518
 Done with processing first R script. Analysis took 0hrs 2min
 Running R RDA
-16963
-Done with processing R script RDA. Analysis took 0hrs 1min
+73586
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-16992
+73614
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10942
@@ -389,19 +937,19 @@ cleaning up files
 
 10943
 running SLiM
-17088
+73703
 Done with SLiM sims. Analysis took 0hrs 8min
 processing tree sequences in python
-17262
+73880
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-17268
+73886
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-17350
+73964
 Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-17376
+73986
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10943
@@ -410,19 +958,19 @@ cleaning up files
 
 10944
 running SLiM
-17474
+74070
 Done with SLiM sims. Analysis took 0hrs 10min
 processing tree sequences in python
-17676
+74296
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-17683
+74302
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-17756
-Done with processing R script RDA. Analysis took 0hrs 1min
+74377
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-17787
+74400
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10944
@@ -431,19 +979,19 @@ cleaning up files
 
 10945
 running SLiM
-17878
-Done with SLiM sims. Analysis took 0hrs 10min
+74493
+Done with SLiM sims. Analysis took 0hrs 11min
 processing tree sequences in python
-18115
+74720
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-18121
-Done with processing first R script. Analysis took 0hrs 2min
+74728
+Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-18193
-Done with processing R script RDA. Analysis took 0hrs 1min
+74804
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-18222
+74827
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10945
@@ -452,20 +1000,20 @@ cleaning up files
 
 10946
 running SLiM
-18316
+74934
 Done with SLiM sims. Analysis took 0hrs 11min
 processing tree sequences in python
-18540
+75167
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-18547
-Done with processing first R script. Analysis took 0hrs 2min
+75173
+Done with processing first R script. Analysis took 0hrs 35min
 Running R RDA
-18616
+75248
 Done with processing R script RDA. Analysis took 0hrs 1min
 Running scikit-allel
-18646
-Done with processing scikit-allel. Analysis took 0hrs 3min
+75296
+Done with processing scikit-allel. Analysis took 2hrs 11min
 cleaning up files
 10946
 
@@ -473,19 +1021,19 @@ cleaning up files
 
 10947
 running SLiM
-18746
-Done with SLiM sims. Analysis took 0hrs 7min
+75460
+Done with SLiM sims. Analysis took 7hrs 9min
 processing tree sequences in python
-18921
+75850
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-18927
-Done with processing first R script. Analysis took 0hrs 3min
+75860
+Done with processing first R script. Analysis took 0hrs 4min
 Running R RDA
-19017
-Done with processing R script RDA. Analysis took 0hrs 1min
+75968
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-19047
+75998
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10947
@@ -494,19 +1042,19 @@ cleaning up files
 
 10948
 running SLiM
-19153
-Done with SLiM sims. Analysis took 0hrs 11min
+76087
+Done with SLiM sims. Analysis took 0hrs 12min
 processing tree sequences in python
-19392
+76329
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-19397
+76334
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-19474
-Done with processing R script RDA. Analysis took 0hrs 1min
+76411
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-19504
+76433
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10948
@@ -515,20 +1063,20 @@ cleaning up files
 
 10949
 running SLiM
-19600
+76528
 Done with SLiM sims. Analysis took 0hrs 9min
 processing tree sequences in python
-19796
+76757
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-19800
+76766
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-19881
-Done with processing R script RDA. Analysis took 0hrs 1min
+76847
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-19910
-Done with processing scikit-allel. Analysis took 0hrs 2min
+76879
+Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10949
 
@@ -536,19 +1084,19 @@ cleaning up files
 
 10950
 running SLiM
-20044
+76981
 Done with SLiM sims. Analysis took 0hrs 9min
 processing tree sequences in python
-20234
+77177
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-20238
+77181
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-20308
-Done with processing R script RDA. Analysis took 0hrs 1min
+77252
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-20341
+77273
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10950
@@ -557,19 +1105,19 @@ cleaning up files
 
 10951
 running SLiM
-20443
+77368
 Done with SLiM sims. Analysis took 0hrs 10min
 processing tree sequences in python
-20672
+77589
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-20679
+77596
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-20749
+77671
 Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-20777
+77692
 Done with processing scikit-allel. Analysis took 0hrs 2min
 cleaning up files
 10951
@@ -578,19 +1126,19 @@ cleaning up files
 
 10952
 running SLiM
-20869
-Done with SLiM sims. Analysis took 0hrs 8min
+77775
+Done with SLiM sims. Analysis took 0hrs 45min
 processing tree sequences in python
-21039
+77993
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-21043
+77999
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-21128
+78080
 Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-21157
+78102
 Done with processing scikit-allel. Analysis took 0hrs 2min
 cleaning up files
 10952
@@ -599,19 +1147,19 @@ cleaning up files
 
 10953
 running SLiM
-21246
-Done with SLiM sims. Analysis took 0hrs 10min
+78185
+Done with SLiM sims. Analysis took 1hrs 5min
 processing tree sequences in python
-21481
+78484
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-21485
-Done with processing first R script. Analysis took 0hrs 2min
+78493
+Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-21553
+78699
 Done with processing R script RDA. Analysis took 0hrs 1min
 Running scikit-allel
-21586
+78765
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10953
@@ -620,19 +1168,19 @@ cleaning up files
 
 10954
 running SLiM
-21702
+78950
 Done with SLiM sims. Analysis took 0hrs 9min
 processing tree sequences in python
-21885
+79178
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-21889
+79187
 Done with processing first R script. Analysis took 0hrs 2min
 Running R RDA
-21967
-Done with processing R script RDA. Analysis took 0hrs 1min
+79257
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-21994
+79279
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10954
@@ -641,19 +1189,19 @@ cleaning up files
 
 10955
 running SLiM
-22100
-Done with SLiM sims. Analysis took 0hrs 9min
+79379
+Done with SLiM sims. Analysis took 0hrs 10min
 processing tree sequences in python
-22305
+79603
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-22309
+79609
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-22386
-Done with processing R script RDA. Analysis took 0hrs 1min
+79694
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-22426
+79715
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10955
@@ -662,19 +1210,19 @@ cleaning up files
 
 10956
 running SLiM
-22518
-Done with SLiM sims. Analysis took 0hrs 11min
+79813
+Done with SLiM sims. Analysis took 0hrs 12min
 processing tree sequences in python
-22752
+80060
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-22759
-Done with processing first R script. Analysis took 0hrs 2min
+80067
+Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-22825
-Done with processing R script RDA. Analysis took 0hrs 1min
+80148
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-22857
+80173
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10956
@@ -683,19 +1231,19 @@ cleaning up files
 
 10957
 running SLiM
-22968
+80272
 Done with SLiM sims. Analysis took 0hrs 10min
 processing tree sequences in python
-23166
+80509
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-23173
+80514
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-23261
-Done with processing R script RDA. Analysis took 0hrs 1min
+80602
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-23300
+80624
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10957
@@ -704,19 +1252,19 @@ cleaning up files
 
 10958
 running SLiM
-23398
+80721
 Done with SLiM sims. Analysis took 0hrs 9min
 processing tree sequences in python
-23583
+80930
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-23589
+80935
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-23694
-Done with processing R script RDA. Analysis took 0hrs 1min
+81023
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-23726
+81046
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10958
@@ -725,19 +1273,19 @@ cleaning up files
 
 10959
 running SLiM
-23825
+81137
 Done with SLiM sims. Analysis took 0hrs 9min
 processing tree sequences in python
-24012
+81345
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-24020
+81351
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-24099
-Done with processing R script RDA. Analysis took 0hrs 1min
+81428
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-24128
+81453
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10959
@@ -746,20 +1294,20 @@ cleaning up files
 
 10960
 running SLiM
-24233
-Done with SLiM sims. Analysis took 0hrs 7min
+81545
+Done with SLiM sims. Analysis took 0hrs 9min
 processing tree sequences in python
-24377
+81738
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-24381
+81742
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-24475
-Done with processing R script RDA. Analysis took 0hrs 1min
+81829
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-24526
-Done with processing scikit-allel. Analysis took 0hrs 2min
+81856
+Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10960
 
@@ -767,19 +1315,19 @@ cleaning up files
 
 10961
 running SLiM
-24618
-Done with SLiM sims. Analysis took 0hrs 16min
+81957
+Done with SLiM sims. Analysis took 0hrs 17min
 processing tree sequences in python
-24959
+82312
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-24968
+82320
 Done with processing first R script. Analysis took 0hrs 2min
 Running R RDA
-25038
-Done with processing R script RDA. Analysis took 0hrs 1min
+82385
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-25065
+82408
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10961
@@ -788,19 +1336,19 @@ cleaning up files
 
 10962
 running SLiM
-25162
-Done with SLiM sims. Analysis took 0hrs 12min
+82500
+Done with SLiM sims. Analysis took 0hrs 13min
 processing tree sequences in python
-25468
+82785
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-25476
+82792
 Done with processing first R script. Analysis took 0hrs 2min
 Running R RDA
-25540
-Done with processing R script RDA. Analysis took 0hrs 1min
+82862
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-25570
+82886
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10962
@@ -809,20 +1357,20 @@ cleaning up files
 
 10963
 running SLiM
-25666
-Done with SLiM sims. Analysis took 0hrs 13min
+82974
+Done with SLiM sims. Analysis took 0hrs 18min
 processing tree sequences in python
-25926
+83322
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-25932
+83333
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-26006
-Done with processing R script RDA. Analysis took 0hrs 1min
+83430
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-26041
-Done with processing scikit-allel. Analysis took 0hrs 44min
+83475
+Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10963
 
@@ -830,20 +1378,20 @@ cleaning up files
 
 10964
 running SLiM
-26203
-Done with SLiM sims. Analysis took 0hrs 9min
+83577
+Done with SLiM sims. Analysis took 0hrs 12min
 processing tree sequences in python
-26426
+83956
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-26430
+83961
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-26518
-Done with processing R script RDA. Analysis took 0hrs 1min
+84107
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-26553
-Done with processing scikit-allel. Analysis took 0hrs 10min
+84144
+Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10964
 
@@ -851,19 +1399,19 @@ cleaning up files
 
 10965
 running SLiM
-26673
-Done with SLiM sims. Analysis took 0hrs 16min
+84259
+Done with SLiM sims. Analysis took 0hrs 12min
 processing tree sequences in python
-26953
+84631
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-26962
+84637
 Done with processing first R script. Analysis took 0hrs 4min
 Running R RDA
-27057
-Done with processing R script RDA. Analysis took 0hrs 1min
+84784
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-27087
+84820
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10965
@@ -872,35 +1420,41 @@ cleaning up files
 
 10966
 running SLiM
-27187
-Done with SLiM sims. Analysis took 0hrs 15min
+84925
+Done with SLiM sims. Analysis took 0hrs 16min
 processing tree sequences in python
-27524
+85272
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-27531
+85283
 Done with processing first R script. Analysis took 0hrs 2min
 Running R RDA
-VCF for 10966 not found, skipping
+85377
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+85400
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10966
 
 
 
 10967
 running SLiM
-27596
-Done with SLiM sims. Analysis took 0hrs 12min
+85485
+Done with SLiM sims. Analysis took 5hrs 48min
 processing tree sequences in python
-27847
+85876
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-27853
+85884
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-27947
-Done with processing R script RDA. Analysis took 0hrs 1min
+85965
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-27978
-Done with processing scikit-allel. Analysis took 0hrs 4min
+85994
+Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10967
 
@@ -908,19 +1462,19 @@ cleaning up files
 
 10968
 running SLiM
-28093
+86091
 Done with SLiM sims. Analysis took 0hrs 12min
 processing tree sequences in python
-28369
+86570
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-28374
+86580
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-28456
-Done with processing R script RDA. Analysis took 0hrs 1min
+86659
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-28485
+86682
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10968
@@ -929,19 +1483,19 @@ cleaning up files
 
 10969
 running SLiM
-28588
-Done with SLiM sims. Analysis took 0hrs 13min
+86774
+Done with SLiM sims. Analysis took 0hrs 12min
 processing tree sequences in python
-28861
+87044
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-28866
+87050
 Done with processing first R script. Analysis took 0hrs 2min
 Running R RDA
-28937
+87116
 Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-28963
+87136
 Done with processing scikit-allel. Analysis took 0hrs 2min
 cleaning up files
 10969
@@ -950,19 +1504,19 @@ cleaning up files
 
 10970
 running SLiM
-29044
-Done with SLiM sims. Analysis took 0hrs 12min
+87212
+Done with SLiM sims. Analysis took 0hrs 11min
 processing tree sequences in python
-29306
+87446
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-29312
+87452
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-29390
-Done with processing R script RDA. Analysis took 0hrs 1min
+88087
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-29420
+88112
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10970
@@ -971,19 +1525,19 @@ cleaning up files
 
 10971
 running SLiM
-29532
+88217
 Done with SLiM sims. Analysis took 0hrs 11min
 processing tree sequences in python
-29781
+88454
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-29787
+88460
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-29890
-Done with processing R script RDA. Analysis took 0hrs 1min
+88596
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-29920
+88619
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10971
@@ -992,19 +1546,19 @@ cleaning up files
 
 10972
 running SLiM
-30023
+88707
 Done with SLiM sims. Analysis took 0hrs 9min
 processing tree sequences in python
-30223
+88925
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-30228
+88929
 Done with processing first R script. Analysis took 0hrs 3min
 Running R RDA
-30311
-Done with processing R script RDA. Analysis took 0hrs 1min
+89016
+Done with processing R script RDA. Analysis took 0hrs 0min
 Running scikit-allel
-30343
+89038
 Done with processing scikit-allel. Analysis took 0hrs 3min
 cleaning up files
 10972
@@ -1013,10 +1567,2818 @@ cleaning up files
 
 10973
 running SLiM
-30441
-Done with SLiM sims. Analysis took 0hrs 8min
+89132
+Done with SLiM sims. Analysis took 0hrs 7min
 processing tree sequences in python
-30613
+89283
 Done with processing tree sequences. Analysis took 0hrs 0min
 Running R scripts
-30618
+89288
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+89354
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+89376
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10973
+
+
+
+10974
+running SLiM
+89463
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+89673
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+89680
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+89741
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+89757
+Done with processing scikit-allel. Analysis took 0hrs 1min
+cleaning up files
+10974
+
+
+
+10975
+running SLiM
+89809
+Done with SLiM sims. Analysis took 0hrs 13min
+processing tree sequences in python
+90092
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+90099
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+90171
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+90193
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10975
+
+
+
+10976
+running SLiM
+90286
+Done with SLiM sims. Analysis took 0hrs 6min
+processing tree sequences in python
+90426
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+90433
+Done with processing first R script. Analysis took 0hrs 1min
+Running R RDA
+VCF for 10976 not found, skipping
+
+
+
+10977
+running SLiM
+90496
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+90690
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+90694
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+90759
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+90781
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10977
+
+
+
+10978
+running SLiM
+90879
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+91037
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+91044
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+91112
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+91133
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10978
+
+
+
+10979
+running SLiM
+91220
+Done with SLiM sims. Analysis took 0hrs 8min
+trees file for 10979 not found, skipping
+
+
+
+10980
+running SLiM
+91421
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+91635
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+91642
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+91711
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+91734
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10980
+
+
+
+10981
+running SLiM
+91823
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+91980
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+91987
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+92075
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+92100
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10981
+
+
+
+10982
+running SLiM
+92191
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+92415
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+92423
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+92506
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+92530
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10982
+
+
+
+10983
+running SLiM
+92618
+Done with SLiM sims. Analysis took 0hrs 16min
+processing tree sequences in python
+92971
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+92978
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+93049
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+93072
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10983
+
+
+
+10984
+running SLiM
+93165
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+93343
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+93350
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+93420
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+93447
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10984
+
+
+
+10985
+running SLiM
+93556
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+93700
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+93704
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+93794
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+93817
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10985
+
+
+
+10986
+running SLiM
+93909
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+94055
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+94059
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+94175
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+94202
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10986
+
+
+
+10987
+running SLiM
+94300
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+94492
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+94497
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+94569
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+94592
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10987
+
+
+
+10988
+running SLiM
+94685
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+94845
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+94849
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+94915
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+94937
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10988
+
+
+
+10989
+running SLiM
+95026
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+95192
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+95196
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+95265
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+95288
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10989
+
+
+
+10990
+running SLiM
+95378
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+95591
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+95596
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+95680
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+95701
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10990
+
+
+
+10991
+running SLiM
+95791
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+96006
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+96013
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+96093
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+96115
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10991
+
+
+
+10992
+running SLiM
+96207
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+96392
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+96397
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+96470
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+96493
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10992
+
+
+
+10993
+running SLiM
+96582
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+96799
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+96803
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+96872
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+96893
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10993
+
+
+
+10994
+running SLiM
+96982
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+97130
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+97136
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+97227
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+97248
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10994
+
+
+
+10995
+running SLiM
+97336
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+97587
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+97592
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+97670
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+97690
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10995
+
+
+
+10996
+running SLiM
+97773
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+97993
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+97999
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+98091
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+98115
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10996
+
+
+
+10997
+running SLiM
+98203
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+98368
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+98374
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+98441
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+98459
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10997
+
+
+
+10998
+running SLiM
+98534
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+98716
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+98721
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+98813
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+98834
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10998
+
+
+
+10999
+running SLiM
+98927
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+99125
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+99129
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+99209
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+99230
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10999
+
+
+
+11000
+running SLiM
+99321
+Done with SLiM sims. Analysis took 0hrs 13min
+processing tree sequences in python
+99587
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+99594
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+99683
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+99710
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11000
+
+
+
+11001
+running SLiM
+99803
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+99988
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+99993
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+188
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+210
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11001
+
+
+
+11002
+running SLiM
+326
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+544
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+553
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+631
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+656
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11002
+
+
+
+11003
+running SLiM
+744
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+932
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+937
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+1015
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+1038
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11003
+
+
+
+11004
+running SLiM
+1125
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+1300
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+1305
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+1400
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+1424
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11004
+
+
+
+11005
+running SLiM
+1517
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+1780
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+1785
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+1973
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+2004
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11005
+
+
+
+11006
+running SLiM
+2105
+Done with SLiM sims. Analysis took 0hrs 12min
+processing tree sequences in python
+2363
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+2370
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+2446
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+2488
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11006
+
+
+
+11007
+running SLiM
+2583
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+2768
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+2773
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+2856
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+2883
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11007
+
+
+
+11008
+running SLiM
+2972
+Done with SLiM sims. Analysis took 0hrs 35min
+processing tree sequences in python
+3364
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+3370
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+3442
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+3469
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11008
+
+
+
+11009
+running SLiM
+3577
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+3861
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+3866
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+3969
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+3996
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11009
+
+
+
+11010
+running SLiM
+4097
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+4278
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+4284
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+4376
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+4399
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11010
+
+
+
+11011
+running SLiM
+4489
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+4644
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+4653
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+4768
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+4791
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11011
+
+
+
+11012
+running SLiM
+4882
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+5079
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+5084
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+5148
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+5172
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11012
+
+
+
+11013
+running SLiM
+5264
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+5456
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+5464
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+5553
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+5578
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11013
+
+
+
+11014
+running SLiM
+5670
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+5921
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+5928
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+6011
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+6034
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11014
+
+
+
+11015
+running SLiM
+6128
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+6322
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+6329
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+6410
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+6433
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11015
+
+
+
+11016
+running SLiM
+6554
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+6775
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+6781
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+6886
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+6912
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11016
+
+
+
+11017
+running SLiM
+7007
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+7237
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+7245
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+7345
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+7368
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11017
+
+
+
+11018
+running SLiM
+7457
+Done with SLiM sims. Analysis took 0hrs 14min
+processing tree sequences in python
+7760
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+7767
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+7857
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+7880
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11018
+
+
+
+11019
+running SLiM
+7968
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+8159
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+8164
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+8269
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+8291
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11019
+
+
+
+11020
+running SLiM
+8377
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+8527
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+8533
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+8613
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+8638
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11020
+
+
+
+11021
+running SLiM
+8739
+Done with SLiM sims. Analysis took 0hrs 13min
+processing tree sequences in python
+9050
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+9057
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+9143
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+9165
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11021
+
+
+
+11022
+running SLiM
+9259
+Done with SLiM sims. Analysis took 0hrs 18min
+trees file for 11022 not found, skipping
+
+
+
+11023
+running SLiM
+9649
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+9854
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+9858
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+9959
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+9981
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11023
+
+
+
+11024
+running SLiM
+10080
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+10271
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+10276
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+10368
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+10390
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11024
+
+
+
+11025
+running SLiM
+10480
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+10711
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+10717
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+10811
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+10837
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11025
+
+
+
+11026
+running SLiM
+10933
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+11094
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+11098
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+11179
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+11204
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11026
+
+
+
+11027
+running SLiM
+11300
+Done with SLiM sims. Analysis took 1hrs 34min
+processing tree sequences in python
+11765
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+11774
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+11842
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+11874
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11027
+
+
+
+11028
+running SLiM
+11966
+Done with SLiM sims. Analysis took 0hrs 13min
+processing tree sequences in python
+12228
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+12237
+Done with processing first R script. Analysis took 0hrs 1min
+Running R RDA
+VCF for 11028 not found, skipping
+
+
+
+11029
+running SLiM
+12287
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+12451
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+12456
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+12525
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+12548
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11029
+
+
+
+11030
+running SLiM
+12640
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+12792
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+12797
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+12875
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+12898
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11030
+
+
+
+11031
+running SLiM
+12992
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+13223
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+13230
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+13311
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+13338
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11031
+
+
+
+11032
+running SLiM
+13428
+Done with SLiM sims. Analysis took 0hrs 13min
+processing tree sequences in python
+13688
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+13695
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+13773
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+13794
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11032
+
+
+
+11033
+running SLiM
+13889
+Done with SLiM sims. Analysis took 0hrs 12min
+processing tree sequences in python
+14142
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+14149
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+14220
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+14241
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11033
+
+
+
+11034
+running SLiM
+14333
+Done with SLiM sims. Analysis took 0hrs 16min
+processing tree sequences in python
+14661
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+14669
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+14756
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+14779
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11034
+
+
+
+11035
+running SLiM
+14866
+Done with SLiM sims. Analysis took 0hrs 16min
+processing tree sequences in python
+15176
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+15183
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+15266
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+15288
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11035
+
+
+
+11036
+running SLiM
+15380
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+15548
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+15554
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+15636
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+15657
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11036
+
+
+
+11037
+running SLiM
+15750
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+15955
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+15961
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+16048
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+16069
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11037
+
+
+
+11038
+running SLiM
+16162
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+16382
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+16389
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+16480
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+16503
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11038
+
+
+
+11039
+running SLiM
+16588
+Done with SLiM sims. Analysis took 0hrs 12min
+processing tree sequences in python
+16833
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+16838
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+16910
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+16932
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11039
+
+
+
+11040
+running SLiM
+17016
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+17183
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+17188
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+17256
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+17278
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11040
+
+
+
+11041
+running SLiM
+17353
+Done with SLiM sims. Analysis took 0hrs 9min
+trees file for 11041 not found, skipping
+
+
+
+11042
+running SLiM
+17547
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+17705
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+17712
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+17814
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+17838
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11042
+
+
+
+11043
+running SLiM
+17928
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+18075
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+18080
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+18166
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+18189
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11043
+
+
+
+11044
+running SLiM
+18283
+Done with SLiM sims. Analysis took 0hrs 16min
+processing tree sequences in python
+18635
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+18642
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+18729
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+18755
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11044
+
+
+
+11045
+running SLiM
+18845
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+19087
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+19093
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+19163
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+19186
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11045
+
+
+
+11046
+running SLiM
+19279
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+19535
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+19540
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+19682
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+19704
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11046
+
+
+
+11047
+running SLiM
+19797
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+19962
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+19968
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+20047
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+20069
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11047
+
+
+
+11048
+running SLiM
+20172
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+20362
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+20369
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+20440
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+20465
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11048
+
+
+
+11049
+running SLiM
+20554
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+20729
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+20735
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+20811
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+20835
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11049
+
+
+
+11050
+running SLiM
+20943
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+21167
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+21173
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+21257
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+21278
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11050
+
+
+
+11051
+running SLiM
+21362
+Done with SLiM sims. Analysis took 0hrs 12min
+processing tree sequences in python
+21606
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+21613
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+21697
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+21730
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11051
+
+
+
+11052
+running SLiM
+21823
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+21967
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+21972
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+22038
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+22060
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11052
+
+
+
+11053
+running SLiM
+22152
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+22353
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+22359
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+22436
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+22475
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11053
+
+
+
+11054
+running SLiM
+22566
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+22764
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+22769
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+22841
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+22868
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11054
+
+
+
+11055
+running SLiM
+22962
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+23180
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+23187
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+23274
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+23299
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11055
+
+
+
+11056
+running SLiM
+23386
+Done with SLiM sims. Analysis took 0hrs 15min
+processing tree sequences in python
+23677
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+23684
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+23763
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+23785
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11056
+
+
+
+11057
+running SLiM
+23875
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+24040
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+24045
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+24114
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+24137
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11057
+
+
+
+11058
+running SLiM
+24226
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+24488
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+24495
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+24571
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+24593
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11058
+
+
+
+11059
+running SLiM
+24686
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+24873
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+24877
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+24962
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+24986
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11059
+
+
+
+11060
+running SLiM
+25079
+Done with SLiM sims. Analysis took 0hrs 12min
+processing tree sequences in python
+25335
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+25340
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+25407
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+25428
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11060
+
+
+
+11061
+running SLiM
+25509
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+25724
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+25730
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+25796
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+25819
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11061
+
+
+
+11062
+running SLiM
+25908
+Done with SLiM sims. Analysis took 0hrs 12min
+processing tree sequences in python
+26153
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+26160
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+26237
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+26260
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11062
+
+
+
+11063
+running SLiM
+26366
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+26600
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+26604
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+26673
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+26695
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11063
+
+
+
+11064
+running SLiM
+26787
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+26994
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+27001
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+27069
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+27096
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11064
+
+
+
+11065
+running SLiM
+27210
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+27446
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+27452
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+27536
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+27560
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11065
+
+
+
+11066
+running SLiM
+27648
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+27853
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+27858
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+27956
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+27977
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11066
+
+
+
+11067
+running SLiM
+28062
+Done with SLiM sims. Analysis took 0hrs 14min
+processing tree sequences in python
+28342
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+28349
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+28428
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+28452
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11067
+
+
+
+11068
+running SLiM
+28548
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+28704
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+28711
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+28793
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+28814
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11068
+
+
+
+11069
+running SLiM
+28913
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+29067
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+29071
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+29154
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+29175
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11069
+
+
+
+11070
+running SLiM
+29276
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+29517
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+29522
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+29605
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+29626
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11070
+
+
+
+11071
+running SLiM
+29719
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+29866
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+29870
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+29959
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+29982
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11071
+
+
+
+11072
+running SLiM
+30073
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+30322
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+30329
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+30396
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+30417
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11072
+
+
+
+11073
+running SLiM
+30496
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+30696
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+30702
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+30780
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+30805
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11073
+
+
+
+11074
+running SLiM
+30895
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+31078
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+31082
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+31191
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+31224
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11074
+
+
+
+11075
+running SLiM
+31311
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+31475
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+31479
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+31597
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+31623
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11075
+
+
+
+11076
+running SLiM
+31719
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+31939
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+31946
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+32033
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+32055
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11076
+
+
+
+11077
+running SLiM
+32153
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+32345
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+32349
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+32419
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+32441
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11077
+
+
+
+11078
+running SLiM
+32528
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+32725
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+32729
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+32806
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+32834
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11078
+
+
+
+11079
+running SLiM
+32931
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+33153
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+33161
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+33240
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+33265
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11079
+
+
+
+11080
+running SLiM
+33371
+Done with SLiM sims. Analysis took 0hrs 15min
+processing tree sequences in python
+33682
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+33690
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+33759
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+33786
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11080
+
+
+
+11081
+running SLiM
+33877
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+34075
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+34084
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+34171
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+34192
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11081
+
+
+
+11082
+running SLiM
+34289
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+34434
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+34438
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+34525
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+34549
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11082
+
+
+
+11083
+running SLiM
+34642
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+34797
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+34802
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+34897
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+34921
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11083
+
+
+
+11084
+running SLiM
+35010
+Done with SLiM sims. Analysis took 0hrs 7min
+processing tree sequences in python
+35159
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+35163
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+35236
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+35260
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11084
+
+
+
+11085
+running SLiM
+35354
+Done with SLiM sims. Analysis took 0hrs 12min
+processing tree sequences in python
+35595
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+35602
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+35696
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+35718
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11085
+
+
+
+11086
+running SLiM
+35809
+Done with SLiM sims. Analysis took 0hrs 12min
+processing tree sequences in python
+36060
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+36068
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+36145
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+36169
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11086
+
+
+
+11087
+running SLiM
+36260
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+36468
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+36473
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+36559
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+36580
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11087
+
+
+
+11088
+running SLiM
+36669
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+36894
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+36898
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+36976
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+36997
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11088
+
+
+
+11089
+running SLiM
+37088
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+37315
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+37322
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+37399
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+37423
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11089
+
+
+
+11090
+running SLiM
+37516
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+37669
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+37674
+Done with processing first R script. Analysis took 0hrs 1min
+Running R RDA
+VCF for 11090 not found, skipping
+
+
+
+11091
+running SLiM
+37723
+Done with SLiM sims. Analysis took 0hrs 13min
+processing tree sequences in python
+38014
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+38022
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+38092
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+38120
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11091
+
+
+
+11092
+running SLiM
+38223
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+38443
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+38451
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+38524
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+38547
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11092
+
+
+
+11093
+running SLiM
+38643
+Done with SLiM sims. Analysis took 3hrs 44min
+processing tree sequences in python
+38952
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+38959
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+39057
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+39086
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11093
+
+
+
+11094
+running SLiM
+39188
+Done with SLiM sims. Analysis took 0hrs 8min
+processing tree sequences in python
+39351
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+39358
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+39441
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+39464
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11094
+
+
+
+11095
+running SLiM
+39556
+Done with SLiM sims. Analysis took 0hrs 13min
+processing tree sequences in python
+39853
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+39860
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+39948
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+39973
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11095
+
+
+
+11096
+running SLiM
+40067
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+40383
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+40394
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+40481
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+40527
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11096
+
+
+
+11097
+running SLiM
+40639
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+40914
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+40923
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+41029
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+41057
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11097
+
+
+
+11098
+running SLiM
+41149
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+41427
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+41436
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+41510
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+41536
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11098
+
+
+
+11099
+running SLiM
+41628
+Done with SLiM sims. Analysis took 0hrs 12min
+processing tree sequences in python
+41886
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+41894
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+41988
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+42034
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11099
+
+
+
+11100
+running SLiM
+42137
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+42375
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+42382
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+42479
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+42505
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11100
+
+
+
+11101
+running SLiM
+42612
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+42818
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+42831
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+42927
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+42952
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11101
+
+
+
+11102
+running SLiM
+43076
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+43513
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+43521
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+43654
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+43708
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11102
+
+
+
+11103
+running SLiM
+43861
+Done with SLiM sims. Analysis took 0hrs 13min
+processing tree sequences in python
+44212
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+44221
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+44359
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+44386
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11103
+
+
+
+11104
+running SLiM
+44507
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+44734
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+44740
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+44830
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+44856
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11104
+
+
+
+11105
+running SLiM
+44956
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+45153
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+45160
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+45254
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+45276
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11105
+
+
+
+11106
+running SLiM
+45375
+Done with SLiM sims. Analysis took 0hrs 17min
+processing tree sequences in python
+45763
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+45770
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+45844
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+45865
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11106
+
+
+
+11107
+running SLiM
+45987
+Done with SLiM sims. Analysis took 0hrs 10min
+processing tree sequences in python
+46191
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+46195
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+46278
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+46304
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11107
+
+
+
+11108
+running SLiM
+46397
+Done with SLiM sims. Analysis took 0hrs 9min
+processing tree sequences in python
+46590
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+46597
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+46678
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+46720
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11108
+
+
+
+11109
+running SLiM
+46815
+Done with SLiM sims. Analysis took 0hrs 11min
+processing tree sequences in python
+47068
+Done with processing tree sequences. Analysis took 0hrs 0min
+Running R scripts
+47075
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+47168
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+47192
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11109

@@ -6,7 +6,7 @@ output: html_document
 ---
 First, remember to set your working directory:
 
-setwd("/Users/katie/Desktop/TestTheTests/TTT_RecombinationGenomeScans")
+setwd("/Users/katie/Desktop/Repos/TestTheTests/TTT_RecombinationGenomeScans")
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -60,7 +60,7 @@ Here is a list of the columns and descriptions:
 "a_freq_old"                 
 "muttype"                     
 "unique"                     
-"for_relatedness" # NEED TO ADD A SET SEED FOR THIS, OTHERWISE SLIGHT DIFFERENT VCF FILES WILL BE PRODUCED IF I RERUN THIS AND ALL RESULTS WILL HAVE TO BE RUN AGAIN.            
+"for_relatedness"        
 "a_freq_final"               
 "keep_loci"                   
 "simID"                      
@@ -113,17 +113,18 @@ Here is a list of the columns and descriptions:
 ```{r}
 
 inver_files = list.files("results_final", pattern = "Invers_ScanResults")
+inver_files
 inver_simID <- substr(inver_files, 1, 5)
+inver_simID
 
-LEA_files = paste0(inver_simID, "_Invers_Results_LEA.txt")
-Baypass_files = paste0(inver_simID, "_baypass_results.txt")
-RDA_files = paste0(inver_simID, "_Invers_RDA_loadings_envi.txt")
+#LEA_files = paste0(inver_simID, "_Invers_Results_LEA.txt")
+#Baypass_files = paste0(inver_simID, "_baypass_results.txt")
 # To add new results, add a line of code here to get a list of the files
 
 length(inver_files)
-length(LEA_files)
-length(Baypass_files)
-length(RDA_files)
+#length(LEA_files)
+#length(Baypass_files)
+#length(RDA_files)
 # To add new results, add a line of code here to check that the number of files is the same as the number of simulations
 
 
@@ -134,29 +135,23 @@ for (i in 1:length(inver_files)){
   x1 <- read_delim(paste0("results_final/", inver_files[i]), delim=" ")
   x1$type = "Inversion"
   
-  ## LEA results
-  x1_LEA <- read_delim(paste0("results_final/", LEA_files[i]), delim=" ")
-  if (sum(x1$keep_loci)!=nrow(x1_LEA)){
-    print("Error: wrong number of loci in LEA file"
-    )
-  }
-  x1_LEA$unique <- x1$unique[which(x1$keep_loci)]
-  
-  ## BayPass results
-  x1_baypass <- read_delim(paste0("results_final/", Baypass_files[i]), delim="\t")
-    if (sum(x1$keep_loci)!=nrow(x1_baypass)){
-    print("Error: wrong number of loci in baypass file"
-    )
-  }
-  x1_baypass$unique <- x1$unique[which(x1$keep_loci)]
-  
-  ## RDA results
-  x1_rda <- read.table(paste0("results_final/", RDA_files[i]), header=TRUE)
-    if (sum(x1$keep_loci)!=nrow(x1_rda)){
-    print("Error: wrong number of loci in RDA file"
-    )
-  }
-  x1_rda$unique <- x1$unique[which(x1$keep_loci)]
+  # ## LEA results
+  # x1_LEA <- read_delim(paste0("results_final/", LEA_files[i]), delim=" ")
+  # if (sum(x1$keep_loci)!=nrow(x1_LEA)){
+  #   print("Error: wrong number of loci in LEA file"
+  #   )
+  # }
+  # x1_LEA$unique <- x1$unique[which(x1$keep_loci)]
+  # 
+  # ## BayPass results
+  # x1_baypass <- read_delim(paste0("results_final/", Baypass_files[i]), delim="\t")
+  #   if (sum(x1$keep_loci)!=nrow(x1_baypass)){
+  #   print("Error: wrong number of loci in baypass file"
+  #   )
+  # }
+  # x1_baypass$unique <- x1$unique[which(x1$keep_loci)]
+  # 
+
   
   ### New Results
   ### To add new results, copy and paste this code (leave this example for others), and rename it using the same structure as above
@@ -169,10 +164,13 @@ for (i in 1:length(inver_files)){
   ### x1_new$unique <- x1$unique[which(x1$keep_loci)]
   
   ## Combine all tables
-  x_final1 <- left_join(x1, x1_LEA, by="unique")
-  x_final2 <- left_join(x_final1, x1_baypass, by="unique")
-  x_final3 <- left_join(x_final2, x1_rda, by="unique")
-  x_final <- x_final3
+  # x_final1 <- left_join(x1, x1_LEA, by="unique")
+  # x_final2 <- left_join(x_final1, x1_baypass, by="unique")
+  # x_final3 <- left_join(x_final2, x1_rda, by="unique")
+  # x_final <- x_final3
+  
+  x_final <- x1
+  
   ### To add new results, reword this code and write a new example for others
   ### x_final4 <- left_join(x_final3, x1_new, by="unique")
   ### x_final <- x_final4
@@ -187,15 +185,16 @@ for (i in 1:length(inver_files)){
 }
 
 table(x_all$simID)
+#Number of simulations
 nlevels(factor(x_all$simID))
 
 names(x_all)[2] <- "pos"
 
 x_all
-  # number of rows should be 414474
-if(nrow(x_all) != 414474){
-  print("Error in data upload"); break;
-}
+  # number of rows should be XXXXX
+#if(nrow(x_all) != XXXXX){
+#  print("Error in data upload"); break;
+#}
 ```
 
 
@@ -204,7 +203,7 @@ No need to edit any of this code if you are adding a new method
 ```{r}
 
 ### Color recombination regions ####
-  lgs <- seq(50000, 500000, by=50000) # linkage groups recombination breakpoints 0.5
+  lgs <- seq(50000, 450000, by=50000) # linkage groups recombination breakpoints 0.5
   lg_whereplot <- lgs - 25000
   r <- 1e-05
   r_low <- 1e-11
@@ -227,58 +226,48 @@ No need to edit any of this code if you are adding a new method
 
 plot_layers <- function(y_head=0, y_arrows=c(1,0.25), thisSim=NULL, ...){
 
-  polygon(x=c(220000, 230000, 230000, 220000),
-          y = c(-10000, -10000, 100000, 100000),
-          col=rgb(0,0,0,0.2), border=NA)
-    # BS
-  polygon(x=c(270000, 280000, 280000, 270000),
-          y = c(-10000, -10000, 100000, 100000),
-          col=rgb(0,0,0,0.2), border=NA)
-    # BS
-  
+  # Inversion
   polygon(x=c(320000, 330000, 330000, 320000),
           y = c(-10000, -10000, 100000, 100000),
           col=rgb(1,0,0,0.3), border=NA)
-  # Inversion
+  
   
   abline(v=lgs, col=adjustcolor("grey", 0.5))
   
+   # Low Recomb region
   polygon(x=c(370000, 380000, 380000, 370000),
           y = c(-10000, -10000, 100000, 100000),
           col=rgb(0,0,1,0.3), border=NA)
-  # Low Recomb region
+ 
   
   polygon(x=c(400000, 450000, 450000, 400000),
           y = c(-10000, -10000, 100000, 100000),
           col=rgb(0,0,1,0.1), border=NA)
   
   text(lg_whereplot, y = y_head, 
-       labels = c("LG1\nNeut", "LG2\nQTL", "LG3\nQTL",
-                  "LG4\nSS", "LG5\nBS",
-                  "LG6\nBS", "LG7\nNeut\nInversion",
-                  "LG8\n r=1e-08", "LG9\nr var", "LG10\nNeut"))
+       labels = c("LG1\nNeut", "LG2\nNeut", "LG3\nQTL",
+                  "LG4\nQTL", "LG5\nFull\nsweep",
+                  "LG6\nPartial\nsweep", "LG7\nNeut\nInversion",
+                  "LG8\n r=1e-08", "LG9\nr var"))
   
   
   ### Add QTLs and Sweep Location
   if(length(thisSim)>0){
   muts <- x_all %>% filter(simID==thisSim)
-  arrows(muts$pos[muts$muttype=="MT=2"],  y_arrows[1], muts$pos[muts$muttype=="MT=2"],  y_arrows[2], col="orange", lwd=muts$prop[muts$muttype=="MT=2"]*10, length = 0.1)
+  arrows(muts$pos[muts$descript=="QTL"],  y_arrows[1], muts$pos[muts$descript=="QTL"],  y_arrows[2], col="orange", lwd=muts$prop[muts$descript=="QTL"]*10, length = 0.1)
   }
   
-  arrows(175001, y_arrows[1], 175001, y_arrows[2], col="purple", lwd=2, length = 0.1)
+  arrows(225000, y_arrows[1], 225000, y_arrows[2], col="purple", lwd=2, length = 0.1)
+  arrows(275000, y_arrows[1], 275000, y_arrows[2], col="purple", lwd=2, length = 0.1)
 } #end plot function
 
 pdf("figures/InversionMap.pdf", width=12, height=4)
   par(mar=c(4,2,1,2))
-  plot(0,0, col="white", xlim=c(0, 500000), ylim=c(-1,1), xaxs="i", yaxt="n", ylab="", xlab="Position (bp)")
+  plot(0,0, col="white", xlim=c(0, 450000), ylim=c(-1,1), xaxs="i", yaxt="n", ylab="", xlab="Position (bp)")
   plot_layers()
 dev.off()  
 ```
 
-## Deleterious allels
-```{r deleterious}
-summary(tapply(x_all$muttype=="MT=3",x_all$simID, sum))
-```
 
 ## Proportion of loci in inversion
 ```{r deleterious}
@@ -310,14 +299,20 @@ sum(is.na(x_all$simID))
   sum(is.na(x_all$keep_loci))
   sum(is.na(x_all$a_freq_final))
     
-  countbutnotinfinal <- which(x_all$keep_loci==FALSE & x_all$prop>=0.01 & x_all$muttype=="MT=2") # rare alleles of large effect
-  keepcount<- which(x_all$keep_loci==TRUE & x_all$prop>=0.01 & x_all$muttype=="MT=2")  # common alleles of large effect
-  dontkeepdontcount <- which(x_all$keep_loci==FALSE & x_all$prop<0.01 & x_all$muttype=="MT=2") # rare alleles small effect
-  keepdontcount <- which(x_all$keep_loci==TRUE & x_all$prop<0.01 & x_all$muttype=="MT=2")
+  print.data.frame(x_all[is.na(x_all$a_freq_final),])
+  
+  x_all$keep_loci[which(is.na(x_all$keep_loci))] <- FALSE
+    # These are NA in the data
+  
+  countbutnotinfinal <- which(x_all$keep_loci==FALSE & x_all$prop>=0.01 & x_all$descrip=="QTL") # rare alleles of large effect
+  keepcount <- which(x_all$keep_loci==TRUE & x_all$prop>=0.01 & x_all$descrip=="QTL")  # common alleles of large effect
+  dontkeepdontcount <- which(x_all$keep_loci==FALSE & x_all$prop<0.01 & x_all$descrip=="QTL") # rare alleles small effect
+  keepdontcount <- which(x_all$keep_loci==TRUE & x_all$prop<0.01 & x_all$descrip=="QTL")
     # common alleles of small effect
   
-  #sanity check
-    sum(x_all$muttype=="MT=2") # number of M2 mutations
+  levels(factor(x_all$descrip))
+  #sanity check: these should be equal
+    sum(x_all$descrip=="QTL", na.rm=TRUE) # number of M2 mutations
     length(c( countbutnotinfinal, keepcount, dontkeepdontcount, keepdontcount))
     # these should be equal
 
@@ -390,12 +385,12 @@ pdf("figures/PlotFreqVsEffectSize.pdf", width=7, height=9)
   #hist(totAGV_rareSmall, breaks=seq(0,1,0.05))
   #hist(totAGV_rareLarge, breaks=seq(0,1,0.05))
   #hist(totAGV_common, breaks=seq(0,1,0.05)) 
-    par(mfrow=c(1,1), mar=c(3,4,1,1), oma=c(3,0,0,0))
-    barplot(rbind(totAGV$totAGV_common, totAGV$totAGV_rareLarge, 
-                  totAGV$totAGV_commonSmall, totAGV$totAGV_rareSmall), 
+    par(mfrow=c(1,1), mar=c(5,4,1,1), oma=c(1,0,0,0))
+    barplot(rbind(totAGV$totAGV_common[1:30], totAGV$totAGV_rareLarge[1:30], 
+                  totAGV$totAGV_commonSmall[1:30], totAGV$totAGV_rareSmall[1:30]), 
                   col=c("#F0AE2D","#B27600" , "#00397F", "#0067E5"),  
                   ylab="Proportion of additive genetic variance", 
-                  names.arg = rep("", nrow(totAGV)))
+                  names.arg = rep("", 30))
     mtext("Simulation replicate", 1)
     par(fig = c(0, 1, 0, 1), oma = c(0, 1, 0, 1), mar = c(3, 4, 1, 4), new = TRUE)
     plot(0, 0, type = "n", bty = "n", xaxt = "n", yaxt = "n", ylab="", xlab="")

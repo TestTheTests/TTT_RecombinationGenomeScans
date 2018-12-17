@@ -10,7 +10,7 @@ conda list
 #mypath="/home/k.lotterhos/k_store/TestTheTests/TTT_RecombinationGenomeScans"
 mypath="/Users/katie/Desktop/Repos/TestTheTests/TTT_RecombinationGenomeScans"
 nreps=210 #number of reps
-start=10927  #10900 10950
+start=10900  #10900 10950
 finish=$(($start + $nreps-1))
 echo -e $start $finish
 simType="Invers"
@@ -109,10 +109,11 @@ do
     #############
     echo "cleaning up files"
     echo $i
-    mv ${i}"_genotypes.lfmm" ../results_final/
-    mv ${i}"_gradients.env" ../results_final/
-    mv *.error ../results_final/
-    cd ../results/ | rm *
+#    mv ${i}"_genotypes.lfmm" ../results_final/
+#    mv ${i}"_gradients.env" ../results_final/
+#mv *.error ../results_final/
+#mv *.vcf.gz ../results_final/
+#cd ../results/ | rm *
     cd ..
 done
 
