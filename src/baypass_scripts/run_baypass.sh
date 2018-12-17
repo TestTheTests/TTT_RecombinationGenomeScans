@@ -1,4 +1,4 @@
-#!/usr/local/sh
+!/usr/local/sh
 ######################################################################################
 #
 # File	  : run_baypass.pl
@@ -50,10 +50,10 @@
 SECONDS=0
 
 source ~/intel/bin/compilervars.sh intel64    # required to run the intel-compiled version of baypass (i_baypass)
-mypath="/home/freeman.k/TTT_RecombinationGenomeScans/src/baypass_scripts"
+mypath="/shared_lab/20181217_TTT_RecombinationGenomeScans/src/baypass_scripts"
 ncpus=60
-nsims=1
-start=2388682558411
+nsims=210
+start=10900
 finish=$(($start + $nsims-1))
 echo $start $finish
 declare -A npopHash    # declare an associative array to store # of populations for each file
@@ -75,6 +75,27 @@ function call_baypass_no_mat {
     cmd="./i_baypass -npop ${npopHash[${i}]} \
     -gfile ./converted_files/${i}_Invers_VCFallFILT${out_suffix}.geno \
     -efile ./converted_files/${i}_Invers_VCFallFILT${out_suffix}.covar -scalecov \
+    -outprefix ./baypass_results/${i}${out_suffix} -nthreads $ncpus"
+
+    $cmd >>"./log_files/${i}_baypass.log" 2>>"./log_files/${i}_baypass.err" || echo -e $cmd
+}
+function call_baypass_no_efile { 
+	cd $mypath
+	file_name=$1
+	out_suffix=$2
+	i=$3
+    
+    # convert vcf to baypass format, store npop in associative array (hash)
+    npopHash=( [${i}]="$(perl ./vcf2baypass.pl -vcf ../../results_final/${i}${file_name} \
+    -pop ../../results_final/${i}_Invers_indFILT.txt \
+    -colGroup 5 -colEnv 4 -colPheno 3 -colInFinal 6 \
+    -outGeno ./converted_files/${i}_Invers_VCFallFILT${out_suffix} \
+    -outCovar ./converted_files/${i}_Invers_VCFallFILT${out_suffix})")
+    
+    echo $npopHash
+    # run baypass
+    cmd="./i_baypass -npop ${npopHash[${i}]} \
+    -gfile ./converted_files/${i}_Invers_VCFallFILT${out_suffix}.geno \
     -outprefix ./baypass_results/${i}${out_suffix} -nthreads $ncpus"
 
     $cmd >>"./log_files/${i}_baypass.log" 2>>"./log_files/${i}_baypass.err" || echo -e $cmd
@@ -110,8 +131,9 @@ do
     	fi 
 	perl ${mypath}/pruneSNPs.pl -scan ../../results_final/${i}_Invers_ScanResults.txt \
 	 -vcf ../../results_final/${i}_Invers_VCFallFILT.vcf.gz
-	gunzip "../../results_final/${i}_Invers_VCFallFILT.pruned.vcf.gz"
-	call_baypass_no_mat "_Invers_VCFallFILT.pruned.vcf" "_PRUNED" "${i}"
+	
+	gunzip ../../results_final/${i}_Invers_VCFallFILT.pruned.vcf.gz	
+	call_baypass_no_efile "_Invers_VCFallFILT.pruned.vcf" "_PRUNED" "${i}"
 
 # run baypass again, this time using the pruned covar matrix from the last step
 	
