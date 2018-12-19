@@ -1,4 +1,4 @@
-!/usr/local/sh
+#!/usr/local/sh
 ######################################################################################
 #
 # File	  : run_baypass.pl
@@ -49,11 +49,11 @@
 #######################################################################################
 SECONDS=0
 
-source ~/intel/bin/compilervars.sh intel64    # required to run the intel-compiled version of baypass (i_baypass)
+# source ~/intel/bin/compilervars.sh intel64    # required to run the intel-compiled version of baypass (i_baypass)
 mypath="/shared_lab/20181217_TTT_RecombinationGenomeScans/src/baypass_scripts"
 ncpus=60
-nsims=210
-start=10900
+nsims=206
+start=10904
 finish=$(($start + $nsims-1))
 echo $start $finish
 declare -A npopHash    # declare an associative array to store # of populations for each file
@@ -72,7 +72,7 @@ function call_baypass_no_mat {
     
     echo $npopHash
     # run baypass
-    cmd="./i_baypass -npop ${npopHash[${i}]} \
+    cmd="g_baypass -npop ${npopHash[${i}]} \
     -gfile ./converted_files/${i}_Invers_VCFallFILT${out_suffix}.geno \
     -efile ./converted_files/${i}_Invers_VCFallFILT${out_suffix}.covar -scalecov \
     -outprefix ./baypass_results/${i}${out_suffix} -nthreads $ncpus"
@@ -94,7 +94,7 @@ function call_baypass_no_efile {
     
     echo $npopHash
     # run baypass
-    cmd="./i_baypass -npop ${npopHash[${i}]} \
+    cmd="g_baypass -npop ${npopHash[${i}]} \
     -gfile ./converted_files/${i}_Invers_VCFallFILT${out_suffix}.geno \
     -outprefix ./baypass_results/${i}${out_suffix} -nthreads $ncpus"
 
@@ -157,7 +157,7 @@ do
     	continue
     fi
 
-    ./i_baypass -npop ${npopHash[$i]} -gfile ./converted_files/${i}$gfileName \
+    g_baypass -npop ${npopHash[$i]} -gfile ./converted_files/${i}$gfileName \
         -efile ./converted_files/${i}$efileName -scalecov \
         -omegafile ./baypass_results/${i}$omegaFile \
         -outprefix "./baypass_results/${i}_ALL_PRUNED_MAT" -nthreads $ncpus \

@@ -56,18 +56,24 @@ unless (open($scanFh, '<', $scanResults)){
 	die "Could not open $scanResults for reading $!";
 }
 my $first = 1;
-my @indArray = [];
+my @indArray  = [];
 my $indCol;
+my $keepCol;
 while (<$scanFh>){
 	chomp $_;
 	my @line = split(/\s/, $_); #split on whitespace
 	if ($first){    # process header line
-		$indCol = first_index { /quasi_indep/ } @line; 
+		$indCol    = first_index { /quasi_indep/ } @line; 
+		$keepCol   = first_index { /keep_loci/ } @line;
 		$first = 0;
 	}
 	else {
-		my $ind = $line[$indCol];
-		push @indArray, $ind;
+		my $ind  = $line[$indCol];
+		my $keep = $line[$keepCol];
+		
+		if ($keep eq "TRUE"){
+			push @indArray, $ind;
+		}
 	}
 }
 
@@ -119,7 +125,7 @@ my $nlines = $i + 1;
 
 # if the vcf and scan results are not the same the pruned file is totally invalid. check lengths and delete the file if necessary
 unless($nlines == scalar @indArray){
-	`rm $outFile`;
+	`rm $outFile.gz`;
 	die join(" ", "Length of scan results (", scalar @indArray, ") does not match length of vcf (", $nlines , "), $!"); 
 }
 
