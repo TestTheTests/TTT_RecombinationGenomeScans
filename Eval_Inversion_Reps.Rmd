@@ -11,8 +11,6 @@ setwd("/Users/katie/Desktop/Repos/TestTheTests/TTT_RecombinationGenomeScans")
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-#install.packages("ROCR")
-
 if(!("tidyverse" %in% installed.packages())){install.packages("tidyverse")}
 library(tidyverse)
 if(!("RSQLite" %in% installed.packages())){install.packages("RSQLite")}
@@ -54,61 +52,8 @@ The LEA and Baypass results give output in the same order as the loci in the vcf
 This chunk of code inputs the results files. Each time an additional program is run, a new set of output files are generated. Those files can be added to the pipeline below and merged with the existing files, then easily incoporated into the subsequent analyses.
 
 Here is a list of the columns and descriptions:
-"vcf_ord"                     
-"pos.x"                      
-"chrom"                       
-"a_freq_old"                 
-"muttype"                     
-"unique"                     
-"for_relatedness"        
-"a_freq_final"               
-"keep_loci"                   
-"simID"                      
-"quasi_indep"                 
-"Hscan_v1.3_H12"             
-"pca_ALL_PC1_loadings"        
-"pca_ALL_PC2_loadings"       
-"pca_ALL_PC3_loadings"        
-"pca_PRUNED_PC1_loadings"    
-"pca_PRUNED_PC2_loadings"     
-"pcadapt_3.0.4_ALL_chisq"    
-"pcadapt_3.0.4_ALL_log10p"    
-"pcadapt_3.0.4_PRUNED_log10p"
-"OutFLANK_0.2_FST"            
-"OutFLANK_0.2_He"            
-"OutFLANK_0.2_ALL_log10p"     
-"OutFLANK_0.2_PRUNED_log10p" 
-"LFMM_ridge_0.0_ALL_log10p"   
-"LFMM_lasso_0.0_ALL_log10p"  
-"CHR"                         
-"rehh_2.0.2_ALL_iHS"         
-"rehh_2.0.2_ALL_log10p"       
-"Spearmans_ALL_rho"          
-"selCoef"                     
-"originGen"                  
-"freq_old"                    
-"freq_final"                 
-"pa2"                         
-"prop"                       
-"He"                          
-"type"                       
-"LEA_1.2.0_ALL_K3_log10p"     
-"LEA_1.2.0_ALL_K3_z"         
-"pos.y"                       
-"baypass_2.1_ALL_BF_pheno"   
-"baypass_2.1_ALL_BF_env"      
-"baypass_2.1_ALL_XTX"        
-"baypass_2.1_PRUNED_BF_pheno" 
-"baypass_2.1_PRUNED_BF_env"  
-"baypass_2.1_PRUNED_XTX" 
-"RDAvegan_v2.5.2_ALL_loading_RDA1_envi"   
-"RDAvegan_v2.5.2_ALL_loading_PCA1_envi"   
-"RDAvegan_v2.5.2_ALL_loading_PCA2_envi"   
-"RDAvegan_v2.5.2_ALL_loading_PCA3_envi"   
-"RDAvegan_v2.5.2_PRUNED_loading_RDA1_envi"
-"RDAvegan_v2.5.2_PRUNED_loading_PCA1_envi"
-"RDAvegan_v2.5.2_PRUNED_loading_PCA2_envi"
-"RDAvegan_v2.5.2_PRUNED_loading_PCA3_envi"
+
+TO DO
 
 ```{r}
 
@@ -191,6 +136,8 @@ nlevels(factor(x_all$simID))
 names(x_all)[2] <- "pos"
 
 x_all
+x_all <- as.data.frame(x_all)
+x_all <- tbl_df(x_all)
   # number of rows should be XXXXX
 #if(nrow(x_all) != XXXXX){
 #  print("Error in data upload"); break;
@@ -254,7 +201,7 @@ plot_layers <- function(y_head=0, y_arrows=c(1,0.25), thisSim=NULL, ...){
   ### Add QTLs and Sweep Location
   if(length(thisSim)>0){
   muts <- x_all %>% filter(simID==thisSim)
-  arrows(muts$pos[muts$descript=="QTL"],  y_arrows[1], muts$pos[muts$descript=="QTL"],  y_arrows[2], col="orange", lwd=muts$prop[muts$descript=="QTL"]*10, length = 0.1)
+  arrows(muts$pos[muts$descrip=="QTL"],  y_arrows[1], muts$pos[muts$descrip=="QTL"],  y_arrows[2], col="orange", lwd=muts$prop[muts$descrip=="QTL"]*10, length = 0.1)
   }
   
   arrows(225000, y_arrows[1], 225000, y_arrows[2], col="purple", lwd=2, length = 0.1)
@@ -270,7 +217,7 @@ dev.off()
 
 
 ## Proportion of loci in inversion
-```{r deleterious}
+```{r inversion}
 xin <- x_all[x_all$pos > 320000 & x_all$pos < 330000,]
 summary(tapply(xin$pos,xin$simID, length)/tapply(x_all$pos,x_all$simID, length))
 ```
@@ -299,7 +246,7 @@ sum(is.na(x_all$simID))
   sum(is.na(x_all$keep_loci))
   sum(is.na(x_all$a_freq_final))
     
-  print.data.frame(x_all[is.na(x_all$a_freq_final),])
+  print.data.frame(x_all[is.na(x_all$a_freq_final),c("pos","a_freq_old", "descrip", "originGen", "seed")])
   
   x_all$keep_loci[which(is.na(x_all$keep_loci))] <- FALSE
     # These are NA in the data
@@ -320,7 +267,9 @@ sum(is.na(x_all$simID))
     # $keep_loci means they were not in the final vcf file
 
   mean(x_all$prop[countbutnotinfinal], na.rm=TRUE)
+```
 
+```{r make effect size plot}
 pdf("figures/PlotFreqVsEffectSize.pdf", width=7, height=9)
   par(mfrow=c(2,1), mar=c(3,3,1,1), oma=c(3,3,0,0))
   
@@ -348,7 +297,9 @@ pdf("figures/PlotFreqVsEffectSize.pdf", width=7, height=9)
     mtext("Frequency", 1, outer=TRUE)
     mtext("Effect Size", 2, outer=TRUE)
   dev.off()
+```
 
+```{r AGV}
 # For each simulation, let's see how much genetic variance remains unexplained by causal loci that are not in the final dataset, but contribute more than 1% to AGV
     # these are rare loci of large effect
   (totAGV_rareLarge <- 
@@ -642,11 +593,53 @@ shaded.bxp <- function (z, notch = FALSE, width = NULL, varwidth = FALSE, outlin
 ### Evaluate population structure
  No need to edit this code if you are adding a new method
  
-```{r}
+```{r inversion hist}
+bob <- as.numeric(unlist(x_all %>% filter(descrip=="Inversion")  %>% select(a_freq_final)))
 
-thisim = 10944 #10903
+bob[which(bob>0.5)] <- bob[which(bob>0.5)]-0.5
+pdf("figures/InversionMAF_hist.pdf", width=5, height=4)
+  par(mar=c(4,4, 0.1,0.1), mfrow=c(1,1), oma=c(0,0,0,0))
+  hist(bob, xlim=c(0,0.5), main=NULL, breaks=seq(0,0.5, by=0.01), xlab="Minor allele frequency of inversion", ylab="Number of simulations")
+dev.off()
+```
+ 
+```{r inversion PC loadings this sim}
+
+thisim = 10903 #10903
+
+x_all %>% filter(seed==thisim, descrip=="Inversion")  %>% select(a_freq_final)
+
 forpdf <- x_all[x_all$simID==thisim,]
-(inv_index <- which(forpdf$muttype=="MT=5"))
+
+(inv_loc <- forpdf$pos[which(forpdf$descrip=="Inversion")+1]) # this gives position within inversion
+
+### PC loadings of loci ####
+par(mar=c(4,4,1,1))
+plot(forpdf$pos, forpdf$pca_ALL_PC1_loadings,
+     ylim=c(-0.2, 0.2),
+      pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "PC1 loadings", xaxt="n")#, 
+     #xlim=c(170000 , 180000))
+  plot_layers(y_head=10, y_arrows=c(10000, 8000), thisSim = thisim)
+  plot(forpdf$pos, forpdf$pca_ALL_PC2_loadings,
+     ylim=c(-0.2, 0.2),
+      pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "PC1 loadings", xaxt="n")#, 
+     #xlim=c(170000 , 180000))
+  plot_layers(y_head=10, y_arrows=c(10000, 8000), thisSim = thisim)
+  
+  plot(forpdf$pos, forpdf$pca_PRUNED_PC1_loadings,
+     ylim=c(-0.2, 0.2),
+      pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "PC1 loadings", xaxt="n")#, 
+     #xlim=c(170000 , 180000))
+  plot_layers(y_head=10, y_arrows=c(0.17,0.15), thisSim = thisim)
+  plot(forpdf$pos, forpdf$pca_PRUNED_PC2_loadings,
+     ylim=c(-0.2, 0.2),xlim=c(0,4.5e05),
+      pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+     cex=0.5, ylab= "PC1 loadings", xaxt="n")#, 
+     #xlim=c(170000 , 180000))
+  plot_layers(y_head=10, y_arrows=c(10, 8), thisSim = thisim)
 
 ### PC scores of individuals ####
   # load individual data
@@ -656,19 +649,23 @@ forpdf <- x_all[x_all$simID==thisim,]
   head(inddf)
   ind_geno <- read.vcfR(paste0("results_final/",
                              thisim, "_Invers_VCFallFILT.vcf.gz", sep=""))
-  (inv_index <- grep("MT=5", ind_geno@fix[,"INFO"]))
+  (inv_index2 <- grep(inv_loc, ind_geno@fix[,"POS"]))
+    #32001-32999 is the location of the inversion
   
-  genoinv <- (ind_geno@gt[inv_index,-1])
+  genoinv <- (ind_geno@gt[inv_index2,-1])
   # check dimensions
     dim(inddf[which(inddf$infinal),])
     length(genoinv)
     genoinv[which(genoinv=="1|0")] <- "0|1" # set heterozygotes equal
     levels(factor(genoinv))
     library(RColorBrewer)
-    myColors <- brewer.pal(3,"Set2")
+    library(fields)
+    myColors <- c("#2ca25f", "#9ebcda", "#8856a7")
     names(myColors) <- levels(factor(genoinv))
     colScale <- scale_colour_manual(name = "Inversion\ngenotype",values = myColors)
-  
+```
+
+```{r plot PC scores}
 pdf("figures/PC_scores_compare.pdf", width=6, height=9)    
  
   # Individual scores without LD pruning
@@ -683,51 +680,27 @@ pdf("figures/PC_scores_compare.pdf", width=6, height=9)
   
   multiplot(p1, p2, cols=1)
   dev.off()
+```
 
-### PC loadings of loci ####
-par(mar=c(4,4,1,1))
-plot(forpdf$pos, forpdf$pca_ALL_PC1_loadings,
-     ylim=c(-8, 13),
-      pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-     cex=0.5, ylab= "PC1 loadings", xaxt="n")#, 
-     #xlim=c(170000 , 180000))
-  plot_layers(y_head=10, y_arrows=c(10000, 8000), thisSim = thisim)
-  plot(forpdf$pos, forpdf$pca_ALL_PC2_loadings,
-     ylim=c(-8, 13),
-      pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-     cex=0.5, ylab= "PC1 loadings", xaxt="n")#, 
-     #xlim=c(170000 , 180000))
-  plot_layers(y_head=10, y_arrows=c(10000, 8000), thisSim = thisim)
-  
-  plot(forpdf$pos, forpdf$pca_PRUNED_PC1_loadings,
-     ylim=c(-8, 13),
-      pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-     cex=0.5, ylab= "PC1 loadings", xaxt="n")#, 
-     #xlim=c(170000 , 180000))
-  plot_layers(y_head=10, y_arrows=c(10, 8), thisSim = thisim)
-  plot(forpdf$pos, forpdf$pca_PRUNED_PC2_loadings,
-     ylim=c(-8, 13),xlim=c(0,5e05),
-      pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-     cex=0.5, ylab= "PC1 loadings", xaxt="n")#, 
-     #xlim=c(170000 , 180000))
-  plot_layers(y_head=10, y_arrows=c(10, 8), thisSim = thisim)
-  
+```{r}  
   ### which locations load onto PC all data ####
 pdf("figures/WhichLocationsPCs.pdf", width=9, height=6)  
+  PCA_lim <- 0.05
+
   par(mar=c(4, 4,1,1), oma=c(0,2,0,0), mfrow=c(3,1))
-  d <- density(x_all$pos[which(abs(x_all$pca_ALL_PC1_loadings)>3)], bw = 1000)
-  plot(d, main="A) Locations of outlier PC1 loadings (all SNPs)", bty="n", las=1, ylim=c(0, 13e-05), xlim=c(0,5e05),adj=0,
+  d <- density(x_all$pos[which(abs(x_all$pca_ALL_PC1_loadings)>PCA_lim )], bw = 1000)
+  plot(d, main="A) Locations of outlier PC1 loadings (all SNPs)", bty="l", las=1, ylim=c(0, 13e-05), xlim=c(0,4.5e05),adj=0,
        ylab="", xlab="")
   polygon(d, col="black")
   plot_layers(y_head=0.00011, y_arrows=c(10, 8), thisSim = thisim)
   
-  d <- density(x_all$pos[which(abs(x_all$pca_ALL_PC2_loadings)>3)], bw = 1000)
-    plot(d, main="B) Locations of outlier PC2 loadings (all SNPs)", bty="n", las=1, ylim=c(0, 6e-05), xlim=c(0,5e05), adj=0,
+  d <- density(x_all$pos[which(abs(x_all$pca_ALL_PC2_loadings)>PCA_lim )], bw = 1000)
+    plot(d, main="B) Locations of outlier PC2 loadings (all SNPs)", bty="l", las=1, ylim=c(0, 6e-05), xlim=c(0,4.5e05), adj=0,
        ylab="", xlab="")
   polygon(d, col="black")
   plot_layers(y_head=10, y_arrows=c(10, 8), thisSim = thisim)
   
-  d <- density(x_all$pos[which(abs(x_all$pca_PRUNED_PC1_loadings)>3)], bw = 1000)
+  d <- density(x_all$pos[which(abs(x_all$pca_PRUNED_PC1_loadings)>PCA_lim )], bw = 1000)
     plot(d, main="C) Locations of outlier PC1 loadings (trimmed SNPs)", bty="n", las=1, ylim=c(0, 2e-05), xlim=c(0,5e05),adj=0,
        ylab="", xlab="Position (bp)")
   polygon(d, col="black")

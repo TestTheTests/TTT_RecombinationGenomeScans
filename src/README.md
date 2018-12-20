@@ -1,5 +1,10 @@
 # TestTheTests
 
+### To run the script for simulation and all analysis in serial (one after another)
+./src/repInversion_serial.sh
+### To run script for all the steps after the neutral mutations have been overlayed on the tree sequenc:
+./src/repInversion_serial_onlyR.sh
+
 Session Info for R
 
 sessionInfo()

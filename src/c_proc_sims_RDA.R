@@ -80,15 +80,24 @@ if (sum(is.na(rdaG)) != 0){
 
 ### Run RDA on all data
 sim.rda.all <- rda(rdaG~., data = pred, scale = T)
+
+final_df_inG <- final_df[which(final_df$keep_loci),]
+
+if(length(sim.rda.all$colsum)!= nrow(final_df_inG)){
+  print("Error: number of loci doesn't match")
+}
+
+
 load.rda.all <- as.data.frame(scores(sim.rda.all, choices = c(1:4), display="species"), row.names = FALSE)
 colnames(load.rda.all) <- paste0("RDAvegan_2.52_ALL_", colnames(load.rda.all))
-load.rda.all$unique <- final_df$unique
+load.rda.all$unique <- final_df_inG$unique
 
 ### Run RDA on pruned data
-sim.rda.pruned <- rda(rdaG[,which(final_df$quasi_indep)]~., data = pred, scale = T)
+sim.rda.pruned <- rda(rdaG[,which(final_df_inG$quasi_indep)]~., data = pred, scale = T)
+
 load.rda.pruned <- as.data.frame(scores(sim.rda.pruned, choices = c(1:4), display="species"), row.names = FALSE)
 colnames(load.rda.pruned) <- paste0("RDAvegan_2.52_PRUNED_", colnames(load.rda.pruned))
-load.rda.pruned$unique <- final_df$unique[which(final_df$quasi_indep)]
+load.rda.pruned$unique <- final_df_inG$unique[which(final_df_inG$quasi_indep)]
 
 # merge tables and add to final_df
 load.rda <- merge(load.rda.all, load.rda.pruned, by="unique", all.x=TRUE)
