@@ -52,8 +52,11 @@ SECONDS=0
 # source ~/intel/bin/compilervars.sh intel64    # required to run the intel-compiled version of baypass (i_baypass)
 mypath="/shared_lab/20181217_TTT_RecombinationGenomeScans/src/baypass_scripts"
 ncpus=60
-nsims=21
-rerun=(10911 10918 10924 10930 10942 10945 10957 10960 10963 10969 10980 10994 11001 11010 11045 11053 11059 11065 11084 11095 11097)
+nsims=206
+start=10900
+finish=$(($start + $nsims-1))
+echo $start $finish
+rerun=(10900 10901 10902 10903 10911 10918 10924 10930 10942 10945 10957 10960 10963 10969 10980 10994 11001 11010 11045 11053 11059 11065 11084 11095 11097)
 echo ${rerun[@]}
 declare -A npopHash    # declare an associative array to store # of populations for each file
 function call_baypass_no_mat { 
