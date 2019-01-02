@@ -1,12 +1,74 @@
 # TestTheTests
 
 ### To run the script for simulation and all analysis in serial (one after another)
-./src/repInversion_serial.sh
-### To run script for all the steps after the neutral mutations have been overlayed on the tree sequenc:
-./src/repInversion_serial_onlyR.sh
+```
+conda activate msprime-env
+cd TTT_RecombinationGenomeScans
+./src/repInversion_serial.sh > output.txt
+```
+### To run script for all the steps after the neutral mutations have been overlayed on the tree sequence:
+```
+conda activate msprime-env
+cd TTT_RecombinationGenomeScans
+./src/repInversion_serial_onlyR.sh > output.txt
+```
+
+katie@Katies-MacBook-Air:~$ conda activate msprime-env
+(msprime-env) katie@Katies-MacBook-Air:~$ conda list
+```
+# packages in environment at /anaconda3/envs/msprime-env:
+#
+# Name                    Version                   Build  Channel
+attrs                     18.2.0                    <pip>
+attrs                     18.2.0                     py_0    conda-forge
+blas                      1.0                         mkl
+bzip2                     1.0.6                         1    conda-forge
+ca-certificates           2018.11.29           ha4d7672_0    conda-forge
+certifi                   2018.11.29            py36_1000    conda-forge
+cycler                    0.10.0                    <pip>
+gsl                       2.2.1                h002c638_3
+h5py                      2.8.0            py36h097b052_4    conda-forge
+hdf5                      1.10.3               hc401514_2    conda-forge
+intel-openmp              2019.0                      118
+jsonschema                3.0.0a3               py36_1000    conda-forge
+kiwisolver                1.0.1                     <pip>
+libffi                    3.2.1                hfc679d8_5    conda-forge
+libgfortran               3.0.1                h93005f0_2
+libopenblas               0.3.3                hdc02c5d_3
+matplotlib                3.0.2                     <pip>
+mkl                       2018.0.3                      1
+mkl_fft                   1.0.6                    py36_0    conda-forge
+mkl_random                1.0.2                    py36_0    conda-forge
+msprime                   0.6.1            py36hcb787e7_0    conda-forge
+ncurses                   6.1                  hfc679d8_1    conda-forge
+numpy                     1.15.4           py36h6a91979_0
+numpy-base                1.15.4           py36h8a80b8c_0
+openblas                  0.3.3                ha44fe06_1    conda-forge
+openssl                   1.0.2p               h470a237_1    conda-forge
+pandas                    0.23.4           py36hf8a1672_0    conda-forge
+pip                       18.1                  py36_1000    conda-forge
+pyparsing                 2.3.0                      py_0    conda-forge
+pyrsistent                0.14.6           py36h470a237_0    conda-forge
+pyslim                    0.1                       <pip>
+python                    3.6.6                h5001a0f_0    conda-forge
+python-dateutil           2.7.5                      py_0    conda-forge
+python.app                1.2                    py36_200    conda-forge
+pytz                      2018.7                     py_0    conda-forge
+readline                  7.0                  haf1bffa_1    conda-forge
+scikit-allel              1.1.10                    <pip>
+setuptools                40.6.2                   py36_0    conda-forge
+six                       1.11.0                py36_1001    conda-forge
+sqlite                    3.25.3               hb1c47c0_0    conda-forge
+svgwrite                  1.2.1                     <pip>
+svgwrite                  1.2.1                      py_0    conda-forge
+tk                        8.6.9                ha92aebf_0    conda-forge
+wheel                     0.32.2                   py36_0    conda-forge
+xz                        5.2.4                h470a237_1    conda-forge
+zlib                      1.2.11               h470a237_3    conda-forge
+```
 
 Session Info for R
-
+```
 sessionInfo()
 R version 3.4.0 (2017-04-21)
 Platform: x86_64-apple-darwin15.6.0 (64-bit)

@@ -195,10 +195,11 @@ if(length(getnonmatches_index > 0)){
     }
     print(muts2$position[muts_ind])
   }
+  muts <- muts2
+  rm(muts2)
 }
 
-muts <- muts2
-rm(muts2)
+
 
 if(!(identical(muts$freq, muts$a_freq_old))){
   print("Error mutation allele frequencies are not identical")

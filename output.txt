@@ -1,0 +1,2961 @@
+10900 11109
+
+
+
+10900
+Running R scripts
+62783
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+62893
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+62933
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10900
+
+
+
+10901
+Running R scripts
+63038
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+63136
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+63167
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10901
+
+
+
+10902
+Running R scripts
+63300
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+63387
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+63438
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10902
+
+
+
+10903
+Running R scripts
+63543
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+63644
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+63679
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10903
+
+
+
+10904
+Running R scripts
+63790
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+63873
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+63910
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10904
+
+
+
+10905
+Running R scripts
+64020
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+64106
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+64158
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10905
+
+
+
+10906
+Running R scripts
+64265
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+64347
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+64380
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10906
+
+
+
+10907
+Running R scripts
+64470
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+64563
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+64595
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10907
+
+
+
+10908
+Running R scripts
+64700
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+64808
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+64841
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10908
+
+
+
+10909
+Running R scripts
+64934
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+65062
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+65100
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10909
+
+
+
+10910
+full vcf file for 10910 not found, skipping
+
+
+
+10911
+Running R scripts
+65190
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10911 not found, skipping
+
+
+
+10912
+Running R scripts
+65206
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+65302
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+65332
+Done with processing scikit-allel. Analysis took 0hrs 38min
+cleaning up files
+10912
+
+
+
+10913
+Running R scripts
+65486
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+65603
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+65635
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10913
+
+
+
+10914
+Running R scripts
+65727
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+65796
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+65839
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10914
+
+
+
+10915
+Running R scripts
+65926
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+66056
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+66090
+Done with processing scikit-allel. Analysis took 0hrs 4min
+cleaning up files
+10915
+
+
+
+10916
+Running R scripts
+66237
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+66341
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+66366
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10916
+
+
+
+10917
+Running R scripts
+66473
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+66565
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+66593
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10917
+
+
+
+10918
+Running R scripts
+66672
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10918 not found, skipping
+
+
+
+10919
+Running R scripts
+66689
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+66764
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+66794
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10919
+
+
+
+10920
+Running R scripts
+66885
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+66955
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+66983
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10920
+
+
+
+10921
+Running R scripts
+67073
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+67142
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+67181
+Done with processing scikit-allel. Analysis took 0hrs 4min
+cleaning up files
+10921
+
+
+
+10922
+Running R scripts
+67392
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+67565
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+67595
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10922
+
+
+
+10923
+Running R scripts
+67696
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+67823
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+67863
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10923
+
+
+
+10924
+Running R scripts
+67960
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10924 not found, skipping
+
+
+
+10925
+Running R scripts
+67984
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+68082
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+68114
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10925
+
+
+
+10926
+Running R scripts
+68208
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10926 not found, skipping
+
+
+
+10927
+Running R scripts
+68225
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+68298
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+68331
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10927
+
+
+
+10928
+Running R scripts
+68448
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+68528
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+68559
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10928
+
+
+
+10929
+Running R scripts
+68656
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+68746
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+68775
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10929
+
+
+
+10930
+Running R scripts
+68870
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10930 not found, skipping
+
+
+
+10931
+Running R scripts
+68886
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+68973
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+69005
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10931
+
+
+
+10932
+Running R scripts
+69090
+Done with processing first R script. Analysis took 2hrs 43min
+Running R RDA
+69242
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+69315
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10932
+
+
+
+10933
+Running R scripts
+69424
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+69555
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+69646
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10933
+
+
+
+10934
+Running R scripts
+69748
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+69842
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+69874
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10934
+
+
+
+10935
+Running R scripts
+69966
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+70051
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+70080
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10935
+
+
+
+10936
+Running R scripts
+70171
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+70261
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+70292
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10936
+
+
+
+10937
+Running R scripts
+70376
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+70451
+Done with processing R script RDA. Analysis took 2hrs 20min
+Running scikit-allel
+70504
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10937
+
+
+
+10938
+Running R scripts
+70639
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+70758
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+70791
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10938
+
+
+
+10939
+Running R scripts
+70881
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+70973
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+71007
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10939
+
+
+
+10940
+Running R scripts
+71105
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+71181
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+71214
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10940
+
+
+
+10941
+Running R scripts
+71312
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+71386
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+71417
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10941
+
+
+
+10942
+Running R scripts
+71532
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10942 not found, skipping
+
+
+
+10943
+Running R scripts
+71548
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+71635
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+71667
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10943
+
+
+
+10944
+Running R scripts
+71753
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+71829
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+71859
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10944
+
+
+
+10945
+Running R scripts
+71953
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10945 not found, skipping
+
+
+
+10946
+Running R scripts
+71971
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+72090
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+72129
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10946
+
+
+
+10947
+Running R scripts
+72228
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+72334
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+72381
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10947
+
+
+
+10948
+Running R scripts
+72515
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+72617
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+72649
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10948
+
+
+
+10949
+Running R scripts
+72846
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+72982
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+73037
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10949
+
+
+
+10950
+Running R scripts
+73145
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+73230
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+73261
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10950
+
+
+
+10951
+Running R scripts
+73358
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+73441
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+73490
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10951
+
+
+
+10952
+Running R scripts
+73582
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+73690
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+73718
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10952
+
+
+
+10953
+Running R scripts
+73818
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+73934
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+73977
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10953
+
+
+
+10954
+Running R scripts
+74117
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+74234
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+74272
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10954
+
+
+
+10955
+Running R scripts
+74412
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+74516
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+74571
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10955
+
+
+
+10956
+Running R scripts
+74694
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+74773
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+74810
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10956
+
+
+
+10957
+Running R scripts
+74903
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10957 not found, skipping
+
+
+
+10958
+Running R scripts
+74922
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+75027
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+75060
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10958
+
+
+
+10959
+Running R scripts
+75155
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+75260
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+75298
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10959
+
+
+
+10960
+Running R scripts
+75396
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10960 not found, skipping
+
+
+
+10961
+Running R scripts
+75416
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+75529
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+75571
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10961
+
+
+
+10962
+Running R scripts
+75702
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+75837
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+75869
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10962
+
+
+
+10963
+Running R scripts
+75954
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10963 not found, skipping
+
+
+
+10964
+Running R scripts
+75969
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+76059
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+76086
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10964
+
+
+
+10965
+Running R scripts
+76179
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+76272
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+76301
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10965
+
+
+
+10966
+Running R scripts
+76394
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+76486
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+76515
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10966
+
+
+
+10967
+Running R scripts
+76596
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+76662
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+76690
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10967
+
+
+
+10968
+Running R scripts
+76784
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+76868
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+76898
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10968
+
+
+
+10969
+Running R scripts
+76988
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+VCF for 10969 not found, skipping
+
+
+
+10970
+Running R scripts
+77040
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+77120
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+77145
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10970
+
+
+
+10971
+Running R scripts
+77240
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+77366
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+77419
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10971
+
+
+
+10972
+Running R scripts
+77515
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+77606
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+77635
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10972
+
+
+
+10973
+Running R scripts
+77726
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+77800
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+77827
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10973
+
+
+
+10974
+Running R scripts
+77916
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+77975
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+77994
+Done with processing scikit-allel. Analysis took 0hrs 1min
+cleaning up files
+10974
+
+
+
+10975
+Running R scripts
+78047
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+78120
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+78150
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10975
+
+
+
+10976
+Running R scripts
+78244
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10976 not found, skipping
+
+
+
+10977
+Running R scripts
+78261
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+78356
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+78386
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10977
+
+
+
+10978
+Running R scripts
+78471
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+78537
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+78565
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10978
+
+
+
+10979
+full vcf file for 10979 not found, skipping
+
+
+
+10980
+Running R scripts
+78663
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10980 not found, skipping
+
+
+
+10981
+Running R scripts
+78678
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+78768
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+78797
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10981
+
+
+
+10982
+Running R scripts
+78889
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+78982
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+79032
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10982
+
+
+
+10983
+Running R scripts
+79133
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+79228
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+79257
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10983
+
+
+
+10984
+Running R scripts
+79350
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+79428
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+79458
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10984
+
+
+
+10985
+Running R scripts
+79553
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+79637
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+79671
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10985
+
+
+
+10986
+Running R scripts
+79760
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+79849
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+79880
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10986
+
+
+
+10987
+Running R scripts
+79968
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+80042
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+80093
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10987
+
+
+
+10988
+Running R scripts
+80174
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+80241
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+80268
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10988
+
+
+
+10989
+Running R scripts
+80361
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+80441
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+80471
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10989
+
+
+
+10990
+Running R scripts
+80559
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+80628
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+80658
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10990
+
+
+
+10991
+Running R scripts
+80751
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+80841
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+80891
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10991
+
+
+
+10992
+Running R scripts
+81012
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+81087
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+81121
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10992
+
+
+
+10993
+Running R scripts
+81209
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+81279
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+81307
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10993
+
+
+
+10994
+Running R scripts
+81396
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 10994 not found, skipping
+
+
+
+10995
+Running R scripts
+81413
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+81492
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+81521
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10995
+
+
+
+10996
+Running R scripts
+81607
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+81704
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+81735
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10996
+
+
+
+10997
+Running R scripts
+81831
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+81920
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+81945
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10997
+
+
+
+10998
+Running R scripts
+82019
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+82107
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+82143
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+10998
+
+
+
+10999
+Running R scripts
+82233
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+82318
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+82345
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+10999
+
+
+
+11000
+Running R scripts
+82432
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+82528
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+82586
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11000
+
+
+
+11001
+Running R scripts
+82682
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 11001 not found, skipping
+
+
+
+11002
+Running R scripts
+82697
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+82792
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+82822
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11002
+
+
+
+11003
+Running R scripts
+82912
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+82988
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+83018
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11003
+
+
+
+11004
+Running R scripts
+83104
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+83196
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+83227
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11004
+
+
+
+11005
+Running R scripts
+83315
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+83396
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+83429
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11005
+
+
+
+11006
+Running R scripts
+83528
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+83600
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+83647
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11006
+
+
+
+11007
+Running R scripts
+83738
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+83814
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+83853
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11007
+
+
+
+11008
+Running R scripts
+83942
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+84009
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+84041
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11008
+
+
+
+11009
+Running R scripts
+84132
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+84229
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+84271
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11009
+
+
+
+11010
+Running R scripts
+84377
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 11010 not found, skipping
+
+
+
+11011
+Running R scripts
+84392
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+84466
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+84495
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11011
+
+
+
+11012
+Running R scripts
+84602
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+84670
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+84700
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11012
+
+
+
+11013
+Running R scripts
+84794
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+84869
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+84901
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11013
+
+
+
+11014
+Running R scripts
+84992
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+85108
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+85141
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11014
+
+
+
+11015
+Running R scripts
+85234
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+85320
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+85355
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11015
+
+
+
+11016
+Running R scripts
+85445
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+85544
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+85573
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11016
+
+
+
+11017
+Running R scripts
+85674
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+85756
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+85789
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11017
+
+
+
+11018
+Running R scripts
+85877
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+85969
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+85999
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11018
+
+
+
+11019
+Running R scripts
+86092
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+86220
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+86253
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11019
+
+
+
+11020
+Running R scripts
+86360
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+86437
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+86468
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11020
+
+
+
+11021
+Running R scripts
+86558
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+86622
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+86651
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11021
+
+
+
+11022
+full vcf file for 11022 not found, skipping
+
+
+
+11023
+Running R scripts
+86738
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+86826
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+86858
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11023
+
+
+
+11024
+Running R scripts
+86946
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+87037
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+87073
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11024
+
+
+
+11025
+Running R scripts
+87158
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+87257
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+87286
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11025
+
+
+
+11026
+Running R scripts
+87393
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+87458
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+87489
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11026
+
+
+
+11027
+Running R scripts
+87575
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+87645
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+87682
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11027
+
+
+
+11028
+Running R scripts
+87806
+Done with processing first R script. Analysis took 0hrs 1min
+Running R RDA
+VCF for 11028 not found, skipping
+
+
+
+11029
+Running R scripts
+87855
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+87927
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+87958
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11029
+
+
+
+11030
+Running R scripts
+88049
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+88138
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+88168
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11030
+
+
+
+11031
+Running R scripts
+88263
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+88332
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+88363
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11031
+
+
+
+11032
+Running R scripts
+88453
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+88538
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+88572
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11032
+
+
+
+11033
+Running R scripts
+88670
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+88749
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+88782
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11033
+
+
+
+11034
+Running R scripts
+88870
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+88934
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+88981
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11034
+
+
+
+11035
+Running R scripts
+89070
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+89155
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+89186
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11035
+
+
+
+11036
+Running R scripts
+89273
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+89359
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+89385
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11036
+
+
+
+11037
+Running R scripts
+89476
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+89562
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+89592
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11037
+
+
+
+11038
+Running R scripts
+89691
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+89785
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+89832
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11038
+
+
+
+11039
+Running R scripts
+89929
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+90032
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+90062
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11039
+
+
+
+11040
+Running R scripts
+90152
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+90222
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+90253
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11040
+
+
+
+11041
+full vcf file for 11041 not found, skipping
+
+
+
+11042
+Running R scripts
+90329
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+90412
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+90448
+Done with processing scikit-allel. Analysis took 11hrs 20min
+cleaning up files
+11042
+
+
+
+11043
+Running R scripts
+90639
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+90753
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+90782
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11043
+
+
+
+11044
+Running R scripts
+90872
+Done with processing first R script. Analysis took 1hrs 17min
+Running R RDA
+91008
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+91040
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11044
+
+
+
+11045
+Running R scripts
+91129
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 11045 not found, skipping
+
+
+
+11046
+Running R scripts
+91145
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+91222
+Done with processing R script RDA. Analysis took 0hrs 58min
+Running scikit-allel
+91267
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11046
+
+
+
+11047
+Running R scripts
+91379
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+91457
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+91486
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11047
+
+
+
+11048
+Running R scripts
+91574
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+91646
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+91673
+Done with processing scikit-allel. Analysis took 0hrs 9min
+cleaning up files
+11048
+
+
+
+11049
+Running R scripts
+91783
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+91897
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+91932
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11049
+
+
+
+11050
+Running R scripts
+92019
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+92120
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+92149
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11050
+
+
+
+11051
+Running R scripts
+92228
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+92297
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+92324
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11051
+
+
+
+11052
+Running R scripts
+92413
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+92480
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+92508
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11052
+
+
+
+11053
+Running R scripts
+92597
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 11053 not found, skipping
+
+
+
+11054
+Running R scripts
+92613
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+92748
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+92779
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11054
+
+
+
+11055
+Running R scripts
+92871
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+92961
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+92991
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11055
+
+
+
+11056
+Running R scripts
+93077
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+93154
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+93187
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11056
+
+
+
+11057
+Running R scripts
+93278
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+93350
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+93380
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11057
+
+
+
+11058
+Running R scripts
+93468
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+93536
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+93570
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11058
+
+
+
+11059
+Running R scripts
+93659
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 11059 not found, skipping
+
+
+
+11060
+Running R scripts
+93674
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+93738
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+93766
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11060
+
+
+
+11061
+Running R scripts
+93863
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+93932
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+93961
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11061
+
+
+
+11062
+Running R scripts
+94050
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+94126
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+94153
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11062
+
+
+
+11063
+Running R scripts
+94248
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+94311
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+94342
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11063
+
+
+
+11064
+Running R scripts
+94432
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+94500
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+94532
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11064
+
+
+
+11065
+Running R scripts
+94627
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 11065 not found, skipping
+
+
+
+11066
+Running R scripts
+94645
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+94741
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+94770
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11066
+
+
+
+11067
+Running R scripts
+94857
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+94945
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+94975
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11067
+
+
+
+11068
+Running R scripts
+95067
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+95145
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+95173
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11068
+
+
+
+11069
+Running R scripts
+95268
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+95353
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+95381
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11069
+
+
+
+11070
+Running R scripts
+95470
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+95563
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+95593
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11070
+
+
+
+11071
+Running R scripts
+95681
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+95761
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+95788
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11071
+
+
+
+11072
+Running R scripts
+95882
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+95947
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+95974
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11072
+
+
+
+11073
+Running R scripts
+96051
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+96132
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+96161
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11073
+
+
+
+11074
+Running R scripts
+96255
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+96338
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+96383
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11074
+
+
+
+11075
+Running R scripts
+96469
+Done with processing first R script. Analysis took 0hrs 4min
+Running R RDA
+96568
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+96601
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11075
+
+
+
+11076
+Running R scripts
+96691
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+96776
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+96805
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11076
+
+
+
+11077
+Running R scripts
+96901
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+96969
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+96996
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11077
+
+
+
+11078
+Running R scripts
+97081
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+97158
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+97208
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11078
+
+
+
+11079
+Running R scripts
+97296
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+97378
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+97408
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11079
+
+
+
+11080
+Running R scripts
+97494
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+97565
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+97595
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11080
+
+
+
+11081
+Running R scripts
+97686
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+97762
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+97793
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11081
+
+
+
+11082
+Running R scripts
+97884
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+97976
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+98004
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11082
+
+
+
+11083
+Running R scripts
+98110
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+98198
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+98229
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11083
+
+
+
+11084
+Running R scripts
+98317
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 11084 not found, skipping
+
+
+
+11085
+Running R scripts
+98335
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+98408
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+98435
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11085
+
+
+
+11086
+Running R scripts
+98526
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+98605
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+98635
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11086
+
+
+
+11087
+Running R scripts
+98726
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+98810
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+98842
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11087
+
+
+
+11088
+Running R scripts
+98948
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+99024
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+99053
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11088
+
+
+
+11089
+Running R scripts
+99141
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+99236
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+99266
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11089
+
+
+
+11090
+Running R scripts
+99353
+Done with processing first R script. Analysis took 0hrs 1min
+Running R RDA
+VCF for 11090 not found, skipping
+
+
+
+11091
+Running R scripts
+99403
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+99468
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+99499
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11091
+
+
+
+11092
+Running R scripts
+99594
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+99660
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+99689
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11092
+
+
+
+11093
+Running R scripts
+99795
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+99874
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+99902
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11093
+
+
+
+11094
+Running R scripts
+99988
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+207
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+238
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11094
+
+
+
+11095
+Running R scripts
+329
+Done with processing first R script. Analysis took 0hrs 0min
+Running R RDA
+VCF for 11095 not found, skipping
+
+
+
+11096
+Running R scripts
+346
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+462
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+510
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11096
+
+
+
+11097
+Running R scripts
+611
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+VCF for 11097 not found, skipping
+
+
+
+11098
+Running R scripts
+669
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+740
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+777
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11098
+
+
+
+11099
+Running R scripts
+879
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+955
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+983
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11099
+
+
+
+11100
+Running R scripts
+1079
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+1147
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+1177
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11100
+
+
+
+11101
+Running R scripts
+1269
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+1346
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+1374
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11101
+
+
+
+11102
+Running R scripts
+1468
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+1544
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+1576
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11102
+
+
+
+11103
+Running R scripts
+1665
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+1757
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+1792
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11103
+
+
+
+11104
+Running R scripts
+1884
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+1960
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+1988
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11104
+
+
+
+11105
+Running R scripts
+2074
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+2167
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+2199
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11105
+
+
+
+11106
+Running R scripts
+2286
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+2355
+Done with processing R script RDA. Analysis took 0hrs 0min
+Running scikit-allel
+2383
+Done with processing scikit-allel. Analysis took 0hrs 2min
+cleaning up files
+11106
+
+
+
+11107
+Running R scripts
+2473
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+2562
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+2590
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11107
+
+
+
+11108
+Running R scripts
+2681
+Done with processing first R script. Analysis took 0hrs 2min
+Running R RDA
+2746
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+2780
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11108
+
+
+
+11109
+Running R scripts
+2864
+Done with processing first R script. Analysis took 0hrs 3min
+Running R RDA
+2958
+Done with processing R script RDA. Analysis took 0hrs 1min
+Running scikit-allel
+2987
+Done with processing scikit-allel. Analysis took 0hrs 3min
+cleaning up files
+11109
