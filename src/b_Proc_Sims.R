@@ -556,7 +556,7 @@ final_df$LFMM_lasso_0.0_ALL_log10p <- -log10(as.numeric(p.values.lasso))
 #plot(final_df$pos, final_df$LFMM_lasso_0.0_ALL_log10p)
 
 ### iHS 2.0.2 convert ####
-# (nlociperchrom <- table(vcf_filt@fix[,"CHROM"]))
+(nlociperchrom <- table(vcf_filt@fix[,"CHROM"]))
 # 
 # substring("0|1", 1, last=1)
 # substring("0|1", 3, last=3)
@@ -690,7 +690,7 @@ if(nrow(final2[which(!(is.na(final2$type))),]) != nrow(muts)){
   break
 }
 
-final2 <- final2[order(final2$position),]
+final2 <- final2[order(final2$position),] # this appears to be sorting by character vector
 
 ### Tables to write to file ####
 ind$simID <- seed

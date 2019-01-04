@@ -242,11 +242,11 @@ sum(is.na(x_all$simID))
     
     #x <- x_all[which(x_all$simID==10903 & x_all$muttype=="MT=2"),]#& x_all$keep_loci==FALSE & x_all$count==TRUE),]
   
-  # check no NA's
-  sum(is.na(x_all$keep_loci))
+  # check no NA's for allele frequency
   sum(is.na(x_all$a_freq_final))
-    
-  print.data.frame(x_all[is.na(x_all$a_freq_final),c("pos","a_freq_old", "descrip", "originGen", "seed")])
+  
+  # check NAs for simulated loci that were filtered for analysis  (should all have MAF < 0.01)
+  print.data.frame(x_all[is.na(x_all$keep_loci),c("pos","a_freq_old", "descrip", "originGen", "seed")])
   
   x_all$keep_loci[which(is.na(x_all$keep_loci))] <- FALSE
     # These are NA in the data
@@ -306,9 +306,9 @@ pdf("figures/PlotFreqVsEffectSize.pdf", width=7, height=9)
    tapply(x_all$prop[countbutnotinfinal], x_all$simID[countbutnotinfinal], sum, na.rm=TRUE))
    (totAGV_rareLargenum <- tapply(x_all$prop[countbutnotinfinal], x_all$simID[countbutnotinfinal], length)) # note this doesn't include 0s
   
-    # supp figure
-  #quantile(totAGV_rareLarge, c(0.025, 0.975))
-  # on average 17% of genetic variance remains unexplained by causal loci not in the final dataset
+  quantile(totAGV_rareLarge, c(0.025,0.5, 0.975))
+  mean(totAGV_rareLarge)
+  # on average 5% of genetic variance remains unexplained by causal loci not in the final dataset
   
 # For each simulation, let's see how much genetic variance remains unexplained by causal loci that are not in the final dataset, and contribute LESS than 1% to AGV
   # rare alleles of small effect
@@ -328,8 +328,9 @@ pdf("figures/PlotFreqVsEffectSize.pdf", width=7, height=9)
   totAGV[is.na(totAGV)] <- 0
   apply(totAGV[,2:10], 2, quantile, c(0.05, 0.5, 0.95, 1.0))
   totAGV
-  
-   
+```
+
+```{r}   
 # Make a plot of histograms
   pdf("figures/PropAGVacrossSims.pdf", width=5, height = 4)
   #par(mfrow=c(3,1))
@@ -599,7 +600,7 @@ bob <- as.numeric(unlist(x_all %>% filter(descrip=="Inversion")  %>% select(a_fr
 bob[which(bob>0.5)] <- bob[which(bob>0.5)]-0.5
 pdf("figures/InversionMAF_hist.pdf", width=5, height=4)
   par(mar=c(4,4, 0.1,0.1), mfrow=c(1,1), oma=c(0,0,0,0))
-  hist(bob, xlim=c(0,0.5), main=NULL, breaks=seq(0,0.5, by=0.01), xlab="Minor allele frequency of inversion", ylab="Number of simulations")
+  hist(bob, xlim=c(0,0.5), main=NULL, breaks=seq(0,0.5, by=0.05), xlab="Minor allele frequency at inversion", ylab="Number of simulations")
 dev.off()
 ```
  
@@ -713,26 +714,29 @@ dev.off()
 
 ### PC from RDA
 ```{r}
-quantile(abs(x_all$RDAvegan_v2.5.2_ALL_loading_PCA1_envi), 0.95, na.rm = TRUE)
-quantile(abs(x_all$RDAvegan_v2.5.2_ALL_loading_PCA2_envi), 0.95, na.rm = TRUE)
-quantile(abs(x_all$RDAvegan_v2.5.2_ALL_loading_PCA3_envi), 0.95, na.rm = TRUE)
+RDApc1 <- x_all$RDAvegan_2.52_ALL_PC1
+RDApc2 <- x_all$RDAvegan_2.52_ALL_PC2
+RDApc3 <- x_all$RDAvegan_2.52_ALL_PC3
 
  ### which locations load onto PC all data ####
 pdf("figures/WhichLocationsPCs_RDA.pdf", width=9, height=6)  
   par(mar=c(4, 4,1,1), oma=c(0,2,0,0), mfrow=c(3,1))
-  d <- density(x_all$pos[which(abs(x_all$RDAvegan_v2.5.2_ALL_loading_PCA1_envi)>0.08)], bw = 1000)
+  d <- density(x_all$pos[which(abs(RDApc1)>
+                                 quantile(abs(RDApc1), 0.95, na.rm = TRUE))], bw = 1000)
   plot(d, main="A) Locations of outlier PC1 loadings in RDA (all SNPs)", bty="n", las=1, ylim=c(0, 13e-05), xlim=c(0,5e05),adj=0,
        ylab="", xlab="")
   polygon(d, col="black")
   plot_layers(y_head=0.00011, y_arrows=c(0.00008, 0.00004), thisSim = thisim)
   
-  d <- density(x_all$pos[which(abs(x_all$RDAvegan_v2.5.2_ALL_loading_PCA2_envi)>0.09)], bw = 1000)
+  d <- density(x_all$pos[which(abs(RDApc2)>
+                                 quantile(abs(RDApc2), 0.95, na.rm = TRUE))], bw = 1000)
     plot(d, main="B) Locations of outlier PC2 loadings in RDA (all SNPs)", bty="n", las=1, ylim=c(0, 3e-05), xlim=c(0,5e05), adj=0,
        ylab="", xlab="")
   polygon(d, col="black")
   plot_layers(y_head=10, y_arrows=c(10, 8), thisSim = thisim)
   
-  d <- density(x_all$pos[which(abs(x_all$RDAvegan_v2.5.2_ALL_loading_PCA3_envi)>0.09)], bw = 1000)
+  d <- density(x_all$pos[which(abs(RDApc3)>
+                                 quantile(abs(RDApc3), 0.95, na.rm = TRUE))], bw = 1000)
     plot(d, main="C) Locations of outlier PC3 loadings in RDA (all SNPs)", bty="n", las=1, ylim=c(0, 3e-05), xlim=c(0,5e05),adj=0,
        ylab="", xlab="Position (bp)")
   polygon(d, col="black")
@@ -748,9 +752,10 @@ This plot compares a few of the different methods, but is not comprehensive. Dep
 
 ```{r}
 thisim = 10944
-# 10944 and 10946 This is an interesting case when the inversion drifted to some diverse frequencies in a couple of the subpopulations, and resulted in a slightly elevated signal in the inversion. Note that this did not happen in many of the simulations.
-# 10945, an interesting comparison.
-
+# 
+names(x_all) <- gsub("sk-a","ska", names(x_all))
+names(x_all) <- gsub("H2/H1","H2H1", names(x_all))
+names(x_all)
 # Note that the y-axes in the below graphs are specific to this simulation
 
 makeManhattans <- function(thisim){
@@ -758,20 +763,56 @@ makeManhattans <- function(thisim){
   
   ### Manahattan plot comparing selective sweep sims ###
   pdf(paste0("figures/Manhattan_SS_",thisim,".pdf"), width=8, height= 4)
-  par(mfrow=c(2,1), mar=c(0.5, 4, 2,0.1), oma=c(3,0,0,0))
+  par(mfrow=c(6,1), mar=c(0.5, 4, 2,0.1), oma=c(3,0,0,0))
     
-  plot(forpdf$pos[forpdf$keep_loci], forpdf$Hscan_v1.3_H12[forpdf$keep_loci],
-       ylim= c(0, 15000), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+  plot(forpdf$pos[forpdf$keep_loci], forpdf$skallel_v1.1.10_H12[forpdf$keep_loci],
+        pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
        cex=0.7, ylab= "  H12 (H-scan)", xaxt="n",  type="h", bty="l",
-       main="A) H12", adj=0)#, 
+       main="A) H12", adj=0,
+       ylim=c(0,1.5))#, 
        #xlim=c(170000 , 180000))
-    plot_layers(y_head=12000, y_arrows=c(9500, 7600), thisSim = thisim)
+    plot_layers(y_head=12000, y_arrows=c(1.4, 1), thisSim = thisim)
     
-    plot(forpdf$pos, forpdf$rehh_2.0.2_ALL_log10p,
-       ylim= c(0, 6), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+  plot(forpdf$pos[forpdf$keep_loci], forpdf$skallel_v1.1.10_H2H1[forpdf$keep_loci],
+        pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       cex=0.7, ylab= "H2/H1 (H-scan)", xaxt="n",  type="h", bty="l",
+       main="A) H2/H1", adj=0,
+       ylim=c(0,1.5))#, 
+       #xlim=c(170000 , 180000))
+    plot_layers(y_head=12000, y_arrows=c(1.4, 1), thisSim = thisim)
+    
+    plot(forpdf$pos[forpdf$keep_loci], forpdf$skallel_v1.1.10_tajD[forpdf$keep_loci],
+        pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       cex=0.7, ylab= "Tajima's D", xaxt="n",  type="h", bty="l",
+       main="A) Tajima's D", adj=0,
+       ylim=c(-1,4))#, 
+       #xlim=c(170000 , 180000))
+    plot_layers(y_head=12000, y_arrows=c(4, 3.5), thisSim = thisim)
+    
+    plot(forpdf$pos[forpdf$keep_loci], forpdf$skallel_v1.1.10_ihs[forpdf$keep_loci],
+        pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
        cex=0.7, ylab= "  -log10(P) iHS",  type="h", bty="l",
-       main="B) iHS", adj=0)
-    plot_layers(y_head=90, y_arrows=c(5.5, 4), thisSim=thisim)
+       main="B) iHS", adj=0,
+       ylim=c(-3,4))
+    plot_layers(y_head=90, y_arrows=c(4, 3), thisSim=thisim)
+    
+    #plot(forpdf$pos, forpdf$skallel_v1.1.10_pi,
+    #    pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+    #   cex=0.7, ylab= "pi",  type="h", bty="l",
+    #   main="B) pi", adj=0, ylim=c(0, 0.01))
+    #plot_layers(y_head=90, y_arrows=c(0.01, 0.008), thisSim=thisim)
+    
+    #plot(forpdf$pos, forpdf$skallel_v1.1.10_thetaW,
+    #    pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+    #   cex=0.7, ylab= "Theta W",  type="h", bty="l",
+    #   main="B) Theta W", adj=0, ylim=c(0, 0.005))
+    #plot_layers(y_head=90, y_arrows=c(0.005, 0.004), thisSim=thisim)
+    
+    plot(forpdf$pos, forpdf$skallel_v1.1.10_nsl,
+        pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       cex=0.7, ylab= "Theta W",  type="h", bty="l",
+       main="B) Theta W", adj=0, ylim=c(-3, 4))
+    plot_layers(y_head=90, y_arrows=c(4, 3), thisSim=thisim)
     
     mtext("Position (bp)", side=1, outer=TRUE, line=2)
   dev.off()
@@ -856,7 +897,7 @@ makeManhattans <- function(thisim){
        ylim= c(-20, 90), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="F) BayPass Bayes Factor - Best Practice (environment)", adj=0, ylab="               Bayes Factor B.P.", xaxt="n")
   plot_layers(y_head=-40, y_arrows=c(60, 45), thisSim=thisim)
   
-  plot(forpdf$pos, abs(forpdf$RDAvegan_v2.5.2_ALL_loading_RDA1_envi),
+  plot(forpdf$pos, abs(forpdf$RDAvegan_2.52_ALL_RDA1),
        ylim= c(0, 0.35), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="G) RDA (environment)", adj=0, ylab="        loading (RDA)")
   plot_layers(y_head=-10, y_arrows=c(0.32, 0.25), thisSim=thisim)
   

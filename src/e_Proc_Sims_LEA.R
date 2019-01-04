@@ -13,9 +13,9 @@ seed <- args[1]
 type <- args[2] # "Invers"
 date()
 
-final_df <- read.table(paste("../results_final/", seed, "_", 
-                             type, "_ScanResults.txt", sep=""),
-                       header=TRUE)
+#final_df <- read.table(paste("../results_final/", seed, "_", 
+#                             type, "_ScanResults.txt", sep=""),
+#                       header=TRUE)
 
 gename <- paste0(seed, "_genotypes.lfmm")
 envname <- paste0(seed, "_gradients.env")
@@ -49,7 +49,7 @@ summary(project)
 # maybe has to do with version of R?
 #pv1 <-  rowMeans(p.values(project, K = 1))
 #pv2 <-  rowMeans(p.values(project, K = 2))
-pv3 <-  rowMeans(p.values(project, K = 3))
+pv3 <-  lfmm.pvalues(project, K = 3)$pvalues
 # get the z-scores
 #z_ave1 <- rowMeans(z.scores(project, K = 1))
 #z_ave2 <- rowMeans(z.scores(project, K = 2))
@@ -63,7 +63,7 @@ z_ave3 <- rowMeans(z.scores(project, K = 3))
 #plot(training$position, abs(z_ave2), cex = .5, pch = 19, col = rgb(0,0,0,0.2), main="LFMM GEA", xaxs="i")
 #plot(training$position, abs(z_ave3), cex = .5, pch = 19, col = rgb(0,0,0,0.2), main="LFMM GEA", xaxs="i")
 
-final_df_LEA <- data.frame(final_df,
+final_df_LEA <- data.frame(
                            #LEA_1.2.0_ALL_K1_log10p =  -log10(pv1),
                        #LEA_1.2.0_ALL_K2_log10p =  -log10(pv2),
                        LEA_1.2.0_ALL_K3_log10p =  -log10(pv3),
@@ -73,7 +73,7 @@ final_df_LEA <- data.frame(final_df,
 
 
 write.table(final_df_LEA, file = paste("../results_final/", seed, "_", 
-                                       type, "_ScanResults.txt", sep=""), 
+                                       type, "_LEA.txt", sep=""), 
             row.names = FALSE)
 #system(paste("rm", paste("../results_final/", seed, "_", 
 #                         type, "_ScanResults.txt", sep="")))
