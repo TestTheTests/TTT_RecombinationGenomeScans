@@ -61,24 +61,43 @@ inver_files = list.files("results_final", pattern = "Invers_ScanResults")
 inver_files
 inver_simID <- substr(inver_files, 1, 5)
 inver_simID
+length(inver_simID)
 
+scikit_files = list.files("results_final", pattern = "scikitallel.txt")
 #LEA_files = paste0(inver_simID, "_Invers_Results_LEA.txt")
-#Baypass_files = paste0(inver_simID, "_baypass_results.txt")
+Baypass_files = paste0(inver_simID, "_baypass_results.txt")
 # To add new results, add a line of code here to get a list of the files
 
-length(inver_files)
+if (!(length(inver_files)==length(scikit_files))){
+  print("Error: number of files not equal")
+  break
+}
 #length(LEA_files)
 #length(Baypass_files)
-#length(RDA_files)
 # To add new results, add a line of code here to check that the number of files is the same as the number of simulations
 
 
 x_all <- NULL
-for (i in 1:length(inver_files)){
+for (i in 5:length(inver_files)){
   print(inver_simID[i])
   ## Main results
   x1 <- read_delim(paste0("results_final/", inver_files[i]), delim=" ")
   x1$type = "Inversion"
+  x1 <- x1[order(x1$vcf_ord),]
+    # It's important to order results here in same order as vcf file
+    # because most other programs are outputting results in that order
+  
+  # ## scikit results
+   x1_ska <- read_delim(paste0("results_final/", scikit_files[i]), delim=" ")
+   if (sum(x1$keep_loci, na.rm=TRUE)!=nrow(x1_ska)){
+     print("Error: wrong number of loci in scikit file"
+     )
+   }
+  x1_ska$unique <- x1$unique[which(x1$keep_loci)]
+  names(x1_ska) <- gsub("sk-a","ska", names(x1_ska))
+  names(x1_ska) <- gsub("H2/H1","H2H1", names(x1_ska))
+  names(x1_ska)
+  # 
   
   # ## LEA results
   # x1_LEA <- read_delim(paste0("results_final/", LEA_files[i]), delim=" ")
@@ -88,13 +107,13 @@ for (i in 1:length(inver_files)){
   # }
   # x1_LEA$unique <- x1$unique[which(x1$keep_loci)]
   # 
-  # ## BayPass results
-  # x1_baypass <- read_delim(paste0("results_final/", Baypass_files[i]), delim="\t")
-  #   if (sum(x1$keep_loci)!=nrow(x1_baypass)){
-  #   print("Error: wrong number of loci in baypass file"
-  #   )
-  # }
-  # x1_baypass$unique <- x1$unique[which(x1$keep_loci)]
+   ## BayPass results
+   x1_baypass <- read_delim(paste0("results_final/", Baypass_files[i]), delim="\t")
+     if (sum(x1$keep_loci, na.rm=TRUE)!=nrow(x1_baypass)){
+     print("Error: wrong number of loci in baypass file"
+     )
+   }
+   x1_baypass$unique <- x1$unique[which(x1$keep_loci)]
   # 
 
   
@@ -109,12 +128,11 @@ for (i in 1:length(inver_files)){
   ### x1_new$unique <- x1$unique[which(x1$keep_loci)]
   
   ## Combine all tables
+   x_final0 <- left_join(x1, x1_ska, by="unique")
   # x_final1 <- left_join(x1, x1_LEA, by="unique")
-  # x_final2 <- left_join(x_final1, x1_baypass, by="unique")
-  # x_final3 <- left_join(x_final2, x1_rda, by="unique")
-  # x_final <- x_final3
+   x_final2 <- left_join(x_final0, x1_baypass, by="unique")
   
-  x_final <- x1
+  x_final <- x_final2
   
   ### To add new results, reword this code and write a new example for others
   ### x_final4 <- left_join(x_final3, x1_new, by="unique")
@@ -125,11 +143,12 @@ for (i in 1:length(inver_files)){
     print("Error in merging files, number of rows has changed")
   }
   x_all <- rbind(x_all, x_final)
-  rm(x_final, x_final1, x_final2, x_final3)
+  #rm(x_final, x_final1, x_final2, x_final3)
   # If adding new results, be sure to remove above
 }
 
 table(x_all$simID)
+
 #Number of simulations
 nlevels(factor(x_all$simID))
 
@@ -753,9 +772,7 @@ This plot compares a few of the different methods, but is not comprehensive. Dep
 ```{r}
 thisim = 10944
 # 
-names(x_all) <- gsub("sk-a","ska", names(x_all))
-names(x_all) <- gsub("H2/H1","H2H1", names(x_all))
-names(x_all)
+
 # Note that the y-axes in the below graphs are specific to this simulation
 
 makeManhattans <- function(thisim){
