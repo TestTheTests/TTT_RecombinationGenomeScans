@@ -66,7 +66,7 @@ for (my $i = $start; $i <= $finish; $start++){
 		next;
 	}
 	open(my $outFh, '>', $outdir."/".$i."_baypass_results.txt")
-		or die "Could not open outfile for $i";
+		or die "Could not open outfile for $i $!";
 	my $columnsHashRef = getColumns($i);
 	printResults($columnsHashRef, $outFh);
 	close $outFh;
@@ -107,17 +107,19 @@ sub getColumns{
 		warn "Could not read pos from $vcfFile $!";
 	}
 	## find BF cols (stored as array refs)
-	my ($ALLEnvColRef, $ALLPhenoColRef)  	   = _readBFfile('', $number);
-	my ($PRUNEDEnvColRef, $PRUNEDPhenoColRef)  = _readBFfile("_ALL_PRUNED_MAT", $number);
+	my ($ALLEnvColRef, $ALLPhenoColRef, $ALLEnvPcolRef, $ALLPhenoPcolRef)  	           = _readBFfile('', $number);
+	my ($PRUNEDEnvColRef, $PRUNEDPhenoColRef, $PRUNEDEnvPcolRef, $PRUNEDPhenoPcolRef)  = _readBFfile("_ALL_PRUNED_MAT", $number);
 	## find XtX cols (stored as array refs)
 	my $ALLxtxColRef    = _readXtXfile('', $number);
 	my $PRUNEDxtxColRef = _readXtXfile('_ALL_PRUNED_MAT', $number);
 	
 	# return all columns as references in a hash
-	return { pos       => \@posCol, 
-		 	 ALLEnv    => $ALLEnvColRef,    ALLPheno    => $ALLPhenoColRef,
-		 	 PRUNEDEnv => $PRUNEDEnvColRef, PRUNEDPheno => $PRUNEDPhenoColRef,
-		 	 ALLxtx    => $ALLxtxColRef,    PRUNEDXtx   => $PRUNEDxtxColRef, 
+	return { pos        => \@posCol, 
+		 ALLEnv     => $ALLEnvColRef,     ALLPheno    => $ALLPhenoColRef,
+		 PRUNEDEnv  => $PRUNEDEnvColRef,  PRUNEDPheno => $PRUNEDPhenoColRef,
+		 ALLxtx     => $ALLxtxColRef,     PRUNEDXtx   => $PRUNEDxtxColRef, 
+		 ALLEnvP    => $ALLEnvPcolRef,    ALLPhenoP   => $ALLPhenoPcolRef,
+		 PRUNEDEnvP => $PRUNEDEnvPcolRef, PRUNEDPhenoP => $PRUNEDPhenoPcolRef
 	};
 
 }
@@ -132,7 +134,9 @@ sub getColumns{
 sub _readBFfile{
 	my ($prefix, $number) = @_;
 	my @EnvCol;
+	my @EnvPcol;
 	my @PhenoCol;
+	my @PhenoPcol;
 	my $bfFile = $number.$prefix."_summary_betai_reg.out";
 	if (open (my $bfFh, '<', $bfFile)){
 		while (<$bfFh>){
@@ -142,12 +146,15 @@ sub _readBFfile{
 			unless (looks_like_number($splitLine[0])){
 				next; # skip header
 			}
-			my $BF = $splitLine[3];
+			my $BF   = $splitLine[4] / 10;
+			my $pval = $splitLine[-1]; 
 			if ($splitLine[0] eq '1'){
 				push @EnvCol, $BF;
+				push @EnvPcol, $pval;
 			}
 			elsif ($splitLine[0] eq '2'){
 				push @PhenoCol, $BF;
+				push @PhenoPcol, $pval;
 			}
 			else {
 				warn "Unknown covariable number: $splitLine[0]";
@@ -157,7 +164,7 @@ sub _readBFfile{
 	else {
 		warn "Could not read BF from $bfFile";
 	}
-	return (\@EnvCol, \@PhenoCol);
+	return (\@EnvCol, \@PhenoCol, \@EnvPcol, \@PhenoPcol);
 }
 
 #-----------------------------------------------------------------------
@@ -197,21 +204,29 @@ sub printResults{
 	my ($resultsHashRef, $outFh) = @_;
 	say $outFh join("\t", "position","baypass_2.1_ALL_BF_pheno","baypass_2.1_ALL_BF_env",
 					"baypass_2.1_ALL_XTX", "baypass_2.1_PRUNED_BF_pheno",
-					"baypass_2.1_PRUNED_BF_env", "baypass_2.1_PRUNED_XTX");
-	my $posRef         = $resultsHashRef -> {pos};
-	my $allPhenoRef    = $resultsHashRef -> {ALLPheno};
-	my $allEnvRef      = $resultsHashRef -> {ALLEnv};
-	my $allxtxRef      = $resultsHashRef -> {ALLxtx};
-	my $prunedPhenoRef = $resultsHashRef -> {PRUNEDPheno};
-	my $prunedEnvRef   = $resultsHashRef -> {PRUNEDEnv};
-	my $prunedXtxRef   = $resultsHashRef -> {PRUNEDXtx};
+					"baypass_2.1_PRUNED_BF_env", "baypass_2.1_PRUNED_XTX",
+					"baypass_2.1_PRUNED_eBPis_env", "baypass_2.1_PRUNED_eBPis_pheno",
+					"baypass_2.1_ALL_eBPis_env", "baypass_2.1_ALL_eBPis_pheno");
+	my $posRef          = $resultsHashRef -> {pos};
+	my $allPhenoRef     = $resultsHashRef -> {ALLPheno};
+	my $allEnvRef       = $resultsHashRef -> {ALLEnv};
+	my $allxtxRef       = $resultsHashRef -> {ALLxtx};
+	my $prunedPhenoRef  = $resultsHashRef -> {PRUNEDPheno};
+	my $prunedEnvRef    = $resultsHashRef -> {PRUNEDEnv};
+	my $prunedXtxRef    = $resultsHashRef -> {PRUNEDXtx};
+	my $prunedEnvPRef   = $resultsHashRef -> {PRUNEDEnvP};
+	my $prunedPhenoPRef = $resultsHashRef -> {PRUNEDPhenoP};
+	my $allEnvPRef      = $resultsHashRef -> {ALLEnvP};
+	my $allPhenoPRef    = $resultsHashRef  -> {ALLPhenoP};
 	
 	my $i = 0;
 	foreach my $pos( @$posRef){
 		say $outFh join ("\t", $pos, @$allPhenoRef[$i], 
 				  		 @$allEnvRef[$i], @$allxtxRef[$i], 
 				  		 @$prunedPhenoRef[$i], @$prunedEnvRef[$i], 
-				  		 @$prunedXtxRef[$i]);
+				  		 @$prunedXtxRef[$i], @$prunedEnvPRef[$i],
+						 @$prunedPhenoPRef[$i], @$allEnvPRef[$i], 
+						 @$allPhenoPRef[$i]);
 		$i++;
 	}
 	
