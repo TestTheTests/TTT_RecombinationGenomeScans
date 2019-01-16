@@ -127,7 +127,7 @@ while(<$popFh>){
    		# add environments and phenotypes if user gave column numbers
    		$groupsHash{$group}{environments} = join(" ",$groupsHash{$group}{environments}, $line[$colEnv])
    			if defined $colEnv;
-   		$groupsHash{$group}{phenotypes}   = join(" ",$groupsHash{$group}{environments}, $line[$colEnv])
+   		$groupsHash{$group}{phenotypes}   = join(" ",$groupsHash{$group}{phenotypes}, $line[$colPheno])
    			if defined $colPheno;
     }
     else {
@@ -266,6 +266,7 @@ sub printCovarFile{
 	if (defined $colEnv){
 		foreach my $group (@sortedKeys){ # go through each group and get the average Env		
 			my $environments      = $covarHash{$group}{environments};
+			
 			my @environmentsArray = split(" ", $environments);
 			$covarData = join(" ", $covarData, getAverage(@environmentsArray));
 		}
@@ -273,7 +274,9 @@ sub printCovarFile{
 	}
 	if (defined $colPheno){
 		foreach my $group (@sortedKeys){    # go through each group and get the average pheno values
-			my $phenotypes		  = $covarHash{$group}{phenotypes};
+			my $phenotypes	      = $covarHash{$group}{phenotypes};
+			if ($group == 1){
+			}
 			my @phenotypesArray   = split(" ", $phenotypes);
 			$covarData = join(" ", $covarData, getAverage(@phenotypesArray));
 		}
