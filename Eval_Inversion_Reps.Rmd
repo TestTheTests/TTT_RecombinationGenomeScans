@@ -59,7 +59,7 @@ BF log10(BF)
 eBPis log10 P value
 
 ```{r}
-
+ 
 inver_files = list.files("results_final", pattern = "Invers_ScanResults")
 inver_files
 inver_simID <- substr(inver_files, 1, 5)
