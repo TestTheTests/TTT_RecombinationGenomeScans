@@ -115,7 +115,7 @@ for (i in 1:length(inver_files)){
   # 
    ## BayPass results
    #x1_baypass <- read.table(paste0("results_final/", Baypass_files[i]), header=TRUE)
-   x1_baypass <- read_delim(paste0("results_final/", Baypass_files[i]), delim="\t")
+   x1_baypass <- read_delim(paste0("results_final/", Baypass_files[i]), delim=" ")
      if (sum(x1$keep_loci, na.rm=TRUE)!=nrow(x1_baypass)){
      print("Error: wrong number of loci in baypass file"
      )
@@ -755,6 +755,7 @@ dev.off()
 ```
 
 ### PC from RDA
+
 ```{r}
 RDApc1 <- x_all$RDAvegan_2.52_ALL_PC1
 RDApc2 <- x_all$RDAvegan_2.52_ALL_PC2
@@ -1250,10 +1251,83 @@ head(plot_df)
 head(perf_df2)  
 tail(perf_df2)
 
-  ngroups<- length(togetcols)
-  dval = c(0,0,10,0,10,0,10,0,0,0,0,0,10,0, 0) # If adding new results, may need to edit this line. Naive approach should be hatched (e.g. 10)
-  aval=45
+
 ```
+
+
+Add information about the allele frequency at different regions and the cumulative
+density at different regions
+
+```{r}
+
+perf_df2 <- perf_df2 %>% mutate(uniq=paste(method, simID, sep="_"))
+head(perf_df2)
+if(sum(duplicated(perf_df2$uniq))>0){print("Error in performance data frame"); break}
+
+getQuant_region <- function(method, simid){
+    bob <- x_all %>% filter(simID==simid) %>% 
+          select(c("prop", method, "simID", "pos", "a_freq_final", "He")) 
+    P <- ecdf(unlist(bob[,method]))
+    bob$cdf <-  P(unlist(bob[,method]))
+
+    whichbob_LEQTL <- which(bob$prop==max(bob$prop, na.rm=TRUE))
+    whichbob_Inversion <- which(bob$pos > 320000 & bob$pos < 330000)
+    whichbob_fullSS <- which(bob$pos > (225000-2000) & bob$pos < (225000+2000))
+    whichbob_partSS <- which(bob$pos > (275000-2000) & bob$pos < (275000+2000))
+    whichbob_lowR <- which(bob$pos > 370000 & bob$pos < 380000)
+    whichbob_neut <- which(bob$pos < 100000)
+    #whichbob_Rvar <- which(bob$pos > 400001 & bob$pos < 450000)
+
+  data.frame(uniq2=paste(method, simid,sep="_"),
+             cdf_LEQTL= bob$cdf[whichbob_LEQTL], #mean(bob$cdf[whichbob_LEQTL], na.rm=TRUE),
+             prop_LEQTL=bob$prop[whichbob_LEQTL],
+             af_LEQTL= bob$a_freq_final[whichbob_LEQTL],
+             cdf_Inversion = mean(bob$cdf[whichbob_Inversion], na.rm=TRUE),
+             cdf_fullSS =mean(bob$cdf[whichbob_fullSS], na.rm=TRUE),
+             cdf_partSS =mean(bob$cdf[whichbob_partSS], na.rm=TRUE),
+             cdf_lowR = mean(bob$cdf[whichbob_lowR], na.rm=TRUE)
+             #cdf_Rvar = mean(bob$cdf[whichbob_BS], na.rm=TRUE),
+      
+             )
+  # Take the average signal in the region, and count that for the replicate
+}
+
+### Quantiles
+perf_df3 <- data.frame()
+for (j in 1:nrow(perf_df2)){
+  if(j%%50==0){print(c(j, "of", nrow(perf_df2)))}
+  doa <- getQuant_region(as.character(perf_df2$method[j]), 
+                         as.character(perf_df2$simID[j]))
+
+  perf_df3 <- rbind(perf_df3, cbind(perf_df2[j,], doa))
+}
+
+
+head(perf_df3)
+str(perf_df3)
+
+# Add stats on final allele frequency
+add_df <- data.frame(simID =  x_all %>% filter(descrip=="full_sweep") %>% select(simID),
+      af_fullSS = (x_all %>% filter(descrip=="full_sweep") %>% select(a_freq_final)),
+      time_fullSS = (x_all %>% filter(descrip=="full_sweep") %>% select(fixed_since)),
+      af_partSS = x_all %>% filter(descrip=="partial_sweep") %>% select( a_freq_final),
+      af_inv = x_all %>% filter(descrip=="Inversion") %>% select(a_freq_final),
+      af_inv = x_all %>% filter(descrip=="Inversion") %>% select(a_freq_final)
+      )
+colnames(add_df)
+colnames(add_df)[c(2,4,5)] <- c("af_fullSS", "af_partSS", "af_inv")
+add_df$simID <- as.factor(add_df$simID)
+head(add_df)
+
+table(perf_df3$method, is.na(perf_df3$cdf_Inversion))
+
+df3b <- perf_df3
+perf_df3 <- left_join(perf_df3, add_df, by="simID")
+str(perf_df3)
+if(!(nrow(df3b)==nrow(perf_df3))){print("Error: number of rows not the same")}
+```
+
+`perf_df3` now has all the information needed for plotting
 
 ## Make AUC-ROC figure
 ```{r}
@@ -1283,33 +1357,51 @@ tail(perf_df2)
 boxplot(perf_df2$AUCpr_fullSS_rand~perf_df2$name) # random expectations
 boxplot(perf_df2$AUCpr_QTN_rand~perf_df2$name)
 
-TO DO REMOVE H2/H1
 
-pdf("figures/AUC-pr.pdf", width=6, height=10)
-  par(mar=c(1, 1, 1,1), mfrow=c(3, 1), oma=c(10, 4,0,0))
+str(perf_df2)
+perf_df2a <- perf_df2 %>% filter(name != "H2/H1")
+dim(perf_df2)
+dim(perf_df2a)
+perf_df2a$name <- factor(perf_df2a$name)
+levels(perf_df2a$name)  
+
+ngroups=nlevels(perf_df2a$name)
+levels(perf_df2a$name) 
+  dval = c(0,0,0,10,0,10,0,10,0,0,0,0,0,10,0, 0) # If adding new results, may need to edit this line. Naive approach should be hatched (e.g. 10)
+  aval=45
+
+if(  length(dval)==ngroups){print("Error wrong number of groups")}
   
-  outstat <- boxplot(perf_df2$AUCpr_fullSS~perf_df2$name, las=2, names=NA,
+pdf("figures/AUC-pr.pdf", width=6, height=10)
+  par(mar=c(1, 1, 1,1), mfrow=c(3, 1), oma=c(10, 4,0,0), cex=1.2)
+  
+  outstat <- boxplot(perf_df2a$AUCpr_fullSS~perf_df2a$name, las=2, names=NA,
           main = "A) Full sweep", col=as.character(plot_df$color),
           ylim=c(0,1), density=20)
   
   rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
        density=dval, angle=aval)
-  polygon(c(0,100,100,0),c(summary(perf_df2$AUCpr_fullSS_rand)[1],
-                           summary(perf_df2$AUCpr_fullSS_rand)[1],
-                           summary(perf_df2$AUCpr_fullSS_rand)[6],
-                           summary(perf_df2$AUCpr_fullSS_rand)[6]),
+  polygon(c(0,100,100,0),c(summary(perf_df2a$AUCpr_fullSS_rand)[1],
+                           summary(perf_df2a$AUCpr_fullSS_rand)[1],
+                           summary(perf_df2a$AUCpr_fullSS_rand)[6],
+                           summary(perf_df2a$AUCpr_fullSS_rand)[6]),
           border=NA, col="grey")
   
-  boxplot(perf_df2$AUCpr_partSS~perf_df2$name, las=2, names=NA,
+  outstat1 <- boxplot(perf_df2a$AUCpr_partSS~perf_df2a$name, las=2, names=NA,
           main = "A) Partial sweep", col=as.character(plot_df$color),
           ylim=c(0,1), density=20)
+    polygon(c(0,100,100,0),c(summary(perf_df2a$AUCpr_partSS_rand)[1],
+                           summary(perf_df2a$AUCpr_partSS_rand)[1],
+                           summary(perf_df2a$AUCpr_partSS_rand)[6],
+                           summary(perf_df2a$AUCpr_partSS_rand)[6]),
+          border=NA, col="grey")
   
-  outstat2 <- boxplot(perf_df2$AUCpr_QTN~perf_df2$name, las=2, 
+  outstat2 <- boxplot(perf_df2a$AUCpr_QTN~perf_df2a$name, las=2, 
           main = "B) Causal QTNs",  ylim=c(0,1), col=as.character(plot_df$color))
-  polygon(c(0,100,100,0),c(summary(perf_df2$AUCpr_QTN_rand)[1],
-                           summary(perf_df2$AUCpr_QTN_rand)[1],
-                           summary(perf_df2$AUCpr_QTN_rand)[6],
-                           summary(perf_df2$AUCpr_QTN_rand)[6]),
+  polygon(c(0,100,100,0),c(summary(perf_df2a$AUCpr_QTN_rand)[1],
+                           summary(perf_df2a$AUCpr_QTN_rand)[1],
+                           summary(perf_df2a$AUCpr_QTN_rand)[6],
+                           summary(perf_df2a$AUCpr_QTN_rand)[6]),
           border=NA, col="grey")
   rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
        density=dval, angle=aval)
@@ -1317,6 +1409,63 @@ pdf("figures/AUC-pr.pdf", width=6, height=10)
   mtext("AUC: Precision-recall", side=2, outer=TRUE, line=2, cex=1.5)
 dev.off()
 ```
+
+### Plot performance stats for sweep area
+
+par(mfrow=c(3,1), mar=c(4,4,1,1), oma=c(0,0,0,0))
+
+## How is H12 affected by allele freq at sweep or inversion? ####
+topl <- perf_df3 %>% filter(name=="H12")
+plot(topl$af_fullSS, topl$cdf_fullSS, xlim=c(0, 1.0), ylab="quantile of H12",
+     xlab="Frequency of sweep", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+points(topl$af_partSS, topl$cdf_partSS, pch=21, col=rgb(0.5,0,1,0.3))
+legend(0,0.3,c("Partial", "Full"),pch=c(21,19), col=rgb(0.5,0,1,0.3), 
+       horiz = TRUE, box.col ="lightgrey", cex=0.8)
+
+plot(topl$fixed_since[topl$fixed_since>1], topl$cdf_fullSS[topl$fixed_since>1],  ylab="quantile of H12",
+     xlab="Generations since fixation", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+
+topl$af_invMAF[topl$af_inv>0.5] <- 1- topl$af_inv[topl$af_inv>0.5]
+
+plot(topl$af_invMAF, topl$cdf_Inversion, xlim=c(0, 0.5), ylab="quantile of H12",
+     xlab="Minor haplotype freq.\n at inversion", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+#abline(lm(topl$cdf_Inversion~topl$af_invMAF))
+```
+
+```{r plot af vs quantile H2/H1}
+par(mfrow=c(3,1), mar=c(4,4,1,1), oma=c(0,0,0,0))
+
+unique(perf_df3$name)
+## How is H12 affected by allele freq at sweep or inversion? ####
+topl <- perf_df3 %>% filter(name=="H2/H1")
+plot(topl$af_fullSS, topl$cdf_fullSS, xlim=c(0, 1.0), ylab="quantile of H12",
+     xlab="Frequency of sweep", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+points(topl$af_partSS, topl$cdf_partSS, pch=21, col=rgb(0.5,0,1,0.3))
+legend(0,0.3,c("Partial", "Full"),pch=c(21,19), col=rgb(0.5,0,1,0.3), 
+       horiz = TRUE, box.col ="lightgrey", cex=0.8)
+
+plot(topl$fixedsince_fullSS[topl$fixedsince_fullSS>1], topl$cdf_fullSS[topl$fixedsince_fullSS>1],  ylab="quantile of H12",
+     xlab="Generations since fixation", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+
+topl$af_invMAF[topl$af_inv>0.5] <- 1- topl$af_inv[topl$af_inv>0.5]
+
+plot(topl$af_invMAF, topl$cdf_Inversion, xlim=c(0, 0.5), ylab="quantile of H12",
+     xlab="Minor haplotype freq.\n at inversion", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+#abline(lm(topl$cdf_Inversion~topl$af_invMAF))
+```
+
+
+
+
+
+
+
 
 ## Make AUC-pr curve for a sim
 This is way too much code for this plot, but it works
@@ -1373,73 +1522,6 @@ dev.off()
 ```
 
 ## Make figures showing percentiles of signals in different regions
-```{r}
-
-perf_df2 <- perf_df2 %>% mutate(uniq=paste(method, simID, sep="_"))
-head(perf_df2)
-if(sum(duplicated(perf_df2$uniq))>0){print("Error in performance data frame"); break}
-
-getQuant_region <- function(method, simid){
-    bob <- x_all %>% filter(simID==simid) %>% 
-          select(c("prop", method, "simID", "pos", "a_freq_final", "He")) 
-    P <- ecdf(unlist(bob[,method]))
-    bob$cdf <-  P(unlist(bob[,method]))
-
-    whichbob_LEQTL <- which(bob$prop==max(bob$prop, na.rm=TRUE))
-    whichbob_Inversion <- which(bob$pos > 320000 & bob$pos < 330000)
-    whichbob_fullSS <- which(bob$pos > (225000-2000) & bob$pos < (225000+2000))
-    whichbob_partSS <- which(bob$pos > (275000-2000) & bob$pos < (275000+2000))
-    whichbob_lowR <- which(bob$pos > 370000 & bob$pos < 380000)
-    #whichbob_Rvar <- which(bob$pos > 400001 & bob$pos < 450000)
-
-  data.frame(uniq2=paste(method, simid,sep="_"),
-             cdf_LEQTL= bob$cdf[whichbob_LEQTL], #mean(bob$cdf[whichbob_LEQTL], na.rm=TRUE),
-             prop_LEQTL=bob$prop[whichbob_LEQTL],
-             af_LEQTL= bob$a_freq_final[whichbob_LEQTL],
-             cdf_Inversion = mean(bob$cdf[whichbob_Inversion], na.rm=TRUE),
-             cdf_fullSS =mean(bob$cdf[whichbob_fullSS], na.rm=TRUE),
-             cdf_partSS =mean(bob$cdf[whichbob_partSS], na.rm=TRUE),
-             cdf_lowR = mean(bob$cdf[whichbob_lowR], na.rm=TRUE)
-             #cdf_Rvar = mean(bob$cdf[whichbob_BS], na.rm=TRUE),
-      
-             )
-  # Take the average signal in the region, and count that for the replicate
-}
-
-### Quantiles
-perf_df3 <- data.frame()
-for (j in 1:nrow(perf_df2)){
-  if(j%%50==0){print(c(j, "of", nrow(perf_df2)))}
-  doa <- getQuant_region(as.character(perf_df2$method[j]), 
-                         as.character(perf_df2$simID[j]))
-
-  perf_df3 <- rbind(perf_df3, cbind(perf_df2[j,], doa))
-}
-
-
-head(perf_df3)
-str(perf_df3)
-
-# Add stats on final allele frequency
-add_df <- data.frame(simID =  x_all %>% filter(descrip=="full_sweep") %>% select(simID),
-      af_fullSS = (x_all %>% filter(descrip=="full_sweep") %>% select(a_freq_final)),
-      time_fullSS = (x_all %>% filter(descrip=="full_sweep") %>% select(fixed_since)),
-      af_partSS = x_all %>% filter(descrip=="partial_sweep") %>% select( a_freq_final),
-      af_inv = x_all %>% filter(descrip=="Inversion") %>% select(a_freq_final),
-      af_inv = x_all %>% filter(descrip=="Inversion") %>% select(a_freq_final)
-      )
-colnames(add_df)
-colnames(add_df)[c(2,4,5)] <- c("af_fullSS", "af_partSS", "af_inv")
-add_df$simID <- as.factor(add_df$simID)
-head(add_df)
-
-table(perf_df3$method, is.na(perf_df3$cdf_Inversion))
-
-df3b <- perf_df3
-perf_df3 <- left_join(perf_df3, add_df, by="simID")
-str(perf_df3)
-if(!(nrow(df3b)==nrow(perf_df3))){print("Error: number of rows not the same")}
-```
 
 ```{r plot quantile figures}   
 pdf("figures/Quantiles_lowR.pdf", width=6, height=10)
@@ -1497,53 +1579,7 @@ plot(topl$a_freq_final.3,  topl$cdf_LEQTL)
 ```
 
 ```{r plot af vs quantile H12}
-par(mfrow=c(3,1), mar=c(4,4,1,1), oma=c(0,0,0,0))
 
-## How is H12 affected by allele freq at sweep or inversion? ####
-topl <- perf_df3 %>% filter(name=="H12")
-plot(topl$af_fullSS, topl$cdf_fullSS, xlim=c(0, 1.0), ylab="quantile of H12",
-     xlab="Frequency of sweep", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
-     ylim=c(0,1))
-points(topl$af_partSS, topl$cdf_partSS, pch=21, col=rgb(0.5,0,1,0.3))
-legend(0,0.3,c("Partial", "Full"),pch=c(21,19), col=rgb(0.5,0,1,0.3), 
-       horiz = TRUE, box.col ="lightgrey", cex=0.8)
-
-plot(topl$fixed_since[topl$fixed_since>1], topl$cdf_fullSS[topl$fixed_since>1],  ylab="quantile of H12",
-     xlab="Generations since fixation", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
-     ylim=c(0,1))
-
-topl$af_invMAF[topl$af_inv>0.5] <- 1- topl$af_inv[topl$af_inv>0.5]
-
-plot(topl$af_invMAF, topl$cdf_Inversion, xlim=c(0, 0.5), ylab="quantile of H12",
-     xlab="Minor haplotype freq.\n at inversion", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
-     ylim=c(0,1))
-#abline(lm(topl$cdf_Inversion~topl$af_invMAF))
-```
-
-```{r plot af vs quantile H2/H1}
-par(mfrow=c(3,1), mar=c(4,4,1,1), oma=c(0,0,0,0))
-
-unique(perf_df3$name)
-## How is H12 affected by allele freq at sweep or inversion? ####
-topl <- perf_df3 %>% filter(name=="H2/H1")
-plot(topl$af_fullSS, topl$cdf_fullSS, xlim=c(0, 1.0), ylab="quantile of H12",
-     xlab="Frequency of sweep", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
-     ylim=c(0,1))
-points(topl$af_partSS, topl$cdf_partSS, pch=21, col=rgb(0.5,0,1,0.3))
-legend(0,0.3,c("Partial", "Full"),pch=c(21,19), col=rgb(0.5,0,1,0.3), 
-       horiz = TRUE, box.col ="lightgrey", cex=0.8)
-
-plot(topl$fixedsince_fullSS[topl$fixedsince_fullSS>1], topl$cdf_fullSS[topl$fixedsince_fullSS>1],  ylab="quantile of H12",
-     xlab="Generations since fixation", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
-     ylim=c(0,1))
-
-topl$af_invMAF[topl$af_inv>0.5] <- 1- topl$af_inv[topl$af_inv>0.5]
-
-plot(topl$af_invMAF, topl$cdf_Inversion, xlim=c(0, 0.5), ylab="quantile of H12",
-     xlab="Minor haplotype freq.\n at inversion", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
-     ylim=c(0,1))
-#abline(lm(topl$cdf_Inversion~topl$af_invMAF))
-```
 
 ## Some other checks and data analysis
 
