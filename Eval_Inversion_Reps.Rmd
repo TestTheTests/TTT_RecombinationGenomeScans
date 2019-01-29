@@ -10,6 +10,7 @@ setwd("/Users/katie/Desktop/Repos/TestTheTests/TTT_RecombinationGenomeScans")
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+# !diagnostics off
 
 if(!("tidyverse" %in% installed.packages())){install.packages("tidyverse")}
 library(tidyverse)
@@ -243,7 +244,12 @@ dev.off()
 
 ## Proportion of loci in inversion
 ```{r inversion}
+## Inversion
 xin <- x_all[x_all$pos > 320000 & x_all$pos < 330000,]
+summary(tapply(xin$pos,xin$simID, length)/tapply(x_all$pos,x_all$simID, length))
+
+## Low Recombination region
+xin <- x_all[x_all$pos > 370000 & x_all$pos < 380000,]
 summary(tapply(xin$pos,xin$simID, length)/tapply(x_all$pos,x_all$simID, length))
 ```
 
@@ -334,7 +340,7 @@ pdf("figures/PlotFreqVsEffectSize.pdf", width=7, height=9)
   
   quantile(totAGV_rareLarge, c(0.025,0.5, 0.975))
   mean(totAGV_rareLarge)
-  # on average 5% of genetic variance remains unexplained by causal loci not in the final dataset
+  # on average 4.5% of genetic variance remains unexplained by causal loci not in the final dataset
   
 # For each simulation, let's see how much genetic variance remains unexplained by causal loci that are not in the final dataset, and contribute LESS than 1% to AGV
   # rare alleles of small effect
@@ -356,7 +362,7 @@ pdf("figures/PlotFreqVsEffectSize.pdf", width=7, height=9)
   totAGV
 ```
 
-```{r propotion AGV across sims}   
+```{r proportion AGV across sims}   
 # Make a plot of histograms
   pdf("figures/PropAGVacrossSims.pdf", width=5, height = 4)
   #par(mfrow=c(3,1))
@@ -617,27 +623,30 @@ shaded.bxp <- function (z, notch = FALSE, width = NULL, varwidth = FALSE, outlin
 } 
 ```
 
-### Evaluate population structure
- No need to edit this code if you are adding a new method
- 
+### Inversion stats
 ```{r inversion hist of MAF and origin gen}
 bob <- as.numeric(unlist(x_all %>% filter(descrip=="Inversion")  %>% select(a_freq_final)))
 
-bob[which(bob>0.5)] <- bob[which(bob>0.5)]-0.5
+bob_MAF<- bob
+bob_MAF[which(bob>0.5)] <- 1- bob[which(bob>0.5)]
 
 origin <- as.numeric(unlist(x_all %>% filter(descrip=="Inversion") %>% select(originGen)))
 
 pdf("figures/InversionMAF_hist.pdf", width=5, height=8)
   par(mar=c(4,4, 1,0.5), mfrow=c(2,1), oma=c(0,0,0,0))
-  hist(bob, xlim=c(0,0.5), main=NULL, breaks=seq(0,0.5, by=0.05), xlab="Minor haplotype frequency at inversion", ylab="Number of simulations")
+  hist(bob, xlim=c(0,1.0), main=NULL, breaks=seq(0,1, by=0.05), xlab="Haplotype frequency at inversion", ylab="Number of simulations")
 
   hist(origin, main="", xlab="Generation of origin of the inversion")
 dev.off()
 
+inv_data = data.frame(inver_simID, af=bob, MAF=bob_MAF, origin)
+inv_data[order(inv_data$MAF),]
 ```
  
 
-
+### Evaluate population structure
+ No need to edit this code if you are adding a new method
+ 
 ```{r inversion PC loadings this sim}
 
 thisim = 10913 #10903
@@ -784,7 +793,7 @@ dev.off()
 This plot compares a few of the different methods, but is not comprehensive. Depending on the methods to be compared, the code could be copied and used to produce similar plots.
 
 ```{r}
-thisim = 10913
+thisim = 10945
 #thisim = 10916
 # 10944
 
@@ -817,7 +826,13 @@ hist(x_all$baypass_2.1_PRUNED_XTX)
 hist(x_all$baypass_2.1_PRUNED_BF_env)
 hist(x_all$baypass_2.1_ALL_BF_env)
 
+fix6 <- which(is.infinite(x_all$LFMM_ridge_0.0_ALL_log10p))
+str(fix6)
 # Note that the y-axes in the below graphs are specific to this simulation
+```
+
+
+```{r}
 
 makeManhattans <- function(thisim){
   forpdf <- x_all[x_all$simID==thisim,]
@@ -825,30 +840,32 @@ makeManhattans <- function(thisim){
   ### Manahattan plot comparing selective sweep sims ###
   pdf(paste0("figures/Manhattan_SS_",thisim,".pdf"), width=8, height= 6)
   par(mfrow=c(3,1), mar=c(0.5, 4, 2,0.1), oma=c(3,0,0,0))
-    
+   
+  (maxp <- max(forpdf$skallel_v1.1.10_H12[forpdf$keep_loci], na.rm=TRUE)) 
   plot(forpdf$pos[forpdf$keep_loci], forpdf$skallel_v1.1.10_H12[forpdf$keep_loci],
         pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-       cex=0.7, ylab= "  H12 (H-scan)", xaxt="n",  type="h", bty="l",
+       cex=0.7, ylab= "                  H12", xaxt="n",  type="h", bty="l",
        main="A) H12", adj=0,
-       ylim=c(0,1.5))#, 
+       ylim=c(0,maxp*1.7))#, 
        #xlim=c(170000 , 180000))
-    plot_layers(y_head=1.25, y_arrows=c(1.0, 0.8), thisSim = thisim,)
-    
+    plot_layers(y_head=maxp*1.5, y_arrows=c(maxp*1.2, maxp*1.02), thisSim = thisim,)
+  
+  (maxp <- max(forpdf$skallel_v1.1.10_H2H1[forpdf$keep_loci], na.rm=TRUE))     
   plot(forpdf$pos[forpdf$keep_loci], forpdf$skallel_v1.1.10_H2H1[forpdf$keep_loci],
         pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-       cex=0.7, ylab= "H2/H1 (H-scan)", xaxt="n",  type="h", bty="l",
+       cex=0.7, ylab= "                    H2/H1", xaxt="n",  type="h", bty="l",
        main="B) H2/H1", adj=0,
-       ylim=c(0,1.2))#, 
+       ylim=c(0,maxp*1.17))#, 
        #xlim=c(170000 , 180000))
-    plot_layers(y_head=12000, y_arrows=c(1.4, 1), thisSim = thisim)
+    plot_layers(y_head=12000, y_arrows=c(maxp*1.15, maxp*1.02), thisSim = thisim)
     
-    
+  (maxp <- max(forpdf$skallel_v1.1.10_ihs[forpdf$keep_loci], na.rm=TRUE))      
     plot(forpdf$pos[forpdf$keep_loci], abs(forpdf$skallel_v1.1.10_ihs[forpdf$keep_loci]),
         pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
-       cex=0.7, ylab= "abs(iHS)",  type="h", bty="l",
+       cex=0.7, ylab= "                  abs(iHS)",  type="h", bty="l",
        main="C) abs(iHS)", adj=0,
-       ylim=c(0,3.5))
-    plot_layers(y_head=90, y_arrows=c(4, 3), thisSim=thisim)
+       ylim=c(0,maxp*1.17))
+    plot_layers(y_head=90, y_arrows=c(maxp*1.15, maxp*1.02), thisSim=thisim)
     # 
     # plot(forpdf$pos[forpdf$keep_loci], forpdf$skallel_v1.1.10_tajD[forpdf$keep_loci],
     #     pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
@@ -885,37 +902,37 @@ makeManhattans <- function(thisim){
 
     (maxp <- max(forpdf$pcadapt_3.0.4_ALL_log10p, na.rm=TRUE))
     plot(forpdf$pos, forpdf$pcadapt_3.0.4_ALL_log10p,
-        ylim= c(0, maxp*1.3), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+        ylim= c(0, maxp*1.7), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
        cex=0.5, ylab= "-log10(P) PCAdapt Naive", xaxt="n", type="h", bty="l", main="A) PCAdapt Naive", adj=0)
-    plot_layers(y_head=maxp*1.2, y_arrows=c(maxp*1.1, maxp), thisSim = thisim)
+    plot_layers(y_head=maxp*1.5, y_arrows=c(maxp*1.2, maxp*1.02), thisSim = thisim)
   
      (maxp <- max(forpdf$pcadapt_3.0.4_PRUNED_log10p, na.rm=TRUE))
     plot(forpdf$pos, forpdf$pcadapt_3.0.4_PRUNED_log10p,
-       ylim= c(0, maxp*1.13), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       ylim= c(0, maxp*1.19), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
        cex=0.5, ylab= "-log10(P) PCAdapt B.P.", xaxt="n", type="h", bty="l", main="B) PCAdapt Best Practice", adj=0)
-    plot_layers(y_head=maxp*100, y_arrows=c(maxp*1.11, maxp*1.02), thisSim=thisim)
+    plot_layers(y_head=maxp*100, y_arrows=c(maxp*1.18, maxp*1.05), thisSim=thisim)
   
     (maxp <- max(c(forpdf$OutFLANK_0.2_ALL_log10p, forpdf$OutFLANK_0.2_PRUNED_log10p), na.rm=TRUE))
     plot(forpdf$pos, forpdf$OutFLANK_0.2_ALL_log10p,
-       ylim= c(0, maxp*1.13), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       ylim= c(0, maxp*1.19), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
        cex=0.5, ylab= "-log10(P) OutFLANK Naive", xaxt="n", type="h", bty="l", main="C) OutFLANK (Fst) Naive", adj=0)
-    plot_layers(y_head=maxp*100, y_arrows=c(maxp*1.11, maxp*1.02), thisSim=thisim)
+    plot_layers(y_head=maxp*100, y_arrows=c(maxp*1.18, maxp*1.05), thisSim=thisim)
   
     plot(forpdf$pos, forpdf$OutFLANK_0.2_PRUNED_log10p,
-       ylim= c(0, maxp*1.13), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       ylim= c(0, maxp*1.19), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
        cex=0.5, ylab= "-log10(P) OutFLANK B.P.", type="h", xaxt="n", bty="l", main="D) OutFLANK (Fst) Best Practice", adj=0)
-    plot_layers(y_head=maxp*100, y_arrows=c(maxp*1.11, maxp*1.02), thisSim=thisim)
+    plot_layers(y_head=maxp*100, y_arrows=c(maxp*1.18, maxp*1.05), thisSim=thisim)
     
     (maxp <- max(c(forpdf$baypass_2.1_ALL_XTX, forpdf$baypass_2.1_PRUNED_XTX), na.rm=TRUE))
     plot(forpdf$pos, forpdf$baypass_2.1_ALL_XTX,
-       ylim= c(25, 175), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       ylim= c(20, maxp*1.19), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
        cex=0.5, ylab= "           XTX Naive", xaxt="n", type="h", bty="l", main="E) BayPass (XTX) Naive", adj=0)
-    plot_layers(y_head=150, y_arrows=c(135,115), thisSim=thisim)
+    plot_layers(y_head=150, y_arrows=c(maxp*1.18, maxp*1.05), thisSim=thisim)
   
     plot(forpdf$pos, forpdf$baypass_2.1_PRUNED_XTX,
-       ylim= c(25, 175), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
+       ylim= c(20, maxp*1.19), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i",
        cex=0.5, ylab= "              XTX B.P.", type="h", bty="l", main="F) BayPass (XTX) Best Practice", adj=0)
-    plot_layers(y_head=0, y_arrows=c(135,115), thisSim=thisim)
+    plot_layers(y_head=0, y_arrows=c(maxp*1.18, maxp*1.05), thisSim=thisim)
     
     mtext("Position (bp)", side=1, outer=TRUE, line=2)
   dev.off()
@@ -924,58 +941,74 @@ makeManhattans <- function(thisim){
   
   ### Manahattan plot comparing Association Tests ###
   
-  cor.test(x_all$baypass_2.1_ALL_BF_env, x_all$baypass_2.1_ALL_BF_pheno)
+
   cor.test(x_all$baypass_2.1_ALL_BF_env, x_all$baypass_2.1_PRUNED_BF_env)
-  cor.test(x_all$baypass_2.1_PRUNED_BF_pheno, x_all$baypass_2.1_PRUNED_BF_env)
-  cor.test(x_all$baypass_2.1_PRUNED_BF_pheno, x_all$baypass_2.1_ALL_BF_pheno)
     # Results for environment and phenotype are very similar, just use one
   
-  summary(x_all$baypass_2.1_PRUNED_BF_pheno)
   summary(x_all$baypass_2.1_PRUNED_BF_env)
-  summary(x_all$baypass_2.1_ALL_BF_pheno)
   summary(x_all$baypass_2.1_ALL_BF_env)
-  summary(forpdf$baypass_2.1_ALL_BF_env)
   
   pdf(paste0("figures/Manhattan_Assoc",thisim,".pdf"), width=8, height= 12)
   par(mfrow=c(7,1), mar=c(0.5, 4, 2,0.1), oma=c(3,0,0,0))
   
+    (maxp <- max(forpdf$LFMM_ridge_0.0_ALL_log10p, na.rm=TRUE))
   plot(forpdf$pos, forpdf$LFMM_ridge_0.0_ALL_log10p,
-       ylim= c(0, 150), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="A) LFMM ridge (phenotype)", adj=0, ylab="-log10 P (LFMM ridge)", xaxt="n")
-  plot_layers(y_head=130, y_arrows=c(120,100), thisSim=thisim)
+       ylim= c(0, maxp*1.7), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="A) LFMM ridge (phenotype)", adj=0, ylab="-log10 P (LFMM ridge)", xaxt="n")
+  plot_layers(y_head=maxp*1.5, y_arrows=c(maxp*1.2,maxp*1.05), thisSim=thisim)
   
-  
+  (maxp <- max(forpdf$LFMM_lasso_0.0_ALL_log10p, na.rm=TRUE))
   plot(forpdf$pos, forpdf$LFMM_lasso_0.0_ALL_log10p,
-       ylim= c(0, 140), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="B) LFMM lasso (phenotype)", adj=0, ylab="-log10 P (LFMM lasso)", xaxt="n")
-  plot_layers(y_head=-100, y_arrows=c(130,110), thisSim=thisim)
+       ylim= c(0, maxp*1.19), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="B) LFMM lasso (phenotype)", adj=0, ylab="-log10 P (LFMM lasso)", xaxt="n")
+  plot_layers(y_head=-100, y_arrows=c(maxp*1.18,maxp*1.05), thisSim=thisim)
   
+  (maxp <- max(x_all$Spearmans_ALL_rho, na.rm=TRUE))
   plot(forpdf$pos, abs(forpdf$Spearmans_ALL_rho),
-       ylim= c(0, 0.9), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="C) Spearman's rho (environment)", adj=0, ylab="     abs(Spearman's rho)", xaxt="n")
-  plot_layers(y_head=0.7, y_arrows=c(0.6, 0.5), thisSim=thisim)
+       ylim= c(0, maxp*1.19), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="C) Spearman's rho (environment)", adj=0, ylab="     abs(Spearman's rho)", xaxt="n")
+  plot_layers(y_head=-100, y_arrows=c(maxp*1.18,maxp*1.05), thisSim=thisim)
   
+  (maxp <- max(forpdf$LEA_1.2.0_ALL_K3_log10p, na.rm=TRUE))
   plot(forpdf$pos, forpdf$LEA_1.2.0_ALL_K3_log10p,
-       ylim= c(0, 30), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="D) LEA (environment)", adj=0, ylab="        -log10 P (LEA)", xaxt="n")
-  plot_layers(y_head=-10, y_arrows=c(90, 25), thisSim=thisim)
+       ylim= c(0, maxp*1.19), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="D) LEA (environment)", adj=0, ylab="        -log10 P (LEA)", xaxt="n")
+  plot_layers(y_head=-10, y_arrows=c(maxp*1.18,maxp*1.05), thisSim=thisim)
   
+  (maxp <- max(c(forpdf$baypass_2.1_ALL_BF_env, forpdf$baypass_2.1_PRUNED_BF_env), na.rm=TRUE))
   plot(forpdf$pos, forpdf$baypass_2.1_ALL_BF_env,
-        pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="E) BayPass Bayes Factor - Naive (environment)", adj=0, ylab="        Bayes Factor Naive", xaxt="n")
-  plot_layers(y_head=70, y_arrows=c(60, 45), thisSim=thisim)
+        pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="E) BayPass Bayes Factor - Naive (environment)", adj=0, ylab="        Bayes Factor Naive", xaxt="n", ylim=c(0, maxp*1.19))
+  plot_layers(y_head=-100, y_arrows=c(maxp*1.18,maxp*1.05), thisSim=thisim)
   
   plot(forpdf$pos, forpdf$baypass_2.1_PRUNED_BF_env,
-        pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="F) BayPass Bayes Factor - Best Practice (environment)", adj=0, ylab="               Bayes Factor B.P.", xaxt="n")
-  plot_layers(y_head=-40, y_arrows=c(60, 45), thisSim=thisim)
+        pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="F) BayPass Bayes Factor - Best Practice (environment)", adj=0, ylab="               Bayes Factor B.P.", xaxt="n", ylim=c(0, maxp*1.19))
+  plot_layers(y_head=-100, y_arrows=c(maxp*1.18,maxp*1.05), thisSim=thisim)
   
+   (maxp <- max(abs(forpdf$RDAvegan_2.52_ALL_RDA1), na.rm=TRUE))
   plot(forpdf$pos, abs(forpdf$RDAvegan_2.52_ALL_RDA1),
-       ylim= c(0, 0.35), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="G) RDA (environment)", adj=0, ylab="        loading (RDA)")
-  plot_layers(y_head=-10, y_arrows=c(0.32, 0.25), thisSim=thisim)
+       ylim= c(0, maxp*1.19), pch=19, col=rgb(0,0,0,0.5), xaxs="i", yaxs="i", type="h", bty="l", main="G) RDA (environment)", adj=0, ylab="        loading (RDA)")
+  plot_layers(y_head=-10,  y_arrows=c(maxp*1.18,maxp*1.05), thisSim=thisim)
   
   mtext("Position (bp)", side=1, outer=TRUE, line=2)
   
   dev.off()
 }# end makeManhattans
 
-makeManhattans(10944)
-makeManhattans(10945)
-makeManhattans(10946)
+
+
+
+
+# both haplotypes common
+makeManhattans(10997) #10997 0.5047847 0.49521531    146
+makeManhattans(11019) #11019 0.5015136 0.49848638   9319
+makeManhattans(11062) #11062 0.5116162 0.48838384    262
+makeManhattans(10906) #10906 0.5061412 0.49385875   3637
+makeManhattans(10946) # 10946 0.4091826 0.40918264    210
+makeManhattans(10944) #10944 0.5205411 0.47945892   3051
+
+# inversion more common than ancestor
+makeManhattans(10913) #10913 0.6919959 0.30800405   3024
+makeManhattans(11088) #11088 0.9072948 0.09270517     24
+
+# inversion less common than ancestor
+makeManhattans(11107) #11107 0.2568251 0.25682508     15
+makeManhattans(10950) #10950 0.2684157 0.26841574    448
 ```
 
 ### AUC-ROC
@@ -1009,6 +1042,7 @@ x_all <- x_all %>% mutate(count_partSS = FALSE)
 x_all$count_partSS[x_all$pos > (part_where-2000) & x_all$pos < (part_where+2000)] <- TRUE
 tapply(x_all$count_partSS,x_all$simID,  sum, na.rm=TRUE)
 
+
 for (i in 1:length(inver_simID)){
   print(i)
   label_list_QTN[[i]] <- x_all$count_QTN[which(x_all$simID == inver_simID[i])]
@@ -1035,8 +1069,8 @@ x_all <- x_all %>% mutate(
 
 togetcols <- c(
   ##SS methods
-      "skallel_v1.1.10_H12", "skallel_v1.1.10_H2H1_mlog10", 
-      "skallel_v1.1.10_ihs",
+      "skallel_v1.1.10_H12", "skallel_v1.1.10_H2H1", "skallel_v1.1.10_H2H1_mlog10", 
+      "skallel_v1.1.10_ihs_abs",
   ## DO methods             
       "pcadapt_3.0.4_ALL_log10p","pcadapt_3.0.4_PRUNED_log10p",
       "OutFLANK_0.2_ALL_log10p", "OutFLANK_0.2_PRUNED_log10p",
@@ -1045,7 +1079,7 @@ togetcols <- c(
       "LFMM_ridge_0.0_ALL_log10p", "LFMM_lasso_0.0_ALL_log10p",
       "LEA_1.2.0_ALL_K3_log10p", "Spearmans_ALL_rho_abs",
       "baypass_2.1_ALL_BF_env", "baypass_2.1_PRUNED_BF_env",
-      "RDAvegan_2.52_ALL_RDA1"
+      "RDAvegan_2.52_ALL_RDA1_abs"
   )
 ```
 
@@ -1058,7 +1092,7 @@ predict_list <- list()
 for (j in 1:length(togetcols)){
   print(paste(j, "of", length(togetcols), togetcols[j], sep=" "))
   for (i in 1:length(inver_simID)){
-    #print(i)
+    if(i%%20==0){print(i)}
   predict_list[[i]] <- as.numeric(unlist(x_all[x_all$simID==inver_simID[i], which(colnames(x_all)==togetcols[j])]))
   }
   #str(predict_list)
@@ -1078,9 +1112,9 @@ for (j in 1:length(togetcols)){
     # partial SS performance
   # note that with only one prediction (sweep site), can't compute AUC
     # done on window around sweep
-  manypred_fullSS = prediction(predict_list, label_list_fullSS)
-  auc.perf_fullSS = performance(manypred_fullSS, measure = "auc")
-  AUCroc_fullSS <- as.numeric(unlist(auc.perf_fullSS@y.values))
+  manypred_partSS = prediction(predict_list, label_list_partSS)
+  auc.perf_partSS = performance(manypred_partSS, measure = "auc")
+  AUCroc_partSS <- as.numeric(unlist(auc.perf_partSS@y.values))
   
   
 ### AUC- PR calculations for QTN
@@ -1101,23 +1135,31 @@ for (j in 1:length(togetcols)){
 
 ### AUC- PR calculations for SS
   getAUCpr_SS <- function(x){
-    selSS <- predict_list[[x]][label_list_SS[[x]]]
-    selSS <- selSS[!is.na(selSS)]
-    neutSS <- predict_list[[x]][!label_list_SS[[x]]]
+    selSS_full <- predict_list[[x]][label_list_fullSS[[x]]]
+    selSS_part <- predict_list[[x]][label_list_partSS[[x]]]
+    selSS_full <- selSS_full[!is.na(selSS_full)]
+    selSS_part <- selSS_part[!is.na(selSS_part)]
+    neutSS <- predict_list[[x]][!c(label_list_fullSS[[x]], label_list_partSS[[x]])]
     neutSS <- neutSS[!is.na(neutSS)]
-    AUCpr_SS_tot <- pr.curve(scores.class0 = selSS, 
+    AUCpr_fullSS_tot <- pr.curve(scores.class0 = selSS_full, 
                           scores.class1 = neutSS, 
                           rand.compute = TRUE
                           )
-    return(data.frame(AUCpr_SS = AUCpr_SS_tot$auc.integral,
-    AUCpr_SS_rand = AUCpr_SS_tot$rand$auc.integral))
+    AUCpr_partSS_tot <- pr.curve(scores.class0 = selSS_part, 
+                          scores.class1 = neutSS, 
+                          rand.compute = TRUE
+                          )
+    return(data.frame(AUCpr_fullSS = AUCpr_fullSS_tot$auc.integral,
+    AUCpr_fullSS_rand = AUCpr_fullSS_tot$rand$auc.integral,
+    AUCpr_partSS = AUCpr_partSS_tot$auc.integral,
+    AUCpr_partSS_rand = AUCpr_partSS_tot$rand$auc.integral
+    ))
   }
-    AUCpr_SS_final <- matrix(unlist(lapply(1:length(predict_list), getAUCpr_SS)), nrow=length(predict_list), ncol=2, byrow=TRUE)
-  colnames(AUCpr_SS_final) <- c("AUCpr_SS", "AUCpr_SS_rand")
+    AUCpr_SS_final <- matrix(unlist(lapply(1:length(predict_list), getAUCpr_SS)), nrow=length(predict_list), ncol=4, byrow=TRUE)
+  colnames(AUCpr_SS_final) <- c("AUCpr_fullSS", "AUCpr_fullSS_rand",
+                                "AUCpr_partSS", "AUCpr_partSS_rand")
 
-  
-    
-    perf_df <- rbind(perf_df, cbind(data.frame(method=togetcols[j], AUCroc_QTN =AUCroc_QTN , AUCroc_SS=AUCroc_SS, simID = inver_simID), AUCpr_QTN_final, AUCpr_SS_final))
+    perf_df <- rbind(perf_df, cbind(data.frame(method=togetcols[j], AUCroc_QTN =AUCroc_QTN , AUCroc_fullSS=AUCroc_fullSS,AUCroc_partSS=AUCroc_partSS, simID = inver_simID), AUCpr_QTN_final, AUCpr_SS_final))
 } # end loop through
 
 if (nrow(perf_df) != length(togetcols)*length(inver_simID)){
@@ -1129,10 +1171,25 @@ Now add the name of how you want your new statistic to be plotted:
 ```{r}
 ## If adding new results, update the name of the variable here
 ## to be the name for plotting
+  # ##SS methods
+  #     "skallel_v1.1.10_H12", "skallel_v1.1.10_H2H1", "skallel_v1.1.10_H2H1_mlog10", 
+  #     "skallel_v1.1.10_ihs",
+  # ## DO methods             
+  #     "pcadapt_3.0.4_ALL_log10p","pcadapt_3.0.4_PRUNED_log10p",
+  #     "OutFLANK_0.2_ALL_log10p", "OutFLANK_0.2_PRUNED_log10p",
+  #     "baypass_2.1_ALL_XTX", "baypass_2.1_PRUNED_XTX",
+  # ## Assoc methods
+  #     "LFMM_ridge_0.0_ALL_log10p", "LFMM_lasso_0.0_ALL_log10p",
+  #     "LEA_1.2.0_ALL_K3_log10p", "Spearmans_ALL_rho_abs",
+  #     "baypass_2.1_ALL_BF_env", "baypass_2.1_PRUNED_BF_env",
+  #     "RDAvegan_2.52_ALL_RDA1"
+  
 perf_df2 <- perf_df %>%
      mutate(name = recode(method, 
-      Hscan_v1.3_H12 = "H12", 
-      rehh_2.0.2_ALL_log10p = "iHS", 
+      skallel_v1.1.10_H12 = "H12", 
+      skallel_v1.1.10_H2H1 = "H2/H1",
+      skallel_v1.1.10_H2H1_mlog10 = "-log(H2/H1)",
+      skallel_v1.1.10_ihs_abs = "iHS", 
   ## DO methods             
       pcadapt_3.0.4_ALL_log10p = "PCAdapt Naive",
       pcadapt_3.0.4_PRUNED_log10p = "PCAdapt BP",
@@ -1147,7 +1204,7 @@ perf_df2 <- perf_df %>%
       Spearmans_ALL_rho_abs = "Spearman's rho (envi)",
       baypass_2.1_ALL_BF_env = "BayPass (envi) Naive", 
       baypass_2.1_PRUNED_BF_env = "BayPass (envi) BP",
-      RDAvegan_v2.5.2_ALL_loading_RDA1_envi_abs = "RDA (envi) loading"
+      RDAvegan_2.52_ALL_RDA1_abs = "RDA (envi) loading"
       ) # end recode
    )
 ```
@@ -1166,8 +1223,10 @@ And add the color scheme for the new statistic:
   # Map shading onto perf_df
 plot_df <- data.frame(method=togetcols)
 plot_df <- plot_df %>% mutate(color = recode(method,
-      Hscan_v1.3_H12 = "#cfcdf5", # wind chime palette on color-hex.com
-      rehh_2.0.2_ALL_log10p = "#9bc2f7", 
+      skallel_v1.1.10_H12 = "#cfcdf5", # wind chime palette on color-hex.com
+      skallel_v1.1.10_H2H1 = "#b4c1f6",
+      skallel_v1.1.10_H2H1_mlog10 = "#b4c1f6",
+      skallel_v1.1.10_ihs_abs = "#9bc2f7", 
   ## DO methods             
       pcadapt_3.0.4_ALL_log10p = "#ecd292", # amber safety palette on color-hex.com
       pcadapt_3.0.4_PRUNED_log10p = "#ecd292",
@@ -1182,7 +1241,7 @@ plot_df <- plot_df %>% mutate(color = recode(method,
       Spearmans_ALL_rho_abs = "#00ab84",
       baypass_2.1_ALL_BF_env = "#9db69f", 
       baypass_2.1_PRUNED_BF_env = "#9db69f",
-      RDAvegan_v2.5.2_ALL_loading_RDA1_envi_abs = "#808000"
+     RDAvegan_2.52_ALL_RDA1_abs = "#808000"
       )# end recode
 ) 
 
@@ -1198,47 +1257,52 @@ tail(perf_df2)
 
 ## Make AUC-ROC figure
 ```{r}
-pdf("figures/AUC-ROC.pdf", width=6, height=10)
-  par(mar=c(1, 1, 1,1), mfrow=c(2, 1), oma=c(10, 4,0,0))
-  
-  outstat <- boxplot(perf_df2$AUCroc_SS~perf_df2$name, las=2, names=NA,
-          main = "A) Global sweep", col=as.character(plot_df$color),
-          ylim=c(0,1), density=20)
-  abline(h=0.5)
-  rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
-       density=dval, angle=aval)
-  
-  outstat2 <- boxplot(perf_df2$AUCroc_QTN ~perf_df2$name, las=2, 
-          main = "B) Causal QTNs",  ylim=c(0,1), col=as.character(plot_df$color))
-  abline(h=0.5)
-  rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
-       density=dval, angle=aval)
-  
-  mtext("AUC - ROC", side=2, outer=TRUE, line=2, cex=1.5)
-dev.off()
+# pdf("figures/AUC-ROC.pdf", width=6, height=10)
+#   par(mar=c(1, 1, 1,1), mfrow=c(2, 1), oma=c(10, 4,0,0))
+#   
+#   outstat <- boxplot(perf_df2$AUCroc_fullSS~perf_df2$name, las=2, names=NA,
+#           main = "A) Global sweep", col=as.character(plot_df$color),
+#           ylim=c(0,1), density=20)
+#   abline(h=0.5)
+#   rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
+#        density=dval, angle=aval)
+#   
+#   outstat2 <- boxplot(perf_df2$AUCroc_QTN ~perf_df2$name, las=2, 
+#           main = "B) Causal QTNs",  ylim=c(0,1), col=as.character(plot_df$color))
+#   abline(h=0.5)
+#   rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
+#        density=dval, angle=aval)
+#   
+#   mtext("AUC - ROC", side=2, outer=TRUE, line=2, cex=1.5)
+# dev.off()
 ```
 
 ## Make AUC-pr boxplot figure
 ```{r}
 
-boxplot(perf_df2$AUCpr_SS_rand~perf_df2$name)
+boxplot(perf_df2$AUCpr_fullSS_rand~perf_df2$name) # random expectations
 boxplot(perf_df2$AUCpr_QTN_rand~perf_df2$name)
 
+TO DO REMOVE H2/H1
+
 pdf("figures/AUC-pr.pdf", width=6, height=10)
-  par(mar=c(1, 1, 1,1), mfrow=c(2, 1), oma=c(10, 4,0,0))
+  par(mar=c(1, 1, 1,1), mfrow=c(3, 1), oma=c(10, 4,0,0))
   
-  outstat <- boxplot(perf_df2$AUCpr_SS~perf_df2$name, las=2, names=NA,
-          main = "A) Global sweep", col=as.character(plot_df$color),
+  outstat <- boxplot(perf_df2$AUCpr_fullSS~perf_df2$name, las=2, names=NA,
+          main = "A) Full sweep", col=as.character(plot_df$color),
           ylim=c(0,1), density=20)
   
   rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
        density=dval, angle=aval)
-  polygon(c(0,100,100,0),c(summary(perf_df2$AUCpr_SS_rand)[1],
-                           summary(perf_df2$AUCpr_SS_rand)[1],
-                           summary(perf_df2$AUCpr_SS_rand)[6],
-                           summary(perf_df2$AUCpr_SS_rand)[6]),
+  polygon(c(0,100,100,0),c(summary(perf_df2$AUCpr_fullSS_rand)[1],
+                           summary(perf_df2$AUCpr_fullSS_rand)[1],
+                           summary(perf_df2$AUCpr_fullSS_rand)[6],
+                           summary(perf_df2$AUCpr_fullSS_rand)[6]),
           border=NA, col="grey")
   
+  boxplot(perf_df2$AUCpr_partSS~perf_df2$name, las=2, names=NA,
+          main = "A) Partial sweep", col=as.character(plot_df$color),
+          ylim=c(0,1), density=20)
   
   outstat2 <- boxplot(perf_df2$AUCpr_QTN~perf_df2$name, las=2, 
           main = "B) Causal QTNs",  ylim=c(0,1), col=as.character(plot_df$color))
@@ -1257,6 +1321,8 @@ dev.off()
 ## Make AUC-pr curve for a sim
 This is way too much code for this plot, but it works
 ```{r}
+
+THIS IS HARD CODED NEED TO EDIT
 
 MakeAUCPRcurve <- function(thisim, let){  
   prdf <- x_all %>% filter(simID==thisim)
@@ -1301,7 +1367,7 @@ MakeAUCPRcurve <- function(thisim, let){
 pdf("figures/AUC-pr-curves.pdf", width=4, height=8)
   par(mar=c(4,6,4,1), mfrow=c(3,1), oma=c(0,0,0,0))
 MakeAUCPRcurve(10944, "A") # pcadapt and baypass
-MakeAUCPRcurve(10945, "B") # outflank and pcadapt
+MakeAUCPRcurve(10946, "B") # outflank and pcadapt
 MakeAUCPRcurve(10947, "C") # outflank and baypass
 dev.off()
 ```
@@ -1315,25 +1381,27 @@ if(sum(duplicated(perf_df2$uniq))>0){print("Error in performance data frame"); b
 
 getQuant_region <- function(method, simid){
     bob <- x_all %>% filter(simID==simid) %>% 
-          select(c("prop", method, "simID", "pos")) 
+          select(c("prop", method, "simID", "pos", "a_freq_final", "He")) 
     P <- ecdf(unlist(bob[,method]))
     bob$cdf <-  P(unlist(bob[,method]))
 
     whichbob_LEQTL <- which(bob$prop==max(bob$prop, na.rm=TRUE))
     whichbob_Inversion <- which(bob$pos > 320000 & bob$pos < 330000)
-    whichbob_SS <- which(bob$pos > (175001-2000) & bob$pos < (175001+2000))
+    whichbob_fullSS <- which(bob$pos > (225000-2000) & bob$pos < (225000+2000))
+    whichbob_partSS <- which(bob$pos > (275000-2000) & bob$pos < (275000+2000))
     whichbob_lowR <- which(bob$pos > 370000 & bob$pos < 380000)
-    whichbob_Rvar <- which(bob$pos > 400001 & bob$pos < 450000)
-    whichbob_BS <- which((bob$pos > 220000 & bob$pos < 230000) | 
-                     (bob$pos > 270000 & bob$pos < 280000))
+    #whichbob_Rvar <- which(bob$pos > 400001 & bob$pos < 450000)
 
   data.frame(uniq2=paste(method, simid,sep="_"),
-             cdf_LEQTL=mean(bob$cdf[whichbob_LEQTL], na.rm=TRUE),
+             cdf_LEQTL= bob$cdf[whichbob_LEQTL], #mean(bob$cdf[whichbob_LEQTL], na.rm=TRUE),
+             prop_LEQTL=bob$prop[whichbob_LEQTL],
+             af_LEQTL= bob$a_freq_final[whichbob_LEQTL],
              cdf_Inversion = mean(bob$cdf[whichbob_Inversion], na.rm=TRUE),
-             cdf_SS =mean(bob$cdf[whichbob_SS], na.rm=TRUE),
-             cdf_lowR = mean(bob$cdf[whichbob_lowR], na.rm=TRUE),
-             cdf_Rvar = mean(bob$cdf[whichbob_BS], na.rm=TRUE),
-             cdf_BS = mean(bob$cdf[whichbob_BS], na.rm=TRUE)
+             cdf_fullSS =mean(bob$cdf[whichbob_fullSS], na.rm=TRUE),
+             cdf_partSS =mean(bob$cdf[whichbob_partSS], na.rm=TRUE),
+             cdf_lowR = mean(bob$cdf[whichbob_lowR], na.rm=TRUE)
+             #cdf_Rvar = mean(bob$cdf[whichbob_BS], na.rm=TRUE),
+      
              )
   # Take the average signal in the region, and count that for the replicate
 }
@@ -1344,15 +1412,36 @@ for (j in 1:nrow(perf_df2)){
   if(j%%50==0){print(c(j, "of", nrow(perf_df2)))}
   doa <- getQuant_region(as.character(perf_df2$method[j]), 
                          as.character(perf_df2$simID[j]))
+
   perf_df3 <- rbind(perf_df3, cbind(perf_df2[j,], doa))
 }
 
+
 head(perf_df3)
+str(perf_df3)
+
+# Add stats on final allele frequency
+add_df <- data.frame(simID =  x_all %>% filter(descrip=="full_sweep") %>% select(simID),
+      af_fullSS = (x_all %>% filter(descrip=="full_sweep") %>% select(a_freq_final)),
+      time_fullSS = (x_all %>% filter(descrip=="full_sweep") %>% select(fixed_since)),
+      af_partSS = x_all %>% filter(descrip=="partial_sweep") %>% select( a_freq_final),
+      af_inv = x_all %>% filter(descrip=="Inversion") %>% select(a_freq_final),
+      af_inv = x_all %>% filter(descrip=="Inversion") %>% select(a_freq_final)
+      )
+colnames(add_df)
+colnames(add_df)[c(2,4,5)] <- c("af_fullSS", "af_partSS", "af_inv")
+add_df$simID <- as.factor(add_df$simID)
+head(add_df)
 
 table(perf_df3$method, is.na(perf_df3$cdf_Inversion))
 
+df3b <- perf_df3
+perf_df3 <- left_join(perf_df3, add_df, by="simID")
+str(perf_df3)
+if(!(nrow(df3b)==nrow(perf_df3))){print("Error: number of rows not the same")}
+```
 
-
+```{r plot quantile figures}   
 pdf("figures/Quantiles_lowR.pdf", width=6, height=10)
   par(mar=c(1, 1, 2,1), mfrow=c(2, 1), oma=c(10, 4,0,0))
   
@@ -1379,28 +1468,81 @@ dev.off()
 pdf("figures/Quantiles_other.pdf", width=6, height=10)
   par(mar=c(1, 1, 2,1), mfrow=c(3, 1), oma=c(10, 4,0,0))
   
-  outstat <- boxplot(perf_df3$cdf_SS*100~perf_df3$name, las=2, names=NA,
+  outstat <- boxplot(perf_df3$cdf_fullSS*100~perf_df3$name, las=2, names=NA,
           main = "A) Global sweep (LG 4)", col=as.character(plot_df$color),
           ylim=c(0,100), density=20, adj=0)
   abline(h=50)
   rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
        density=dval, angle=aval)
   
-  outstat2 <- boxplot(perf_df3$cdf_LEQTL*100~perf_df3$name, las=2, 
-          main = "B) Largest effect QTN (LG 2 or 3)",  ylim=c(0,100), col=as.character(plot_df$color), adj=0,
-          names=NA)
+    outstat1 <- boxplot(perf_df3$cdf_partSS*100~perf_df3$name, las=2, names=NA,
+          main = "A) Partial sweep (LG 4)", col=as.character(plot_df$color),
+          ylim=c(0,100), density=20, adj=0)
   abline(h=50)
-  rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
+  rect((1:ngroups)-.4, outstat1$stats[2,], (1:ngroups)+.4, outstat1$stats[4,],
        density=dval, angle=aval)
   
-  outstat2 <- boxplot(perf_df3$cdf_BS*100~perf_df3$name, las=2, 
-          main = "C) Background selection (LG 5 and 6)",  ylim=c(0,100), adj=0, col=as.character(plot_df$color))
+  outstat2 <- boxplot(perf_df3$cdf_LEQTL*100~perf_df3$name, las=2, 
+          main = "B) Largest effect QTN (LG 2 or 3)",  ylim=c(0,100), col=as.character(plot_df$color), adj=0)
   abline(h=50)
   rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
        density=dval, angle=aval)
   
   mtext("Mean percentile", side=2, outer=TRUE, line=2, cex=1.5)
 dev.off()
+```
+
+```{r}
+plot(topl$a_freq_final.3,  topl$cdf_LEQTL)
+```
+
+```{r plot af vs quantile H12}
+par(mfrow=c(3,1), mar=c(4,4,1,1), oma=c(0,0,0,0))
+
+## How is H12 affected by allele freq at sweep or inversion? ####
+topl <- perf_df3 %>% filter(name=="H12")
+plot(topl$af_fullSS, topl$cdf_fullSS, xlim=c(0, 1.0), ylab="quantile of H12",
+     xlab="Frequency of sweep", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+points(topl$af_partSS, topl$cdf_partSS, pch=21, col=rgb(0.5,0,1,0.3))
+legend(0,0.3,c("Partial", "Full"),pch=c(21,19), col=rgb(0.5,0,1,0.3), 
+       horiz = TRUE, box.col ="lightgrey", cex=0.8)
+
+plot(topl$fixed_since[topl$fixed_since>1], topl$cdf_fullSS[topl$fixed_since>1],  ylab="quantile of H12",
+     xlab="Generations since fixation", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+
+topl$af_invMAF[topl$af_inv>0.5] <- 1- topl$af_inv[topl$af_inv>0.5]
+
+plot(topl$af_invMAF, topl$cdf_Inversion, xlim=c(0, 0.5), ylab="quantile of H12",
+     xlab="Minor haplotype freq.\n at inversion", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+#abline(lm(topl$cdf_Inversion~topl$af_invMAF))
+```
+
+```{r plot af vs quantile H2/H1}
+par(mfrow=c(3,1), mar=c(4,4,1,1), oma=c(0,0,0,0))
+
+unique(perf_df3$name)
+## How is H12 affected by allele freq at sweep or inversion? ####
+topl <- perf_df3 %>% filter(name=="H2/H1")
+plot(topl$af_fullSS, topl$cdf_fullSS, xlim=c(0, 1.0), ylab="quantile of H12",
+     xlab="Frequency of sweep", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+points(topl$af_partSS, topl$cdf_partSS, pch=21, col=rgb(0.5,0,1,0.3))
+legend(0,0.3,c("Partial", "Full"),pch=c(21,19), col=rgb(0.5,0,1,0.3), 
+       horiz = TRUE, box.col ="lightgrey", cex=0.8)
+
+plot(topl$fixedsince_fullSS[topl$fixedsince_fullSS>1], topl$cdf_fullSS[topl$fixedsince_fullSS>1],  ylab="quantile of H12",
+     xlab="Generations since fixation", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+
+topl$af_invMAF[topl$af_inv>0.5] <- 1- topl$af_inv[topl$af_inv>0.5]
+
+plot(topl$af_invMAF, topl$cdf_Inversion, xlim=c(0, 0.5), ylab="quantile of H12",
+     xlab="Minor haplotype freq.\n at inversion", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+#abline(lm(topl$cdf_Inversion~topl$af_invMAF))
 ```
 
 ## Some other checks and data analysis
