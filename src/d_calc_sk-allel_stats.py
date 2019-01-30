@@ -165,7 +165,9 @@ def processFile(f):
             if winStart < pos[0]:
                 winStart = pos[0]
             if winEnd > pos[-1]:
-                winEnd = pos[-1]
+                for statname in [key for key in statvals.keys() if key !='ihs' and key != 'nsl']:
+                    statvals[statname].extend(np.nan)
+                continue
         
             ####### subset the haplotype array ##############
             # search sorted finds the place in a sorted array where a number can be inserted
@@ -173,7 +175,7 @@ def processFile(f):
             endInd   = np.searchsorted(pos, winEnd)
         
             hapsInSubWin = chromHap.subset(list(range(startInd, endInd + 1)))
-    
+                
             
             for statName in [key for key in statvals.keys() if key !='ihs' and key != 'nsl']:
                 calcAndAppendStatValForScan(list(pos), statName, hapsInSubWin, statvals, winStart, winEnd, ac)
