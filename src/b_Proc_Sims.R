@@ -449,6 +449,7 @@ final_df$pcadapt_3.0.4_ALL_chisq <- as.numeric(pca_all$chi2.stat)
 final_df$pcadapt_3.0.4_ALL_log10p <- -log10(pca_all$pvalues)
 #plot(final_df$pos, final_df$pcadapt_3.0.4_ALL_chisq)
 #plot(final_df$pos, final_df$pcadapt_3.0.4_ALL_log10p)
+
 ### PCADAPT pruned data ####    
 test <- snp_gc(snp_pcadapt(training$G_coded, U.row = newpc$u[,1]))
 final_df$pcadapt_3.0.4_PRUNED_log10p <- -predict(test,log10=T)

@@ -1267,8 +1267,8 @@ if(sum(duplicated(perf_df2$uniq))>0){print("Error in performance data frame"); b
 getQuant_region <- function(method, simid){
     bob <- x_all %>% filter(simID==simid) %>% 
           select(c("prop", method, "simID", "pos", "a_freq_final", "He")) 
-    P <- ecdf(unlist(bob[,method]))
-    bob$cdf <-  P(unlist(bob[,method]))
+#    P <- ecdf(unlist(bob[,method]))
+#    bob$cdf <-  P(unlist(bob[,method]))
 
     whichbob_LEQTL <- which(bob$prop==max(bob$prop, na.rm=TRUE))
     whichbob_Inversion <- which(bob$pos > 320000 & bob$pos < 330000)
@@ -1277,17 +1277,27 @@ getQuant_region <- function(method, simid){
     whichbob_lowR <- which(bob$pos > 370000 & bob$pos < 380000)
     whichbob_neut <- which(bob$pos < 100000)
     #whichbob_Rvar <- which(bob$pos > 400001 & bob$pos < 450000)
-
+    
+    P <- ecdf(unlist(bob[c(whichbob_neut),method]))
+      # creates a probability function based on neutral loci
+    
+    cdf_neut <- mean(P(unlist(bob[whichbob_neut,method])))
+    cdf_LEQTL <- P(unlist(bob[whichbob_LEQTL,method]))
+    cdf_Inversion <- mean(P(unlist(bob[whichbob_Inversion,method])), na.rm=TRUE)
+    cdf_fullSS <- mean(P(unlist(bob[whichbob_fullSS,method])), na.rm=TRUE)
+    cdf_partSS <- mean(P(unlist(bob[whichbob_partSS,method])), na.rm=TRUE)
+    cdf_lowR <-  mean(P(unlist(bob[whichbob_lowR,method])), na.rm=TRUE)
+    
   data.frame(uniq2=paste(method, simid,sep="_"),
-             cdf_LEQTL= bob$cdf[whichbob_LEQTL], #mean(bob$cdf[whichbob_LEQTL], na.rm=TRUE),
+             cdf_neut,
+             cdf_LEQTL, #mean(bob$cdf[whichbob_LEQTL], na.rm=TRUE),
              prop_LEQTL=bob$prop[whichbob_LEQTL],
              af_LEQTL= bob$a_freq_final[whichbob_LEQTL],
-             cdf_Inversion = mean(bob$cdf[whichbob_Inversion], na.rm=TRUE),
-             cdf_fullSS =mean(bob$cdf[whichbob_fullSS], na.rm=TRUE),
-             cdf_partSS =mean(bob$cdf[whichbob_partSS], na.rm=TRUE),
-             cdf_lowR = mean(bob$cdf[whichbob_lowR], na.rm=TRUE)
-             #cdf_Rvar = mean(bob$cdf[whichbob_BS], na.rm=TRUE),
-      
+             cdf_Inversion,
+             cdf_fullSS,
+             cdf_partSS,
+             cdf_lowR
+             #cdf_Rvar = mean(bob$cdf[whichbob_BS], na.rm=TRUE)
              )
   # Take the average signal in the region, and count that for the replicate
 }
@@ -1388,7 +1398,7 @@ pdf("figures/AUC-pr.pdf", width=6, height=10)
           border=NA, col="grey")
   
   outstat1 <- boxplot(perf_df2a$AUCpr_partSS~perf_df2a$name, las=2, names=NA,
-          main = "A) Partial sweep", col=as.character(plot_df$color),
+          main = "B) Partial sweep", col=as.character(plot_df$color),
           ylim=c(0,1), density=20)
     polygon(c(0,100,100,0),c(summary(perf_df2a$AUCpr_partSS_rand)[1],
                            summary(perf_df2a$AUCpr_partSS_rand)[1],
@@ -1397,7 +1407,7 @@ pdf("figures/AUC-pr.pdf", width=6, height=10)
           border=NA, col="grey")
   
   outstat2 <- boxplot(perf_df2a$AUCpr_QTN~perf_df2a$name, las=2, 
-          main = "B) Causal QTNs",  ylim=c(0,1), col=as.character(plot_df$color))
+          main = "C) Causal QTNs",  ylim=c(0,1), col=as.character(plot_df$color))
   polygon(c(0,100,100,0),c(summary(perf_df2a$AUCpr_QTN_rand)[1],
                            summary(perf_df2a$AUCpr_QTN_rand)[1],
                            summary(perf_df2a$AUCpr_QTN_rand)[6],
@@ -1413,77 +1423,196 @@ dev.off()
 ### Plot performance stats for sweep area
 
 par(mfrow=c(3,1), mar=c(4,4,1,1), oma=c(0,0,0,0))
+```{r}
+## How are sweep loci affected by allele freq at sweep or inversion? ####
+topl <- perf_df3 %>% filter(name %in% c("H12",  "-log(H2/H1)", "iHS"))
+head(topl)
+unique(topl$name)
 
-## How is H12 affected by allele freq at sweep or inversion? ####
-topl <- perf_df3 %>% filter(name=="H12")
-plot(topl$af_fullSS, topl$cdf_fullSS, xlim=c(0, 1.0), ylab="quantile of H12",
-     xlab="Frequency of sweep", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
-     ylim=c(0,1))
-points(topl$af_partSS, topl$cdf_partSS, pch=21, col=rgb(0.5,0,1,0.3))
-legend(0,0.3,c("Partial", "Full"),pch=c(21,19), col=rgb(0.5,0,1,0.3), 
-       horiz = TRUE, box.col ="lightgrey", cex=0.8)
+topl2 <- gather(topl, "cdf_type", "quantile", cdf_fullSS, cdf_partSS, cdf_Inversion, cdf_lowR)
 
-plot(topl$fixed_since[topl$fixed_since>1], topl$cdf_fullSS[topl$fixed_since>1],  ylab="quantile of H12",
-     xlab="Generations since fixation", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
-     ylim=c(0,1))
+head(topl2)
+str(topl2)
+topl2$cdf_type <- as.factor(topl2$cdf_type)
+levels(topl2$cdf_type)
+topl3 <- topl2 %>% mutate(cdf_type2 = recode_factor(cdf_type, 
+                                        "cdf_partSS" = "Partial sweep",
+                                        "cdf_fullSS" = "Full sweep",
+                                        "cdf_Inversion" = "Inversion",
+                                        "cdf_lowR" = "Low recomb.", 
+                                        .ordered=TRUE
+                                        ))
+levels(topl3$cdf_type2)
 
-topl$af_invMAF[topl$af_inv>0.5] <- 1- topl$af_inv[topl$af_inv>0.5]
+### Make a plot of quantile as a function of region for sweeps ####
 
-plot(topl$af_invMAF, topl$cdf_Inversion, xlim=c(0, 0.5), ylab="quantile of H12",
-     xlab="Minor haplotype freq.\n at inversion", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
-     ylim=c(0,1))
-#abline(lm(topl$cdf_Inversion~topl$af_invMAF))
+pdf("figures/Quantile_region_sweep_inversion.pdf", width=6, height=4)
+ggplot(data=topl3, aes(x=name, y=quantile, fill=cdf_type2)) + geom_boxplot()  +  
+  ylim(0,1) +
+  theme_classic(base_size = 15) +
+  scale_fill_manual(values=c("#064273", "#1da2d8", "#ffdc6f", "#fffa82"), name="Region") + 
+  labs(x="", y="Quantile relative to neutral loci") +
+  geom_hline(yintercept=0.5, linetype="solid", color = "grey")
+dev.off()
+
 ```
 
-```{r plot af vs quantile H2/H1}
-par(mfrow=c(3,1), mar=c(4,4,1,1), oma=c(0,0,0,0))
+```{r}
+### Make a plot of quantile as a function of a.f. for sweeps ####
+pdf("figures/Quantile_sweep_vs_af.pdf", width=10, height=4)
 
-unique(perf_df3$name)
-## How is H12 affected by allele freq at sweep or inversion? ####
-topl <- perf_df3 %>% filter(name=="H2/H1")
-plot(topl$af_fullSS, topl$cdf_fullSS, xlim=c(0, 1.0), ylab="quantile of H12",
+par(mfrow=c(1,2), mar=c(4,5,0.5,0.5), oma=c(0,0,0,0))
+
+plot(topl$af_fullSS[topl$name=="H12"], topl$cdf_fullSS[topl$name=="H12"], xlim=c(0, 1.0), ylab="Quantile in sweep regions\nrelative to neutral loci",
      xlab="Frequency of sweep", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
      ylim=c(0,1))
-points(topl$af_partSS, topl$cdf_partSS, pch=21, col=rgb(0.5,0,1,0.3))
-legend(0,0.3,c("Partial", "Full"),pch=c(21,19), col=rgb(0.5,0,1,0.3), 
-       horiz = TRUE, box.col ="lightgrey", cex=0.8)
 
-plot(topl$fixedsince_fullSS[topl$fixedsince_fullSS>1], topl$cdf_fullSS[topl$fixedsince_fullSS>1],  ylab="quantile of H12",
-     xlab="Generations since fixation", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
-     ylim=c(0,1))
-
-topl$af_invMAF[topl$af_inv>0.5] <- 1- topl$af_inv[topl$af_inv>0.5]
-
-plot(topl$af_invMAF, topl$cdf_Inversion, xlim=c(0, 0.5), ylab="quantile of H12",
-     xlab="Minor haplotype freq.\n at inversion", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
-     ylim=c(0,1))
-#abline(lm(topl$cdf_Inversion~topl$af_invMAF))
+  points(topl$af_partSS[topl$name=="H12"], topl$cdf_partSS[topl$name=="H12"], pch=21, col=rgb(0.5,0,1,0.3))
+  xy<- data.frame(x=c(topl$af_fullSS[topl$name=="H12"], topl$af_partSS[topl$name=="H12"]),
+                  y=c(topl$cdf_fullSS[topl$name=="H12"], topl$cdf_partSS[topl$name=="H12"]))
+  xy <- xy[order(xy$x),]
+  out <- lm(xy$y ~ poly(xy$x,3))
+  xy$y2 <- predict(out)
+  points(xy$x, xy$y2, type="l", col=rgb(0.5,0,1), lwd=3)
+  
+    points(topl$af_partSS[topl$name=="iHS"], topl$cdf_partSS[topl$name=="iHS"], pch=2, col=rgb(0,0.5,1,0.3))
+    points(topl$af_fullSS[topl$name=="iHS"], topl$cdf_fullSS[topl$name=="iHS"], pch=17, col=rgb(0,0.5,1,0.3))
+      xy<- data.frame(x=c(topl$af_fullSS[topl$name=="iHS"], topl$af_partSS[topl$name=="iHS"]),
+                  y=c(topl$cdf_fullSS[topl$name=="iHS"], topl$cdf_partSS[topl$name=="iHS"]))
+   xy <- xy[order(xy$x),]
+    out <- lm(xy$y ~ poly(xy$x,3))
+    xy$y2 <- predict(out)
+    points(xy$x, xy$y2, type="l", col=rgb(0,0.5,1), lwd=3)
+    
+  text(0.3, 0.85, "H12", cex=1.5, col=rgb(0.5,0,1))
+  text(0.45, 0.65, "iHS", cex=1.5, col=rgb(0,0.5,1))
+  legend("bottomleft", c("H12 partial SS", "H12 full SS", "iHS partial SS", "iHS full SS"),
+         pch=c(21, 19, 2, 17), col=c(rgb(0.5,0,1),rgb(0.5,0,1), rgb(0,0.5,1),rgb(0,0.5,1)),
+         bty="n", cex=1, x.inters=1)
+  text(0, 1, "A", cex=1.5)
+## end first plot
+  
+## check out gen since fixation
+  par(mar=c(4,2,0.5,0.5))
+    topl$fixed_since <- as.numeric(topl$fixed_since)
+  summary(topl$fixed_since)
+  cond <- topl$name=="H12" & topl$fixed_since>1 & !is.na(topl$fixed_since)
+  plot(topl$fixed_since[cond], topl$cdf_fullSS[cond], ylim=c(0, 1.0), ylab="Quantile in sweep regions\nrelative to neutral loci",
+     xlab="Generations since fixation", bty="l", pch=19, col=rgb(0.5,0,1,0.3), xlim=c(0,200))
+      xy<- data.frame(x=topl$fixed_since[which(cond)], y= topl$cdf_fullSS[which(cond)])
+   xy <- xy[order(xy$x),]
+    out <- lm(xy$y ~ poly(xy$x,1))
+    xy$y2 <- predict(out)
+    points(xy$x, xy$y2, type="l", col=rgb(0.5,0,1), lwd=3)
+  
+  
+  cond <- topl$name=="iHS" & topl$fixed_since>1 & !is.na(topl$fixed_since)
+  points(topl$fixed_since[cond], topl$cdf_fullSS[cond], ylim=c(0, 1.0), ylab="Quantile in sweep regions\nrelative to neutral loci",
+     xlab="Generations since fixation", bty="l", pch=19, col=rgb(0,0.5,1,0.3), xlim=c(0,200))
+      xy<- data.frame(x=topl$fixed_since[which(cond)], y= topl$cdf_fullSS[which(cond)])
+   xy <- xy[order(xy$x),]
+    out <- lm(xy$y ~ poly(xy$x,1))
+    xy$y2 <- predict(out)
+    points(xy$x, xy$y2, type="l", col=rgb(0,0.5,1), lwd=3)
+  text(0, 1, "B", cex=1.5)
+dev.off()
 ```
 
 
+## Quantiles for different regions for QTNs
+```{r}
+levels(perf_df3$name)
+
+## How are QTL loci affected by  inversion? ####
+topl <- perf_df3 %>% filter(name %in% c("PCAdapt Naive",  "PCAdapt BP", "OutFLANK Naive",
+                                        "OutFLANK BP", "XTX Naive", "XTX BP"))
+head(topl)
+unique(topl$name)
+
+topl2 <- gather(topl, "cdf_type", "quantile", cdf_LEQTL, cdf_Inversion, cdf_lowR)
+
+head(topl2)
+str(topl2)
+topl2$cdf_type <- as.factor(topl2$cdf_type)
+levels(topl2$cdf_type)
+topl3 <- topl2 %>% mutate(cdf_type2 = recode_factor(cdf_type, 
+                                        "cdf_LEQTL" = "Largest effect QTL",
+                                        "cdf_Inversion" = "Inversion",
+                                        "cdf_lowR" = "Low recomb.", 
+                                        .ordered=TRUE
+                                        ))
+levels(topl3$cdf_type2)
+
+a<- ggplot(data=topl3, aes(x=name, y=quantile, fill=cdf_type2, color=cdf_type2)) + geom_boxplot()  +  
+  ylim(0,1.19) +
+  theme_classic(base_size = 15) +
+  scale_fill_manual(values=c("#4c004d", "#ffdc6f", "#fffa82"), name="Region") + 
+  scale_color_manual(values=c("#b2458d", "black", "black"), name="Region") +
+  labs(x="", y="Quantile relative to neutral loci") +
+  geom_hline(yintercept=0.5, linetype="solid", color = "grey") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  annotate(geom="text", x=0.6, y=1.15, label="A", size=10)
+#a
+
+levels(perf_df3$name)
+
+## How are QTL loci affected by inversion? ####
+topl <- perf_df3 %>% filter(name %in% c("LFMM ridge (pheno)",    "LFMM lasso (pheno)",   
+"LEA (envi)",            "Spearman's rho (envi)", "BayPass (envi) Naive",  "BayPass (envi) BP",    
+"RDA (envi) loading"   ))
+head(topl)
+unique(topl$name)
+
+topl2 <- gather(topl, "cdf_type", "quantile", cdf_LEQTL, cdf_Inversion, cdf_lowR)
+
+head(topl2)
+str(topl2)
+topl2$cdf_type <- as.factor(topl2$cdf_type)
+levels(topl2$cdf_type)
+topl3 <- topl2 %>% mutate(cdf_type2 = recode_factor(cdf_type, 
+                                        "cdf_LEQTL" = "Largest effect QTL",
+                                        "cdf_Inversion" = "Inversion",
+                                        "cdf_lowR" = "Low recomb.", 
+                                        .ordered=TRUE
+                                        ))
+levels(topl3$cdf_type2)
+
+b<- ggplot(data=topl3, aes(x=name, y=quantile, fill=cdf_type2, color=cdf_type2)) + geom_boxplot()  +  
+  ylim(0,1.19) +
+  theme_classic(base_size = 15) +
+  scale_fill_manual(values=c("#4c004d", "#ffdc6f", "#fffa82"), name="Region") + 
+  scale_color_manual(values=c("#b2458d", "black", "black"), name="Region") +
+  labs(x="", y="Quantile relative to neutral loci") +
+  geom_hline(yintercept=0.5, linetype="solid", color = "grey") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position="none") +
+  annotate(geom="text", x=0.6, y=1.15, label="B", size=10)
+#
 
 
+### Make a plot of quantile as a function of region for sweeps ####
+library(gridExtra)
+pdf("figures/Quantile_region_QTL_inversion.pdf", width=8, height=12)
+  grid.arrange(a,b, nrow=2)
+dev.off()
 
-
-
+```
 
 ## Make AUC-pr curve for a sim
 This is way too much code for this plot, but it works
 ```{r}
 
-THIS IS HARD CODED NEED TO EDIT
-
 MakeAUCPRcurve <- function(thisim, let){  
   prdf <- x_all %>% filter(simID==thisim)
   labels <- label_list_QTN[[which(inver_simID==thisim)]]
   
-  todo <- c(4,6,8) #compare pcadapt, outflank, and baypass
-    togetcols[todo]
+  todo <- which(names(prdf) %in% c("pcadapt_3.0.4_PRUNED_log10p",
+                                   "OutFLANK_0.2_PRUNED_log10p",
+                                   "baypass_2.1_PRUNED_XTX"))
   
   aucz = c()  
-  for (i in todo){
-    print(togetcols[i])
-    stat <- unlist(prdf[,togetcols[i]])
+  for (i in 1:length(todo)){
+    # loop through each statistic
+    stat <- unlist(prdf[,todo[i]])
     neut <- stat[!labels]
     neut <- neut[!is.na(neut)]
     sel <- stat[which(labels)]
@@ -1495,150 +1624,87 @@ MakeAUCPRcurve <- function(thisim, let){
     print("top hits for causal loci")
     print(head(as.numeric(sort(sel, decreasing = TRUE))))
     aucz = c(aucz, wpr$auc.integral) 
-    if(i==4){
-      plot(wpr$curve[,1], wpr$curve[,2], col="purple", ylim=c(0,1), type="l",
+    if(i==1){
+      plot(wpr$curve[,1], wpr$curve[,2], col="purple", ylim=c(0,1.2), type="l", xlim=c(0,1.1),
            bty="l", xlab="Recall\n(proportion of causal loci discovered)", ylab="Precision\n(proportion of positive hits\nthat are causal loci)", lwd=2, main=paste(let,") Simulation ", thisim, sep=""))
     }
-    if(i==6){
+    if(i==2){
       points(wpr$curve[,1], wpr$curve[,2], col="orange", ylim=c(0,1), type="l", lty=2, lwd=2)
     }
-    if(i==8){
+    if(i==3){
       points(wpr$curve[,1], wpr$curve[,2], col="lightblue", ylim=c(0,1), type="l", lty=3, lwd=2.5)
     }
   }# end loop
     aucz=round(aucz,2)
-    legend(0.4,1, c(paste("PCAdapt AUC = ",aucz[1]), 
+    legend(0.5,1.2, c(paste("PCAdapt AUC = ",aucz[1]), 
                     paste("OutFLANK AUC = ", aucz[2]),
                     paste("XTX AUC = ", aucz[3])),
            lwd=c(2,2,2.5), lty=c(1,2,3), col=c("purple", "orange", "lightblue"), bty="n")
 }
 
 pdf("figures/AUC-pr-curves.pdf", width=4, height=8)
-  par(mar=c(4,6,4,1), mfrow=c(3,1), oma=c(0,0,0,0))
-MakeAUCPRcurve(10944, "A") # pcadapt and baypass
-MakeAUCPRcurve(10946, "B") # outflank and pcadapt
-MakeAUCPRcurve(10947, "C") # outflank and baypass
+  par(mar=c(4,6,6,1), mfrow=c(3,1), oma=c(0,0,0,0))
+MakeAUCPRcurve(10944, "A") # pcadapt 
+MakeAUCPRcurve(10956, "B") # outflank and baypass
+MakeAUCPRcurve(10961, "C") # outflank and baypass 
+  #10952 all low
+   #10956 baypass
 dev.off()
 ```
 
 ## Make figures showing percentiles of signals in different regions
 
-```{r plot quantile figures}   
-pdf("figures/Quantiles_lowR.pdf", width=6, height=10)
-  par(mar=c(1, 1, 2,1), mfrow=c(2, 1), oma=c(10, 4,0,0))
-  
-  outstat <- boxplot(perf_df3$cdf_Inversion*100~perf_df3$name, las=2, names=NA,
-          main = "A) Inversion (LG 7)", col=as.character(plot_df$color),
-          ylim=c(0,100), density=20)
-  abline(h=50)
-  rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
-       density=dval, angle=aval)
-  
-  outstat2 <- boxplot(perf_df3$cdf_lowR*100~perf_df3$name, las=2, 
-          main = "B) Low recombination (r = 1e-08, LG 8)",  ylim=c(0,100), col=as.character(plot_df$color))
-  abline(h=50)
-  rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
-       density=dval, angle=aval)
-  
-  
-  mtext("Mean percentile", side=2, outer=TRUE, line=2, cex=1.5)
-dev.off()
-
-
-
-
-pdf("figures/Quantiles_other.pdf", width=6, height=10)
-  par(mar=c(1, 1, 2,1), mfrow=c(3, 1), oma=c(10, 4,0,0))
-  
-  outstat <- boxplot(perf_df3$cdf_fullSS*100~perf_df3$name, las=2, names=NA,
-          main = "A) Global sweep (LG 4)", col=as.character(plot_df$color),
-          ylim=c(0,100), density=20, adj=0)
-  abline(h=50)
-  rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
-       density=dval, angle=aval)
-  
-    outstat1 <- boxplot(perf_df3$cdf_partSS*100~perf_df3$name, las=2, names=NA,
-          main = "A) Partial sweep (LG 4)", col=as.character(plot_df$color),
-          ylim=c(0,100), density=20, adj=0)
-  abline(h=50)
-  rect((1:ngroups)-.4, outstat1$stats[2,], (1:ngroups)+.4, outstat1$stats[4,],
-       density=dval, angle=aval)
-  
-  outstat2 <- boxplot(perf_df3$cdf_LEQTL*100~perf_df3$name, las=2, 
-          main = "B) Largest effect QTN (LG 2 or 3)",  ylim=c(0,100), col=as.character(plot_df$color), adj=0)
-  abline(h=50)
-  rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
-       density=dval, angle=aval)
-  
-  mtext("Mean percentile", side=2, outer=TRUE, line=2, cex=1.5)
-dev.off()
-```
-
-```{r}
-plot(topl$a_freq_final.3,  topl$cdf_LEQTL)
-```
-
-```{r plot af vs quantile H12}
-
-
-## Some other checks and data analysis
-
-```{r}
-# low he sites
-par(mar=c(4,4,1,1), mfrow=c(1,1))
-hist(x_all$pos[x_all$OutFLANK_0.2_He<0.05], breaks=seq(0,500000, by=10000))
-plot_layers()
-
-# Quantify outliers in recombination variation region based on P-value
--log10(0.05/7000)
-# Bonferroni significant if -log10(P) > 5
-# Or BF > 2
-x_rv <- (x_all %>% filter(pos  > 400001 & pos < 450000) )
-mean(table(x_rv$simID))
-  # about 700 sites in this region
-
-togetcols
-
-# Calculate proportion of sites that are outliers in R-var region
-Rvar_Pval <- function(method){
-  yo1 <- x_rv %>% select(method, simID)
-  tapply(unlist(yo1[,method]), yo1$simID, function(x){sum(x>5, na.rm=TRUE)/sum(!is.na(x))})
-}
-
-mean(Rvar_Pval("pcadapt_3.0.4_ALL_log10p"))
-mean(Rvar_Pval("pcadapt_3.0.4_PRUNED_log10p"))
-
-
-Rvar_BF <- function(method){
-  yo1 <- x_rv %>% select(method, simID)
-  tapply(unlist(yo1[,method]), yo1$simID, function(x){sum(x>2, na.rm=TRUE)/sum(!is.na(x))})
-}
-mean(Rvar_BF("baypass_2.1_ALL_BF_env"))
-mean(Rvar_BF("baypass_2.1_PRUNED_BF_env"))
-0.003*700
-
-Rvar_quant <- function(method){
-  yo1 <- x_rv %>% select(method, simID)
-  q <- x_all %>% select(method) %>% unlist %>% quantile(0.95, na.rm=TRUE)
-  tapply(unlist(yo1[,method]), yo1$simID, function(x){sum(x>q, na.rm=TRUE)/sum(!is.na(x))})
-}
-summary(Rvar_quant("Hscan_v1.3_H12"))
-summary(Rvar_quant("rehh_2.0.2_ALL_log10p"))
-summary(Rvar_Pval("rehh_2.0.2_ALL_log10p"))
-
-
-# Quantify BF for inversion region
-x_inv <- (x_all %>% filter(pos  > 320000 & pos < 330000) )
-Inv_BF <- function(method){
-  yo1 <- x_inv %>% select(method, simID)
-  tapply(unlist(yo1[,method]), yo1$simID, mean)
-}
-mean(Inv_BF("baypass_2.1_ALL_BF_env"))
-mean(Inv_BF("baypass_2.1_PRUNED_BF_env"))
-quantile(unlist(x_all[,"baypass_2.1_ALL_BF_env"]), c(0.5,0.6), na.rm=TRUE)
-
+# ```{r plot quantile figures}   
+# pdf("figures/Quantiles_lowR.pdf", width=6, height=10)
+#   par(mar=c(1, 1, 2,1), mfrow=c(2, 1), oma=c(10, 4,0,0))
+#   
+#   outstat <- boxplot(perf_df3$cdf_Inversion*100~perf_df3$name, las=2, names=NA,
+#           main = "A) Inversion (LG 7)", col=as.character(plot_df$color),
+#           ylim=c(0,100), density=20)
+#   abline(h=50)
+#   rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
+#        density=dval, angle=aval)
+#   
+#   outstat2 <- boxplot(perf_df3$cdf_lowR*100~perf_df3$name, las=2, 
+#           main = "B) Low recombination (r = 1e-08, LG 8)",  ylim=c(0,100), col=as.character(plot_df$color))
+#   abline(h=50)
+#   rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
+#        density=dval, angle=aval)
+#   
+#   
+#   mtext("Mean percentile", side=2, outer=TRUE, line=2, cex=1.5)
+# dev.off()
 # 
+# 
+# 
+# 
+# pdf("figures/Quantiles_other.pdf", width=6, height=10)
+#   par(mar=c(1, 1, 2,1), mfrow=c(3, 1), oma=c(10, 4,0,0))
+#   
+#   outstat <- boxplot(perf_df3$cdf_fullSS*100~perf_df3$name, las=2, names=NA,
+#           main = "A) Global sweep (LG 4)", col=as.character(plot_df$color),
+#           ylim=c(0,100), density=20, adj=0)
+#   abline(h=50)
+#   rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
+#        density=dval, angle=aval)
+#   
+#     outstat1 <- boxplot(perf_df3$cdf_partSS*100~perf_df3$name, las=2, names=NA,
+#           main = "A) Partial sweep (LG 4)", col=as.character(plot_df$color),
+#           ylim=c(0,100), density=20, adj=0)
+#   abline(h=50)
+#   rect((1:ngroups)-.4, outstat1$stats[2,], (1:ngroups)+.4, outstat1$stats[4,],
+#        density=dval, angle=aval)
+#   
+#   outstat2 <- boxplot(perf_df3$cdf_LEQTL*100~perf_df3$name, las=2, 
+#           main = "B) Largest effect QTN (LG 2 or 3)",  ylim=c(0,100), col=as.character(plot_df$color), adj=0)
+#   abline(h=50)
+#   rect((1:ngroups)-.4, outstat2$stats[2,], (1:ngroups)+.4, outstat2$stats[4,],
+#        density=dval, angle=aval)
+#   
+#   mtext("Mean percentile", side=2, outer=TRUE, line=2, cex=1.5)
+# dev.off()
 ```
+
 
 ```{r}
 sessionInfo()
