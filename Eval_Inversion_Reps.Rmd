@@ -1386,7 +1386,7 @@ pdf("figures/AUC-pr.pdf", width=6, height=10)
   par(mar=c(1, 1, 1,1), mfrow=c(3, 1), oma=c(10, 4,0,0), cex=1.2)
   
   outstat <- boxplot(perf_df2a$AUCpr_fullSS~perf_df2a$name, las=2, names=NA,
-          main = "A) Full sweep", col=as.character(plot_df$color),
+          main = "A) Full sweep", col=as.character(plot_df$color[-2]),
           ylim=c(0,1), density=20)
   
   rect((1:ngroups)-.4, outstat$stats[2,], (1:ngroups)+.4, outstat$stats[4,],
@@ -1398,7 +1398,7 @@ pdf("figures/AUC-pr.pdf", width=6, height=10)
           border=NA, col="grey")
   
   outstat1 <- boxplot(perf_df2a$AUCpr_partSS~perf_df2a$name, las=2, names=NA,
-          main = "B) Partial sweep", col=as.character(plot_df$color),
+          main = "B) Partial sweep", col=as.character(plot_df$color[-2]),
           ylim=c(0,1), density=20)
     polygon(c(0,100,100,0),c(summary(perf_df2a$AUCpr_partSS_rand)[1],
                            summary(perf_df2a$AUCpr_partSS_rand)[1],
@@ -1407,7 +1407,7 @@ pdf("figures/AUC-pr.pdf", width=6, height=10)
           border=NA, col="grey")
   
   outstat2 <- boxplot(perf_df2a$AUCpr_QTN~perf_df2a$name, las=2, 
-          main = "C) Causal QTNs",  ylim=c(0,1), col=as.character(plot_df$color))
+          main = "C) Causal QTNs",  ylim=c(0,1), col=as.character(plot_df$color[-2]))
   polygon(c(0,100,100,0),c(summary(perf_df2a$AUCpr_QTN_rand)[1],
                            summary(perf_df2a$AUCpr_QTN_rand)[1],
                            summary(perf_df2a$AUCpr_QTN_rand)[6],
@@ -1457,6 +1457,44 @@ dev.off()
 
 ```
 
+
+```{r check inversion haplotype freq vs H12}
+pdf("figures/inversionMHFvsHstatsCDF.pdf", width=6, height=5)
+par(mfrow=c(1,1), mar=c(4,5,0.5,0.5), oma=c(0,0,0,0))
+
+xz <- topl$af_inv[topl$name=="H12"]
+xz[xz>0.5] = 1-xz[xz>0.5]
+plot(xz, topl$cdf_Inversion[topl$name=="H12"], xlim=c(0, 0.5), ylab="Quantile in inversion \nrelative to neutral loci",
+     xlab="Minor haplotype frequency", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
+     ylim=c(0,1))
+
+  xy<- data.frame(x=xz,
+                  y=topl$cdf_Inversion[topl$name=="H12"])
+  xy <- xy[order(xy$x),]
+  out <- lm(xy$y ~ poly(xy$x,1))
+  xy$y2 <- predict(out)
+  points(xy$x, xy$y2, type="l", col=rgb(0.5,0,1), lwd=3)
+
+  
+  xz <- topl$af_inv[topl$name=="-log(H2/H1)"]
+  xz[xz>0.5] = 1-xz[xz>0.5]  
+  points(xz, topl$cdf_Inversion[topl$name=="-log(H2/H1)"], xlim=c(0, 0.5), ylab="Quantile in inversion \nrelative to neutral loci",
+     xlab="Minor haplotype frequency in inversion", bty="l", pch=3, col=rgb(0.5,0.5,0, 0.6),
+     ylim=c(0,1))
+  xy<- data.frame(x=xz,
+                  y=topl$cdf_Inversion[topl$name=="-log(H2/H1)"])
+  xy <- xy[order(xy$x),]
+  out <- lm(xy$y ~ poly(xy$x,1))
+  xy$y2 <- predict(out)
+  points(xy$x, xy$y2, type="l", col=rgb(0.5,0.5,0), lwd=3)
+  
+  text(0.15,0.9,"H12", col=rgb(0.5,0,1), cex=1.5)
+  text(0.15,0.6,"-log(H2/H1)", col=rgb(0.5,0.5,0), cex=1.5)
+ dev.off() 
+```
+
+
+
 ```{r}
 ### Make a plot of quantile as a function of a.f. for sweeps ####
 pdf("figures/Quantile_sweep_vs_af.pdf", width=10, height=4)
@@ -1466,6 +1504,8 @@ par(mfrow=c(1,2), mar=c(4,5,0.5,0.5), oma=c(0,0,0,0))
 plot(topl$af_fullSS[topl$name=="H12"], topl$cdf_fullSS[topl$name=="H12"], xlim=c(0, 1.0), ylab="Quantile in sweep regions\nrelative to neutral loci",
      xlab="Frequency of sweep", bty="l", pch=19, col=rgb(0.5,0,1,0.3),
      ylim=c(0,1))
+
+abline(h=0.5, col="grey")
 
   points(topl$af_partSS[topl$name=="H12"], topl$cdf_partSS[topl$name=="H12"], pch=21, col=rgb(0.5,0,1,0.3))
   xy<- data.frame(x=c(topl$af_fullSS[topl$name=="H12"], topl$af_partSS[topl$name=="H12"]),
@@ -1515,6 +1555,8 @@ plot(topl$af_fullSS[topl$name=="H12"], topl$cdf_fullSS[topl$name=="H12"], xlim=c
     xy$y2 <- predict(out)
     points(xy$x, xy$y2, type="l", col=rgb(0,0.5,1), lwd=3)
   text(0, 1, "B", cex=1.5)
+  
+abline(h=0.5, col="grey")
 dev.off()
 ```
 
