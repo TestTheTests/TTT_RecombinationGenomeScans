@@ -1,38 +1,44 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
-# In[24]:
+# In[1]:
 
 
-import sys, os
+import sys, os, random, argparse
 from sklearn.externals import joblib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import random
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn import model_selection
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
+from sklearn import model_selection, preprocessing
 from scipy.stats import randint as sp_randint
 from sklearn import svm
 from time import time
 from operator import itemgetter
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-from sklearn import preprocessing
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, train_test_split
 
+
+# In[2]:
+
+##### parse args to find the feature vectors and the name for the classifier
+parser = argparse.ArgumentParser(description = 'process the input feature vecs',
+                                 usage = "classify_SNPs.py -f [path] -c [classifier name]" )
+parser.add_argument("-f", '--fvecs', help = 'the path to the feature vec directory', required = True)
+parser.add_argument("-c", '--clf', help = 'the name to give to the classifier', required = True)
+
+args = vars(parser.parse_args())
+trainingSetDir = args['fvecs']
+classifierPickleFileName = args['clf'] + ".p"
+
+
+statsToUse = "all"
+
+
+# # Read in the data
+# 
+# This cell just reads in the feature vectors and makes sure they are in the right format
 
 # In[3]:
-
-
-trainingSetDir = "/media/kevin/TOSHIBA_EXT/TTT_RecombinationGenomeScans/ml_project/feature_vecs_h12"
-classifierPickleFileName = "addH12.p"
-statsToUse = "all"
-print(os.listdir(trainingSetDir))
-
-
-# In[6]:
-
 
 
 classList = []
@@ -87,7 +93,11 @@ for i in range(len(trainingData)):
         XH[trainingData[i][0]].append(currVector)
 
 
-# In[8]:
+# # Create the training and testing sets
+# 
+# In this cell, the data is shuffled and then 1000 examples from each class are chosen (unless the class has less than 1000 samples, in that case every sample from the class is used).  The undersampled data is then split into a training set and a testing set. `for i in range(1000):` could be changed to use any number of samples. You
+
+# In[4]:
 
 
 X = []
@@ -108,14 +118,7 @@ sys.stderr.write("Training set size after split: %s\n" %(len(y_train)))
 sys.stderr.write("Testing set size: %s\n" %len(y_test))
 
 
-# In[9]:
-
-
-print(XH.keys())
-labels = XH.keys()
-
-
-# In[47]:
+# In[5]:
 
 
 # Utility function to report best scores
@@ -133,7 +136,7 @@ def report(grid_scores, n_top=3):
         print("")
 
 
-# In[35]:
+# In[6]:
 
 
 sys.stderr.write("Checking accuracy when distinguishing among all %s classes\n" %(len(XH.keys())))
@@ -158,16 +161,4 @@ sys.stderr.write("GridSearchCV took %.2f seconds for %d candidate parameter sett
 print("Results for %s" %(mlType))
 report(grid_search.cv_results_)
 joblib.dump((X_test, y_test, grid_search, list(XH.keys())), classifierPickleFileName)
-
-
-# In[48]:
-
-
-report(grid_search.cv_results_)
-
-
-# In[ ]:
-
-
-plotReportForComparison("QTNdistinct.p")
 
