@@ -81,9 +81,11 @@ def calcAndAppendStatValForScan(snpLocs, statName, hapsInSubWin, statVals,
             statVals[statName].append(h12)
     elif statName == 'ihs':
         unstd_ihs = allel.ihs(hapsInSubWin, snpLocs, map_pos = None, use_threads = False)
-        statVals[statName].extend(allel.stats.selection.standardize_by_allele_count(unstd_ihs, 
-                                                                                   altAlleleCounts,
-                                                                                   n_bins=20)[0])            
+        stdiHS    = allel.stats.selection.standardize_by_allele_count(unstd_ihs, 
+                                                                      altAlleleCounts,
+                                                                      n_bins=20)[0]
+         # use absolute value for iHS because sign depends on allele encoding
+        statVals[statName].extend(np.absolute(stdiHS)) 
     elif statName == 'nsl':
         unstd_nsl = allel.nsl(hapsInSubWin, use_threads = False)
         statVals[statName].extend(allel.stats.selection.standardize_by_allele_count(unstd_nsl, 
@@ -199,7 +201,7 @@ def processFile(f):
     eprint("Created " + outfile)
 
 
-# In[4]:
+# In[5]:
 
 
 ############## Main ############################################################
@@ -253,4 +255,10 @@ if __name__ == '__main__':
                                                                                    secs % 360 // 60,
                                                                                    round(secs % 360 % 60, 2), 
                                                                                    len(fileList)))
+
+
+# In[ ]:
+
+
+
 
